@@ -1,0 +1,10 @@
+﻿{
+  "profiles": {
+    "Randstad.UfoRsm.BabelFish": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "live"
+      }
+    }
+  }
+}

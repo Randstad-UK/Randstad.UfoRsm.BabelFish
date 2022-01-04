@@ -1,0 +1,61 @@
+{
+  "ExtendedData": {
+    "inputs": [
+      "https://demo.in-time.co.uk/services/IntimeServiceV2_9?wsdl"
+    ],
+    "collectionTypes": [
+      "System.Array",
+      "System.Collections.Generic.Dictionary`2"
+    ],
+    "namespaceMappings": [
+      "*, RSM"
+    ],
+    "references": [
+      "Microsoft.Extensions.Configuration, {Microsoft.Extensions.Configuration, 3.1.6}",
+      "Microsoft.Extensions.Configuration.Abstractions, {Microsoft.Extensions.Configuration.Abstractions, 3.1.6}",
+      "Microsoft.Extensions.Configuration.Binder, {Microsoft.Extensions.Configuration.Binder, 3.1.6}",
+      "Microsoft.Extensions.Configuration.CommandLine, {Microsoft.Extensions.Configuration.CommandLine, 3.1.6}",
+      "Microsoft.Extensions.Configuration.EnvironmentVariables, {Microsoft.Extensions.Configuration.EnvironmentVariables, 3.1.6}",
+      "Microsoft.Extensions.Configuration.FileExtensions, {Microsoft.Extensions.Configuration.FileExtensions, 3.1.6}",
+      "Microsoft.Extensions.Configuration.Json, {Microsoft.Extensions.Configuration.Json, 3.1.6}",
+      "Microsoft.Extensions.Configuration.UserSecrets, {Microsoft.Extensions.Configuration.UserSecrets, 3.1.6}",
+      "Microsoft.Extensions.DependencyInjection, {Microsoft.Extensions.DependencyInjection, 3.1.6}",
+      "Microsoft.Extensions.DependencyInjection.Abstractions, {Microsoft.Extensions.DependencyInjection.Abstractions, 3.1.6}",
+      "Microsoft.Extensions.FileProviders.Abstractions, {Microsoft.Extensions.FileProviders.Abstractions, 3.1.6}",
+      "Microsoft.Extensions.FileProviders.Physical, {Microsoft.Extensions.FileProviders.Physical, 3.1.6}",
+      "Microsoft.Extensions.FileSystemGlobbing, {Microsoft.Extensions.FileSystemGlobbing, 3.1.6}",
+      "Microsoft.Extensions.Hosting, {Microsoft.Extensions.Hosting, 3.1.6}",
+      "Microsoft.Extensions.Hosting.Abstractions, {Microsoft.Extensions.Hosting.Abstractions, 3.1.6}",
+      "Microsoft.Extensions.Hosting.WindowsServices, {Microsoft.Extensions.Hosting.WindowsServices, 3.1.6}",
+      "Microsoft.Extensions.Logging, {Microsoft.Extensions.Logging, 3.1.6}",
+      "Microsoft.Extensions.Logging.Abstractions, {Microsoft.Extensions.Logging.Abstractions, 3.1.6}",
+      "Microsoft.Extensions.Logging.Configuration, {Microsoft.Extensions.Logging.Configuration, 3.1.6}",
+      "Microsoft.Extensions.Logging.Console, {Microsoft.Extensions.Logging.Console, 3.1.6}",
+      "Microsoft.Extensions.Logging.Debug, {Microsoft.Extensions.Logging.Debug, 3.1.6}",
+      "Microsoft.Extensions.Logging.EventLog, {Microsoft.Extensions.Logging.EventLog, 3.1.6}",
+      "Microsoft.Extensions.Logging.EventSource, {Microsoft.Extensions.Logging.EventSource, 3.1.6}",
+      "Microsoft.Extensions.Options, {Microsoft.Extensions.Options, 3.1.6}",
+      "Microsoft.Extensions.Options.ConfigurationExtensions, {Microsoft.Extensions.Options.ConfigurationExtensions, 3.1.6}",
+      "Microsoft.Extensions.Primitives, {Microsoft.Extensions.Primitives, 3.1.6}",
+      "Newtonsoft.Json, {Newtonsoft.Json, 12.0.2}",
+      "RabbitMQ.Client, {RabbitMQ.Client, 5.1.1}",
+      "Randstad.Environments, {Randstad.Environments, 1.0.0}",
+      "Randstad.Logging, {Randstad.Logging, 2.1.1}",
+      "Randstad.LogLevels, {Randstad.LogLevels, 1.1.0}",
+      "Randstad.OperatingCompanies, {Randstad.OperatingCompanies, 1.0.2}",
+      "Randstad.ServiceDiscovery.Client, {Randstad.ServiceDiscovery.Client, 1.0.10}",
+      "RandstadMessageExchange, {Randstad.MessageExchange, 2.4.0}",
+      "System.Diagnostics.EventLog, {System.Diagnostics.EventLog, 4.7.0}",
+      "System.Security.Principal.Windows, {System.Security.Principal.Windows, 4.7.0}",
+      "System.ServiceModel, {System.ServiceModel.Primitives, 4.4.4}",
+      "System.ServiceModel.Duplex, {System.ServiceModel.Duplex, 4.4.4}",
+      "System.ServiceModel.Http, {System.ServiceModel.Http, 4.4.4}",
+      "System.ServiceModel.NetTcp, {System.ServiceModel.NetTcp, 4.4.4}",
+      "System.ServiceModel.Primitives, {System.ServiceModel.Primitives, 4.4.4}",
+      "System.ServiceModel.Security, {System.ServiceModel.Security, 4.4.4}",
+      "System.ServiceProcess.ServiceController, {System.ServiceProcess.ServiceController, 4.7.0}"
+    ],
+    "targetFramework": "netcoreapp3.1",
+    "typeReuseMode": "All"
+  }
+}

@@ -1,0 +1,5 @@
+﻿{
+  "CPE": "RCPE",
+  "PS": "RC",
+  "BS": "WEEKLY" 
+}

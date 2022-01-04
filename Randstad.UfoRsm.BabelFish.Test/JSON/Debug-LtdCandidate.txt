@@ -1,0 +1,209 @@
+﻿{
+	"CandidateId": "a1C7E000003OEhBUAW",
+	"LiveInPayroll": true,
+	"MigratedCandidateId": null,
+	"CandidateRef": "C-000062336",
+	"Title": null,
+	"Name": "Test",
+	"Surname": "Ltd-Worker",
+	"Fullname": "Test Ltd-Worker",
+	"Salutation": null,
+	"Gender": "male",
+	"DateOfBirth": "2000-09-09T00:00:00",
+	"NiNumber": null,
+	"DocumentNumber": null,
+	"MaritalStatus": null,
+	"Nationality": null,
+	"HomeAddress": {
+		"Street": "Any Street",
+		"City": "Any Town",
+		"County": null,
+		"Country": null,
+		"PostCode": "MK1 1BB"
+	},
+	"EmergencyContactName": null,
+	"EmergencyContact": null,
+	"Phone": "021534654654",
+	"Mobile": null,
+	"EmailAddress": null,
+	"PaymentMethod": "BACS",
+	"PayrollRefNumber": "L-00002656",
+	"StartDate": "2021-09-09T00:00:00",
+	"EndDate": null,
+	"EmployeeFileId": "a107E000003ICo4QAG",
+	"Status": { "Status": "Working" },
+	"Owner": {
+		"Id": "0054J0000052YyVQAU",
+		"MigratedUserId": "RAdmin",
+		"EmployeeRef": "12345",
+		"Firstname": "Randstad",
+		"Lastname": "Administration",
+		"Username": "randstad.admin@ruk-ufo.co.uk.test",
+		"Email": "donotreply@randstad.co.uk",
+		"IsActive": true,
+		"OpCo": {
+			"Id": "a3R7E0000006ms2UAA",
+			"MigratedGroupId": null,
+			"IsActive": true,
+			"Name": "Business Solutions",
+			"FinanceCode": "BS"
+		},
+		"Unit": {
+			"Id": "a3R7E0000006msHUAQ",
+			"MigratedGroupId": null,
+			"IsActive": true,
+			"Name": "Test Unit",
+			"FinanceCode": null
+		},
+		"Branch": {
+			"Id": "a3R7E0000006ms8UAA",
+			"MigratedGroupId": null,
+			"IsActive": true,
+			"Name": "Test Branch",
+			"FinanceCode": null
+		},
+		"Region": {
+			"Id": "a3R7E0000006msCUAQ",
+			"MigratedGroupId": null,
+			"IsActive": true,
+			"Name": "Test Region",
+			"FinanceCode": null
+		},
+		"Division": {
+			"Id": "a3R7E0000006ms7UAA",
+			"MigratedGroupId": null,
+			"IsActive": true,
+			"Name": "Test Division",
+			"FinanceCode": null
+		}
+	},
+	"LeaverHolidayRequest": null,
+	"LtdCompany": {
+		"Id": "a3L7E000000mxb1UAA",
+		"Name": "Test Ltd",
+		"Cis": null,
+		"InvoiceAddress": {
+			"Street": "Test Street",
+			"City": "Test Town",
+			"County": null,
+			"Country": null,
+			"PostCode": "MK1 1BB"
+		},
+		"RegNo": "123456789",
+		"SelfBill": "Yes",
+		"UtrNumber": "PENDING",
+		"VatNumber": null,
+		"BankAccount": {
+			"PayMethod": 0,
+			"SortCode": "203907",
+			"AccountNumber": "12345678",
+			"AccountName": "Test Ltd",
+			"SocietyName": null,
+			"SocietyNum": null,
+			"IBAN": null,
+			"BIC": null
+		},
+		"PLIOptOut": null,
+		"Candidates": null,
+		"Unit": null,
+		"Branch": null,
+		"Region": null,
+		"Division": null
+	},
+	"UmbrellaAgency": null,
+	"OutsourcedAgency": null,
+	"Paye": null,
+	"PayType": 1,
+	"AWRScope": "Out of Scope",
+	"OperatingCo": {
+		"Id": "a3R7E0000006mn6UAA",
+		"MigratedGroupId": null,
+		"IsActive": null,
+		"Name": "Business Solutions",
+		"FinanceCode": "BS"
+	},
+	"Divisions": [
+		{
+			"Candidate": {
+				"CandidateId": "a1C7E000003OEhBUAW",
+				"LiveInPayroll": null,
+				"MigratedCandidateId": null,
+				"CandidateRef": null,
+				"Title": null,
+				"Name": null,
+				"Surname": null,
+				"Fullname": null,
+				"Salutation": null,
+				"Gender": null,
+				"DateOfBirth": null,
+				"NiNumber": null,
+				"DocumentNumber": null,
+				"MaritalStatus": null,
+				"Nationality": null,
+				"HomeAddress": null,
+				"EmergencyContactName": null,
+				"EmergencyContact": null,
+				"Phone": null,
+				"Mobile": null,
+				"EmailAddress": null,
+				"PaymentMethod": null,
+				"PayrollRefNumber": null,
+				"StartDate": null,
+				"EndDate": null,
+				"EmployeeFileId": null,
+				"Status": null,
+				"Owner": null,
+				"LeaverHolidayRequest": null,
+				"LtdCompany": null,
+				"UmbrellaAgency": null,
+				"OutsourcedAgency": null,
+				"Paye": null,
+				"PayType": null,
+				"AWRScope": null,
+				"OperatingCo": null,
+				"Divisions": null,
+				"SetGdpr": null,
+				"Unit": null,
+				"Branch": null,
+				"Region": null,
+				"Division": null
+			},
+			"CandidateDivisionId": "a2y7E000000ZhbiQAC",
+			"Division": {
+				"DivisionId": "a3C7E000000R52aUAC",
+				"Name": "RSW",
+				"MigratedAttributeId": "PS-4099"
+			},
+			"TempStatus": "Compliant"
+		}
+	],
+	"SetGdpr": null,
+	"Unit": {
+		"Id": "a3R7E0000006mq6UAA",
+		"MigratedGroupId": "PS-376",
+		"IsActive": true,
+		"Name": "Edu - Manchester Primary South",
+		"FinanceCode": "E1265"
+	},
+	"Branch": {
+		"Id": "a3R7E0000006moBUAQ",
+		"MigratedGroupId": null,
+		"IsActive": null,
+		"Name": "Edu Manchester",
+		"FinanceCode": null
+	},
+	"Region": {
+		"Id": "a3R7E0000006mnUUAQ",
+		"MigratedGroupId": null,
+		"IsActive": null,
+		"Name": "Education North Region",
+		"FinanceCode": null
+	},
+	"Division": {
+		"Id": "a3R7E0000006mn9UAA",
+		"MigratedGroupId": null,
+		"IsActive": null,
+		"Name": "Education",
+		"FinanceCode": null
+	}
+}
