@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Randstad.Logging;
+using Randstad.OperatingCompanies;
 using RandstadMessageExchange;
 
 namespace Randstad.UfoRsm.BabelFish.Translators
@@ -12,7 +13,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
         private readonly string _routingKeyBase;
         protected readonly ILogger _logger;
         protected string _updatedRoutingKey;
-        
+
         protected TranslatorBase(IProducerService producer, string routingKeyBase, ILogger logger)
         {
             _producer = producer;
@@ -54,7 +55,6 @@ namespace Randstad.UfoRsm.BabelFish.Translators
             }
         }
 
-
         protected bool ShouldExportFromExport(string tomCode)
         {
 
@@ -85,6 +85,17 @@ namespace Randstad.UfoRsm.BabelFish.Translators
 
             return valid;
 
+        }
+
+        protected bool BlockExport(OperatingCompanies.OperatingCompany opco)
+        {
+            switch (opco)
+            {
+                case OperatingCompany.BS:
+                    return false;
+                default:
+                    return true;
+            }
         }
     }
 }

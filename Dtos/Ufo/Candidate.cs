@@ -40,6 +40,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
         public string EmployeeFileId { get; set; }
         public CandidateStatus Status { get; set; }
 
+        public Address HomeAddress { get; set; }
 
         public LtdCompany LtdCompany { get; set; }
         public ThirdPartyAgency UmbrellaAgency { get; set; }
@@ -66,6 +67,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
             worker.commsDisabledSpecified = true;
             worker.commsDisabled = true;
+            worker.dateOfBirthSpecified = false;
 
             try
             {
@@ -83,7 +85,10 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             worker.title = Title;
 
             if (DateOfBirth != null)
+            {
                 worker.dateOfBirth = DateOfBirth;
+                worker.dateOfBirthSpecified = true;
+            }
 
             if (StartDate != null)
                 worker.dateOfJoining = StartDate;
@@ -110,12 +115,14 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             worker.payAsPAYESpecified = false;
             worker.starterStatementDSpecified = false;
             worker.week1Month1Specified = false;
-
+            
 
             worker.emailPayslipSpecified = false;
             worker.selfBillingSpecified = false;
 
             worker.nationalInsuranceNumber = NiNumber;
+
+            worker.address = HomeAddress.GetAddress();
 
             MapPaye(worker);
             MapLtd(worker);
@@ -132,6 +139,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             //TODO: update inputHOlidayScheme and PaymentFrequency when RMS is set up
             //worker.inpayHolidayScheme = "inputHolidayScheme";
 
+            //TODO: update payment frequency when set up in RSM
             worker.paymentFrequency = "Weekly";
             worker.workerType = "PAYE";
             
@@ -167,7 +175,6 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
         {
             if (PayType != PaymentTypes.LTD) return;
 
-            
             worker.workerType = "LTD";
             worker.isCISSpecified = true;
             worker.isCIS = false;
@@ -183,7 +190,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             }
 
             worker.limitedCompany = new RSM.Company();
-
+ 
             worker.bankAccount = new RSM.BankAccount();
             worker.bankAccount.accountName = LtdCompany.BankAccount.AccountName;
             worker.bankAccount.accountNumber = LtdCompany.BankAccount.AccountNumber;
@@ -231,6 +238,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
                 worker.selfBilling = true;
             }
+
 
             worker.utr = LtdCompany.UtrNumber;
 

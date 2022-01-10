@@ -5,26 +5,23 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Randstad.Logging;
-using Randstad.UfoSti.BabelFish.Dtos.Sti;
-using Randstad.UfoSti.BabelFish.Dtos.Ufo;
+using Randstad.UfoRsm.BabelFish;
+using Randstad.UfoRsm.BabelFish.Dtos.Ufo;
+using Randstad.UfoRsm.BabelFish.Helpers;
+using Randstad.UfoRsm.BabelFish.Translators;
 using RandstadMessageExchange;
-using Assignment = Randstad.UfoSti.BabelFish.Dtos.Ufo.Assignment;
 
-namespace Randstad.UfoSti.BabelFish.Translators
+namespace Randstad.UfoRsm.BabelFish.Translators
 {
     public class AssignmentTranslation : TranslatorBase, ITranslator
     {
         private readonly Dictionary<string, string> _rateCodes;
-        private readonly string _consultantCodePrefix;
         private readonly Dictionary<string, string> _tomCodes;
-        private readonly Dictionary<string, string> _employerRefs;
 
-        public AssignmentTranslation(Dictionary<string, string> rateCodes, IProducerService producer, string routingKeyBase, string consultantCodePrefix, Dictionary<string, string> tomCodes, Dictionary<string, string> employerRefs, ILogger logger) : base(producer, routingKeyBase, logger)
+        public AssignmentTranslation(IProducerService producer, string routingKeyBase, Dictionary<string, string> tomCodes, Dictionary<string, string> rateCodes, ILogger logger) : base(producer, routingKeyBase, logger)
         {
-            _consultantCodePrefix = consultantCodePrefix;
-            _rateCodes = rateCodes;
-            _employerRefs = employerRefs;
             _tomCodes = tomCodes;
+            _rateCodes = rateCodes;
         }
 
         public async Task Translate(ExportedEntity entity)
@@ -34,7 +31,14 @@ namespace Randstad.UfoSti.BabelFish.Translators
             Assignment assign = null;
             try
             {
-                assign = JsonConvert.DeserializeObject<Dtos.Ufo.Assignment>(entity.Payload);
+                assign = JsonConvert.DeserializeObject<Assignment>(entity.Payload);
+
+                if (BlockExport(Mappers.MapOpCoFromName(assign.OpCo.Name)))
+                {
+                    _logger.Warn($"Assignment OpCo not live in RSWM {assign.AssignmentRef} {assign.OpCo.Name}", entity.CorrelationId, entity, entity.ObjectId, "Dtos.Ufo.ExportedEntity", null);
+                    entity.ExportSuccess = false;
+                    return;
+                }
 
                 if (string.IsNullOrEmpty(assign.OpCo.FinanceCode))
                 {
@@ -74,13 +78,11 @@ namespace Randstad.UfoSti.BabelFish.Translators
                 
             }
 
-            List<Dtos.Sti.AssignmentRate> rates = null;
-            Dtos.Sti.Assignment assignment = null;
+            Dtos.RsmInherited.Placement assignment = null;
             
-            ClientAddress invoiceAddress = null;
             try
             {
-                assignment = assign.MapAssignment(_rateCodes, out rates, _consultantCodePrefix, _tomCodes, _employerRefs, out invoiceAddress);
+                assignment = assign.MapAssignment(_tomCodes, _logger, _rateCodes, entity.CorrelationId);
 
             }
             catch (Exception exp)
@@ -95,51 +97,12 @@ namespace Randstad.UfoSti.BabelFish.Translators
                 return;
             }
 
-            if (invoiceAddress != null)
-            {
-                SendClientAddressToOpcos(invoiceAddress, entity.CorrelationId, assign.InvoiceAddress, entity.ObjectId, assignment.AssignmentRef);
-            }
 
-            SendToSti(JsonConvert.SerializeObject(assignment), assignment.OpCo.ToString(), "Assignment", entity.CorrelationId, (bool)assignment.IsStartChecked);
+            SendToRsm(JsonConvert.SerializeObject(assignment), Mappers.MapOpCoFromName(assign.OpCo.Name).ToString(), "Assignment", entity.CorrelationId, Helpers.Mappers.MapCheckin(assign.CheckIn));
 
-            _logger.Success($"Successfully mapped Assignment {assignment.AssignmentRef} and sent to STI", entity.CorrelationId, assign, entity.ObjectId, "Dtos.Ufo.Assignment", null, assignment, "Dtos.Sti.Assignment");
-            if (rates == null)
-            {
-                return;
-            }
-
-            foreach(var rate in rates)
-            {
-                SendToSti(JsonConvert.SerializeObject(rate), assignment.OpCo.ToString(), "AssignmentRate", entity.CorrelationId, (bool)assignment.IsStartChecked);
-                _logger.Success($"Successfully mapped Rate for Assignment {rate.AssignmentRef} and sent to STI", entity.CorrelationId, rate, null, "Dtos.Ufo.AssignmentRate", null);
-            }
-
+            _logger.Success($"Successfully mapped Assignment {assign.AssignmentRef} and sent to RSM", entity.CorrelationId, assign, entity.ObjectId, "Dtos.Ufo.Assignment", null, assignment, "Dtos.Sti.Assignment");
+            
             entity.ExportSuccess = true;
         }
-
-        private void SendClientAddressToOpcos(ClientAddress clientAddresses, Guid correlationId,
-            Dtos.Ufo.InvoiceAddress ufoInvoiceAddress, string entityId, string assignmentRef)
-        {
-
-            foreach (var opco in _employerRefs)
-            {
-                var o = opco.Key;
-                clientAddresses.EmployerRef = opco.Value;
-
-                if (o.ToLower() == "ps")
-                {
-                    o = "care";
-                }
-
-                //Is Checked in always true as UFO won't export unless it is
-                SendToSti(JsonConvert.SerializeObject(clientAddresses), o, "ClientAddress", correlationId, true);
-                _logger.Success(
-                    $"Successfully mapped ClientAddress {ufoInvoiceAddress.InvoiceAddressRef} for Assignment {assignmentRef} and Sent To {o} STI",
-                    correlationId, ufoInvoiceAddress, ufoInvoiceAddress.AddressId, "Dtos.Ufo.InvoiceAddress", null,
-                    clientAddresses, "Dtos.Sti.ClientAddress");
-            }
-        }
-
-
     }
 }

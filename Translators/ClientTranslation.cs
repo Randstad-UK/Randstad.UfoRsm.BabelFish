@@ -28,6 +28,13 @@ namespace Randstad.UfoRsm.BabelFish.Translators
             {
                 client = JsonConvert.DeserializeObject<Dtos.Ufo.Client>(entity.Payload);
 
+                if (BlockExport(Mappers.MapOpCoFromName(client.OpCo.Name)))
+                {
+                    _logger.Warn($"Client OpCo not live in RSWM {client.ClientRef} {client.OpCo.Name}", entity.CorrelationId, entity, entity.ObjectId, "Dtos.Ufo.ExportedEntity", null);
+                    entity.ExportSuccess = false;
+                    return;
+                }
+
                 if (string.IsNullOrEmpty(client.OpCo.FinanceCode))
                 {
                     _logger.Warn($"No Finance Code On {client.ClientRef} Opco", entity.CorrelationId, entity, entity.ObjectId, "Dtos.Ufo.ExportedEntity", null);
@@ -84,7 +91,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
 
 
 
-            SendToRsm(JsonConvert.SerializeObject(client), Mappers.MapOpCoFromName(client.OpCo.Name.ToLower()).ToString(), "Client", entity.CorrelationId, (bool)client.IsCheckedIn);
+            SendToRsm(JsonConvert.SerializeObject(rmsClient), Mappers.MapOpCoFromName(client.OpCo.Name.ToLower()).ToString(), "Client", entity.CorrelationId, (bool)client.IsCheckedIn);
             _logger.Success($"Successfully mapped Client {client.ClientRef} and Sent To RSM", entity.CorrelationId, rmsClient, client.ClientId, "Dtos.Ufo.Client", null, client, "RSM.Client");
             entity.ExportSuccess = true;
 

@@ -5,8 +5,9 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Randstad.Logging;
 using Randstad.OperatingCompanies;
-using Randstad.UfoSti.BabelFish.Dtos.Ufo;
-using Randstad.UfoSti.BabelFish.Helpers;
+using Randstad.UfoRsm.BabelFish;
+using Randstad.UfoRsm.BabelFish.Dtos.Ufo;
+using Randstad.UfoRsm.BabelFish.Translators;
 using RandstadMessageExchange;
 
 namespace Randstad.UfoSti.BabelFish.Translators

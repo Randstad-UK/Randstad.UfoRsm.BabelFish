@@ -84,6 +84,9 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             placement.endSpecified = true;
             placement.end = EndDate;
 
+            placement.expenseEmailApprovalSpecified = true;
+            placement.expenseEmailApproval = false;
+
             placement.externalId = AssignmentRef;
 
             placement.faxbackEnabledSpecified = true;
@@ -103,13 +106,14 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             placement.jobDescription = AssignmentJobTitle;
 
             //todo: Assignment manager needs set to default manager set up in RSM
-            placement.manager = new Manager();
+            //placement.manager = new Manager();
 
             placement.noCommunications = "WMCL";
             placement.permSpecified = true;
             placement.perm = false;
 
-            placement.purchaseBranch = Unit.FinanceCode;
+            placement.purchaseBranch = Unit.Name;
+            placement.purchaseCostCentre = tomCodes[Unit.FinanceCode];
             placement.purchaseDivision = OpCo.Name;
             placement.purchaseOrderNum = PoNumber;
 
@@ -117,7 +121,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             placement.roundToNearestMin = 1;
 
             placement.salesBranch = Unit.Name;
-            placement.salesCostCentre = Unit.FinanceCode;
+            placement.salesCostCentre = tomCodes[Unit.FinanceCode];
 
             placement.siteAddress = WorkAddress.GetAddress();
 
@@ -161,7 +165,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
 
             var priorityOrder = 1;
-
+            var rateIndex = 0;
             //Sti.AssignmentRate stiRate = null;
             foreach (var rate in Rates)
             {
@@ -175,6 +179,8 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                 }
 
                 priorityOrder++;
+                placement.rates[rateIndex]=rsmRate;
+                rateIndex++;
             }
 
         }

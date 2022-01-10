@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.30225.117
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Randstad.UfoRsm.BabelFish", "Randstad.UfoRsm.BabelFish.csproj", "{1C4C3B37-413D-4254-886A-9C7099570E71}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Randstad.UfoRsm.BabelFish.Test", "Randstad.UfoRsm.BabelFish.Test\Randstad.UfoRsm.BabelFish.Test.csproj", "{412E00EC-08B3-4DE1-AE43-D801A83E6DFE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Randstad.UfoRsm.BabelFish.Tests", "..\Randstad.UfoRsm.BabelFish.Tests\Randstad.UfoRsm.BabelFish.Tests.csproj", "{C29947B1-FC62-49B0-A264-49CE6A8AF689}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,18 +29,18 @@ Global
 		{1C4C3B37-413D-4254-886A-9C7099570E71}.Staging|Any CPU.Build.0 = Staging|Any CPU
 		{1C4C3B37-413D-4254-886A-9C7099570E71}.Test|Any CPU.ActiveCfg = Test|Any CPU
 		{1C4C3B37-413D-4254-886A-9C7099570E71}.Test|Any CPU.Build.0 = Test|Any CPU
-		{412E00EC-08B3-4DE1-AE43-D801A83E6DFE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{412E00EC-08B3-4DE1-AE43-D801A83E6DFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{412E00EC-08B3-4DE1-AE43-D801A83E6DFE}.Dev|Any CPU.ActiveCfg = Debug|Any CPU
-		{412E00EC-08B3-4DE1-AE43-D801A83E6DFE}.Dev|Any CPU.Build.0 = Debug|Any CPU
-		{412E00EC-08B3-4DE1-AE43-D801A83E6DFE}.Live|Any CPU.ActiveCfg = Debug|Any CPU
-		{412E00EC-08B3-4DE1-AE43-D801A83E6DFE}.Live|Any CPU.Build.0 = Debug|Any CPU
-		{412E00EC-08B3-4DE1-AE43-D801A83E6DFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{412E00EC-08B3-4DE1-AE43-D801A83E6DFE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{412E00EC-08B3-4DE1-AE43-D801A83E6DFE}.Staging|Any CPU.ActiveCfg = Debug|Any CPU
-		{412E00EC-08B3-4DE1-AE43-D801A83E6DFE}.Staging|Any CPU.Build.0 = Debug|Any CPU
-		{412E00EC-08B3-4DE1-AE43-D801A83E6DFE}.Test|Any CPU.ActiveCfg = Debug|Any CPU
-		{412E00EC-08B3-4DE1-AE43-D801A83E6DFE}.Test|Any CPU.Build.0 = Debug|Any CPU
+		{C29947B1-FC62-49B0-A264-49CE6A8AF689}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C29947B1-FC62-49B0-A264-49CE6A8AF689}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C29947B1-FC62-49B0-A264-49CE6A8AF689}.Dev|Any CPU.ActiveCfg = Debug|Any CPU
+		{C29947B1-FC62-49B0-A264-49CE6A8AF689}.Dev|Any CPU.Build.0 = Debug|Any CPU
+		{C29947B1-FC62-49B0-A264-49CE6A8AF689}.Live|Any CPU.ActiveCfg = Debug|Any CPU
+		{C29947B1-FC62-49B0-A264-49CE6A8AF689}.Live|Any CPU.Build.0 = Debug|Any CPU
+		{C29947B1-FC62-49B0-A264-49CE6A8AF689}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C29947B1-FC62-49B0-A264-49CE6A8AF689}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C29947B1-FC62-49B0-A264-49CE6A8AF689}.Staging|Any CPU.ActiveCfg = Debug|Any CPU
+		{C29947B1-FC62-49B0-A264-49CE6A8AF689}.Staging|Any CPU.Build.0 = Debug|Any CPU
+		{C29947B1-FC62-49B0-A264-49CE6A8AF689}.Test|Any CPU.ActiveCfg = Debug|Any CPU
+		{C29947B1-FC62-49B0-A264-49CE6A8AF689}.Test|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

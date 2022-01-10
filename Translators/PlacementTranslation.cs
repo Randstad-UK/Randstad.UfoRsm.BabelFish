@@ -4,36 +4,41 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Randstad.Logging;
-using Randstad.UfoSti.BabelFish.Dtos.Sti;
-using Randstad.UfoSti.BabelFish.Dtos.Ufo;
-using Randstad.UfoSti.BabelFish.Helpers;
+using Randstad.UfoRsm.BabelFish;
+using Randstad.UfoRsm.BabelFish.Dtos;
+using Randstad.UfoRsm.BabelFish.Dtos.Ufo;
+using Randstad.UfoRsm.BabelFish.Helpers;
+using Randstad.UfoRsm.BabelFish.Translators;
 using RandstadMessageExchange;
 
-namespace Randstad.UfoSti.BabelFish.Translators
+namespace Randstad.UfoRsm.BabelFish.Translators
 {
     public class PlacementTranslation : TranslatorBase, ITranslator
     {
         private readonly string _consultantCodePrefix;
         private readonly Dictionary<string, string> _tomCodes;
-        private readonly Dictionary<string, string> _employerRefs;
 
-        public PlacementTranslation(IProducerService producer, string routingKeyBase, string consultantCodePrefix, Dictionary<string, string> tomCodes, Dictionary<string, string> employerRefs, ILogger logger) : base(producer, routingKeyBase, logger)
+        public PlacementTranslation(IProducerService producer, string routingKeyBase, Dictionary<string, string> tomCodes, ILogger logger) : base(producer, routingKeyBase, logger)
         {
-            _consultantCodePrefix = consultantCodePrefix;
+
             _tomCodes = tomCodes;
-            _employerRefs = employerRefs;
         }
 
         public async Task Translate(ExportedEntity entity)
         {
             if (entity.ObjectType != "Placement") return;
 
-            Dtos.Ufo.Placement placement = null;
+            Placement placement = null;
             try
             {
-                placement = JsonConvert.DeserializeObject<Dtos.Ufo.Placement>(entity.Payload);
+                placement = JsonConvert.DeserializeObject<Placement>(entity.Payload);
 
-
+                if (BlockExport(Mappers.MapOpCoFromName(placement.OpCo.Name)))
+                {
+                    _logger.Warn($"Placement OpCo not live in RSWM {placement.PlacementRef} {placement.OpCo.Name}", entity.CorrelationId, entity, entity.ObjectId, "Dtos.Ufo.ExportedEntity", null);
+                    entity.ExportSuccess = false;
+                    return;
+                }
             }
             catch (Exception exp)
             {
@@ -58,11 +63,10 @@ namespace Randstad.UfoSti.BabelFish.Translators
 
             }
 
-            Dtos.Sti.Placement mappedPlacement = null;
-            ClientAddress invoiceAddress = null;
+            RSM.Placement mappedPlacement = null;
             try
             {
-                mappedPlacement = placement.MapPlacement(_consultantCodePrefix, _tomCodes, _employerRefs, out invoiceAddress);
+                mappedPlacement = placement.MapPlacement(_tomCodes, _logger, entity.CorrelationId);
             }
             catch (Exception exp)
             {
@@ -75,37 +79,10 @@ namespace Randstad.UfoSti.BabelFish.Translators
                 return;
             }
 
-            if (invoiceAddress != null)
-            {
-                SendClientAddressToOpcos(invoiceAddress, entity.CorrelationId, placement.InvoiceAddress, entity.ObjectId, placement.PlacementRef);
-            }
-
-            SendToSti(JsonConvert.SerializeObject(mappedPlacement), mappedPlacement.OpCo.ToString(), "Placement", entity.CorrelationId, (bool)mappedPlacement.IsStartChecked);
+            SendToRsm(JsonConvert.SerializeObject(mappedPlacement), Mappers.MapOpCoFromName(placement.OpCo.Name).ToString(), "Placement", entity.CorrelationId, Mappers.MapCheckin(placement.CheckIn));
             _logger.Success($"Successfully mapped Placement {placement.PlacementRef} and sent to Sti", entity.CorrelationId, placement, entity.ObjectId, "Dtos.Ufo.Placement", null, mappedPlacement, "Dtos.Sti.Placement");
             entity.ExportSuccess = true;
         }
 
-        private void SendClientAddressToOpcos(ClientAddress clientAddresses, Guid correlationId,
-            Dtos.Ufo.InvoiceAddress ufoInvoiceAddress, string entityId, string placementRef)
-        {
-
-            foreach (var opco in _employerRefs)
-            {
-                var o = opco.Key;
-                clientAddresses.EmployerRef = opco.Value;
-
-                if (o.ToLower() == "ps")
-                {
-                    o = "care";
-                }
-
-                //Is Checked in always true as UFO won't export unless it is
-                SendToSti(JsonConvert.SerializeObject(clientAddresses), o, "ClientAddress", correlationId, true);
-                _logger.Success(
-                    $"Successfully mapped ClientAddress {ufoInvoiceAddress.InvoiceAddressRef} for placement {placementRef} and Sent To {o} STI",
-                    correlationId, ufoInvoiceAddress, ufoInvoiceAddress.AddressId, "Dtos.Ufo.InvoiceAddress", null,
-                    clientAddresses, "Dtos.Sti.ClientAddress");
-            }
-        }
     }
 }

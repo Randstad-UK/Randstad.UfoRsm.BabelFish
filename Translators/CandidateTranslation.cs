@@ -29,6 +29,12 @@ namespace Randstad.UfoRsm.BabelFish.Translators
             {
                 candidate = JsonConvert.DeserializeObject<Candidate>(entity.Payload);
 
+                if (BlockExport(Mappers.MapOpCoFromName(candidate.OperatingCo.Name)))
+                {
+                    _logger.Warn($"Candidate OpCo not live in RSWM {candidate.CandidateRef} {candidate.OperatingCo.Name}", entity.CorrelationId, entity, entity.ObjectId, "Dtos.Ufo.ExportedEntity", null);
+                    entity.ExportSuccess = false;
+                    return;
+                }
 
                 if (string.IsNullOrEmpty(candidate.OperatingCo.FinanceCode))
                 {

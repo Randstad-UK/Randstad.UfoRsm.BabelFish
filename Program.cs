@@ -135,12 +135,16 @@ namespace Randstad.UfoRsm.BabelFish
                     var candidateTranslator = new CandidateTranslation(producer, applicationSettings.RsmRoutingKeyBase, employerRefs, tomCodes, logger);
                     var clientTranslator = new ClientTranslation(producer, applicationSettings.RsmRoutingKeyBase, logger);
                     var consultantTranslator = new ConsultantTranslation(producer, applicationSettings.RsmRoutingKeyBase, logger);
+                    var assignmentTranslator = new AssignmentTranslation(producer, applicationSettings.RsmRoutingKeyBase, tomCodes, rateMap, logger);
+                    var placementTranslator = new PlacementTranslation(producer, applicationSettings.RsmRoutingKeyBase, tomCodes, logger);
+
+
                     /*
                     var rateTranslator = new AssignmentRateTranslation(rateMap, producer, applicationSettings.StiRoutingKeyBase, applicationSettings.EmployeeCodePrefix, logger);
-                    var assignmentTranslator = new AssignmentTranslation(rateMap, producer, applicationSettings.StiRoutingKeyBase, applicationSettings.EmployeeCodePrefix, tomCodes, employerRefs, logger);
+                    
                     var contactTranslator = new ClientContactTranslation(producer, applicationSettings.StiRoutingKeyBase, applicationSettings.EmployeeCodePrefix, logger);
 
-                    var placementTranslator = new PlacementTranslation(producer, applicationSettings.StiRoutingKeyBase, applicationSettings.EmployeeCodePrefix, tomCodes, employerRefs, logger);
+                    
                     var timesheetTranslator = new TimesheetTranslation(rateMap, producer, applicationSettings.StiRoutingKeyBase, applicationSettings.EmployeeCodePrefix, tomCodes, logger, employerRefs);
                     
                     var holidayRequestTranslator = new HolidayRequestTranslation(producer, applicationSettings.StiRoutingKeyBase, employerRefs, logger);
@@ -152,7 +156,9 @@ namespace Randstad.UfoRsm.BabelFish
                     {
                         candidateTranslator,
                         clientTranslator,
-                        consultantTranslator
+                        consultantTranslator,
+                        assignmentTranslator,
+                        placementTranslator
                     };
 
                     services.AddSingleton(translators);

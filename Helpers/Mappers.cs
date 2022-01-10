@@ -21,18 +21,6 @@ namespace Randstad.UfoRsm.BabelFish.Helpers
             }
         }
 
-        public static bool MapBool(string value)
-        {
-            switch (value)
-            {
-                case "Yes":
-                    return true;
-                case "No":
-                    return false;
-                default:
-                    throw new Exception("Unknown Yes No type");
-            }
-        }
 
         public static YesNo MapYesNo(string value)
         {
@@ -62,6 +50,35 @@ namespace Randstad.UfoRsm.BabelFish.Helpers
             }
         }
         */
+
+        public static bool MapBool(string value)
+        {
+            switch (value)
+            {
+                case "Yes":
+                    return true;
+                case "No":
+                    return false;
+                default:
+                    throw new Exception("Unknown Yes No type");
+            }
+        }
+
+        public static bool MapCheckin(string value)
+        {
+            if (string.IsNullOrEmpty(value)) return false;
+
+            switch (value)
+            {
+                case "Checked In":
+                    return true;
+                case "No Show":
+                    return false;
+                default:
+                    throw new Exception("Unknown Yes No type");
+            }
+        }
+
 
         public static OperatingCompany MapOpCoFromName(string value)
         {

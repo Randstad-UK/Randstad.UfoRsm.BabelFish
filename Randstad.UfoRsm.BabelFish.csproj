@@ -34,16 +34,13 @@
     <Compile Remove="Dtos\Ufo\Expense.cs" />
     <Compile Remove="Dtos\Ufo\HolidayRequest.cs" />
     <Compile Remove="Dtos\Ufo\Job.cs" />
-    <Compile Remove="Dtos\Ufo\Placement.cs" />
     <Compile Remove="Dtos\Ufo\Timesheet.cs" />
     <Compile Remove="Dtos\Ufo\TimesheetLine.cs" />
     <Compile Remove="Translators\AssignmentRateTranslation.cs" />
-    <Compile Remove="Translators\AssignmentTranslation.cs" />
     <Compile Remove="Translators\ClientContactTranslation.cs" />
     <Compile Remove="Translators\HolidayRequestTranslation.cs" />
     <Compile Remove="Translators\InvoiceAddressTranslation.cs" />
     <Compile Remove="Translators\LtdCompanyTranslation.cs" />
-    <Compile Remove="Translators\PlacementTranslation.cs" />
     <Compile Remove="Translators\TimesheetTranslation.cs" />
   </ItemGroup>
 
@@ -51,8 +48,6 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="6.0.0" />
-    <PackageReference Include="NUnit" Version="3.13.2" />
-    <PackageReference Include="NUnit3TestAdapter" Version="4.2.0" />
     <PackageReference Include="Randstad.Logging" Version="2.1.1" />
     <PackageReference Include="Randstad.MessageExchange" Version="2.4.0" />
     <PackageReference Include="Randstad.ServiceDiscovery.Client" Version="1.0.10" />
