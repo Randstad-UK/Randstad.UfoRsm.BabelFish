@@ -6,11 +6,12 @@ using System.Net;
 using System.Text;
 using System.Transactions;
 using Newtonsoft.Json;
+using Randstad.Logging.Core;
 using Randstad.OperatingCompanies;
-using Randstad.UfoSti.BabelFish.Dtos.Sti;
-using Randstad.UfoSti.BabelFish.Helpers;
+using Randstad.UfoRsm.BabelFish.Helpers;
+using RSM;
 
-namespace Randstad.UfoSti.BabelFish.Dtos.Ufo
+namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 {
     public class Timesheet : ObjectBase
     {
@@ -59,22 +60,6 @@ namespace Randstad.UfoSti.BabelFish.Dtos.Ufo
         public DateTime? ApprovedDateTime { get; set; }
         private string _OriginalTimesheetRef { get; set; }
 
-
-        //public string ApprovalComment { get; set; }
-        //public string ApprovalDescription { get; set; }
-        //public DateTime? ApprovedOn { get; set; }
-        //public DateTime? SubmittedOn { get; set; }
-        //public string AssignmentJobTitle { get; set; }
-        //public string ApprovalStatus { get; set; }
-        //public string JobCategory { get; set; }
-        // public string CandidateRef { get; set; }
-
-        private readonly List<string> timesheetLetter = new List<string>
-        {
-            "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U",
-            "V", "W", "X", "Y", "Z"
-        };
-
         private List<TimesheetLine> GetBasicHours(out TimesheetLine consolidatedBasicHours)
         {
             try
@@ -100,7 +85,6 @@ namespace Randstad.UfoSti.BabelFish.Dtos.Ufo
                 throw new Exception($"{_OriginalTimesheetRef} Problem mapping Basic Hours. Hours Type should be normal time, Rate needs to be basic Rate, Rate pay unit should be hourly "+exp.Message, exp);
             }
         }
-
 
 
         private TimesheetLine GetConsolidatedLine(List<TimesheetLine> lines)
@@ -365,69 +349,18 @@ namespace Randstad.UfoSti.BabelFish.Dtos.Ufo
             }
         }
 
-        private void MapInvoiceData(Sti.Timesheet timesheet, List<TimesheetLine> orderedLines)
+
+        public List<Dtos.RsmInherited.Timesheet> MapTimesheet()
         {
-            timesheet.DailyLines = new List<TimesheetDailyLines>();
-            timesheet.GenerateTimesheetImages = true;
-
-            var lineIndex = -1;
-            foreach (var line in orderedLines.OrderBy(x => x.StartTime))
-            {
-                lineIndex++;
-                try
-                {
-                    if (line.Rate == null) continue;
-
-                    //use basic rate name unless OverTimeType populated
-                    var rateName = line.Rate.FeeName;
-                    if (string.IsNullOrEmpty(rateName))
-                        line.Rate.RateType = "Basic Hours";
-
-                    var l = new TimesheetDailyLines();
-
-                    if (line.StartTime != null)
-                    {
-                        l.StartTime = (DateTime) line.StartTime;
-                        l.EndTime = (DateTime) line.EndTime;
-                    }
-
-                    if (line.Rate.RateType.ToLower() == "other rate")
-                    {
-                        l.StartTime = (DateTime) line.StartTime;
-                        l.EndTime = (DateTime) line.EndTime;
-                    }
-
-
-                    if (line.BreakTimeMinutes != null)
-                        l.LunchTime = (Decimal) line.BreakTimeMinutes;
-
-                    if (line.Rate.PayUnit.ToLower() == "hourly")
-                        l.UnitsWorked = (Decimal) line.TotalHours;
-                    else if (line.Rate.PayUnit.ToLower() == "daily")
-                        l.UnitsWorked = (Decimal) line.DaysReported;
-
-                    timesheet.DailyLines.Add(l);
-                }
-                catch (Exception exp)
-                {
-                    throw new Exception($"Problem mapping Invoice Data on TS Line index {lineIndex} "+exp.Message, exp);
-                }
-            }
-        }
-
-
-        public List<Sti.Timesheet> MapTimesheet(Dictionary<string, string> rateMap, string consultantPrefixCode, Dictionary<string, string> tomCodes, Dictionary<string, string> employerRefs)
-        {
-            var timesheetList = new List<Sti.Timesheet>();
+            var timesheetList = new List<Dtos.RsmInherited.Timesheet>();
 
             _OriginalTimesheetRef = TimesheetRef;
             TimesheetRef = TimesheetRef.Replace("TSM-", "UT");
 
             var continueMapping = true;
 
-            var timesheet = MapBasicTimesheet(consultantPrefixCode, tomCodes, employerRefs);
+            var timesheet = MapBasicTimesheet();
 
-            MapConsultantSplit(timesheet, consultantPrefixCode);
 
             TimesheetLine consolidatedBasicHours = null;
             var basicHours = GetBasicHours(out consolidatedBasicHours);
@@ -445,38 +378,6 @@ namespace Randstad.UfoSti.BabelFish.Dtos.Ufo
             var expenseList = GetConsolidatedExpenses(out consolidatedExpenseses);
 
 
-            //============================== Combine the seperate lines order them and generate invoice data ============================
-            var orderedLines = new List<TimesheetLine>();
-            
-            if(basicHours!=null)
-                orderedLines.AddRange(basicHours);
-
-
-            if (basicDays != null)
-            {
-                orderedLines.AddRange(basicDays);
-            }
-
-            if (overTimeHours != null)
-            {
-                foreach (var a in overTimeHours)
-                {
-                    orderedLines.AddRange(a.AsEnumerable().ToList());
-                }
-            }
-
-
-            if (overTimeDays != null)
-            {
-                foreach (var a in overTimeDays)
-                {
-                    orderedLines.AddRange(a.AsEnumerable().ToList());
-                }
-            }
-
-            MapInvoiceData(timesheet, orderedLines);
-
-            //============================== End invoice data generate ==================================================================
 
 
             //============================== Combine the consolidated lines and map to STI timesheet ============================
@@ -508,480 +409,108 @@ namespace Randstad.UfoSti.BabelFish.Dtos.Ufo
                 throw new Exception($"{_OriginalTimesheetRef} - No timesheet lines could be mapped successfully, check rates, hours etc and re-push");
             }
 
-            var timesheetCount = -1;
-            while (continueMapping)
+
+            if (combined.Any())
             {
-                var tsl = combined.Where(x => x.IsMapped == false).Take(5);
-
-                List<Expense> expenses = null;
-                if (Expenses != null)
+                timesheet.shifts = new Shift[combined.Count];
+                var shiftIndex = 0;
+                //Map all the time values
+                foreach (var line in combined)
                 {
-                    expenses = consolidatedExpenseses.Where(x => x.IsMapped == false).Take(3).ToList();
-                }
+                    var shift = new RSM.Shift();
 
-                //no more timesheet lines or expenses
-                if (!tsl.Any() && (expenses ==null || !expenses.Any()))
-                {
-                    continueMapping = false;
-                    continue;
-                }
+                    //get the rate name, default it to Basic Hours first
+                    var rateName = "Basic Hours";
+                    var rateDescription = "Basic Hours";
 
-                //generate a new timesheet instance and increment the timesheet ref
-                if (timesheetCount > -1)
-                {
-                    TimesheetRef = TimesheetRef + timesheetLetter[timesheetCount];
-                    timesheet = MapBasicTimesheet(consultantPrefixCode, tomCodes, employerRefs);
-                }
-
-                //Map the timesheet lines to timesheet non adhoc
-                var lineCount = 0;
-                foreach (var t in tsl)
-                {
-                    if (!string.IsNullOrEmpty(t.PoNumber))
+                    if (line.Rate.RateType.ToLower() == "basic rate")
                     {
-                        timesheet.PurchaseOrderNumber = t.PoNumber;
+                        if (line.Rate.PayUnit.ToLower() == "daily")
+                        {
+                            rateName = "Basic Days";
+                        }
                     }
 
-                    if(TotalDays>0)
-                        MapLine(timesheet, t, lineCount, rateMap, false);
+                    if (line.Rate.RateType.ToLower() == "other rate")
+                    {
+                        rateName = line.Rate.OvertimeType;
+                    }
+
+                    shift.rateName = rateName;
+
+                    //Hourly rate
+                    if (line.TotalDays == null || line.TotalDays <= 0)
+                    {
+                        shift.hours = Convert.ToInt64(line.TotalHours * 60 * 60 * 1000);
+                    }
+                    //Day rate
                     else
-                        MapLine(timesheet, t, lineCount, rateMap, true);
-
-                    t.IsMapped = true;
-                    lineCount++;
-
-                }
-
-                //Map the expenses to timesheet adhoc sections
-                var adhocCount = 0;
-                if (expenses != null)
-                {
-                    foreach (var e in expenses)
                     {
-                        MapExpenseLine(timesheet, e, adhocCount, rateMap);
-                        e.IsMapped = true;
-                        adhocCount++;
+                        shift.day = Convert.ToInt64(line.TotalDays);
                     }
-                }
 
-                //set the location
-                if (WorkAddress != null)
-                {
-                    timesheet.WorkLocation = WorkAddress.City;
-                    if (!string.IsNullOrEmpty(WorkAddress.County))
-                    {
-                        timesheet.WorkLocation += "," + WorkAddress.County;
-                    }
+                    timesheet.shifts[shiftIndex] = shift;
+                    shiftIndex++;
                 }
-
-                timesheet.JobLocation = timesheet.WorkLocation;
-                timesheet.JobDescription = JobTitle;
-                timesheet.SignedOff = YesNo.Y;
-                timesheet.EntityReference = TimesheetRef;
-                timesheet.TimesheetNumber = TimesheetRef;
-                timesheetList.Add(timesheet);
-                timesheetCount++;
             }
 
             
+            //map all the expenses
+            if (consolidatedExpenseses.Any())
+            {
+                timesheet.Expenses= new List<RSM.ExpenseItem>();
+                foreach (var expense in consolidatedExpenseses)
+                {
+                    var expenseItem = new RSM.ExpenseItem();
+                    expenseItem.description = expense.Rate.ExpenseType;
+                    expenseItem.grossValue = expense.Amount;
+                    expenseItem.exportedSpecified = true;
+                    expenseItem.receiptDate = expense.ExpenseDate;
+                    expenseItem.unitSpecified = true;
+                    expenseItem.unit = expense.Quantity;
+                    expenseItem.freehandRef = TimesheetRef;
+                    expenseItem.payrollRef = TimesheetRef;
+                    timesheet.Expenses.Add(expenseItem);
+                }
+            }
 
+            timesheetList.Add(timesheet);
+            
             return timesheetList;
         }
 
-        private Sti.Timesheet MapBasicTimesheet(string consultantPrefixCode, Dictionary<string, string> tomCodes, Dictionary<string, string> employerRefs)
+        private Dtos.RsmInherited.Timesheet MapBasicTimesheet()
         {
-            var timesheet = new Sti.Timesheet();
-            timesheet.ClientRef = ClientRef;
-            timesheet.PersonnelRef = PayrollRef;
-            timesheet.ClientName = ClientName;
-            timesheet.WorkerName = CandidateName;
+            var timesheet = new Dtos.RsmInherited.Timesheet();
 
-            //Map all the finance codes-------------------------------------------------
-            //Map OpCo
-            try
-            {
-                if (!string.IsNullOrEmpty(OpCo.FinanceCode))
-                    timesheet.OpCo = Mappers.MapOpCo(OpCo.FinanceCode);
-                else
-                    timesheet.OpCo = Mappers.MapOpCoFromName(OpCo.Name);
-            }
-            catch (Exception exp)
-            {
-                throw new Exception($"Problem mapping OpCo for timesheet", exp);
-            }
-
-            //Map Division
-            try
-            {
-                timesheet.Division = tomCodes[Unit.FinanceCode];
-            }
-            catch (Exception exp)
-            {
-                throw new Exception($"Problem mapping Division for timesheet");
-            }
-
-            //Map EmployerRef
-            try
-            {
-                timesheet.EmployerRef = employerRefs[OpCo.FinanceCode];
-            }
-            catch (Exception exp)
-            {
-                throw new Exception("Problem mapping employer ref for timesheet", exp);
-            }
-
-            //Map department
-            timesheet.Department = Unit.FinanceCode;
-
-            //Finished mapping finance codes--------------------------------------------
-
-            timesheet.InvoiceToClient = ClientRef;
-
-            if (timesheet.OpCo == OperatingCompany.CPE && HleRef != null)
-            {
-                timesheet.ReportToClient = HleRef;
-                timesheet.InvoiceToClient = ClientRef;
-            }
-
+            timesheet.periodEndDateSpecified = false;
             if (PeriodEndDate != null)
             {
-                timesheet.TimesheetDate = (DateTime)PeriodStartDate;
-
-                if (timesheet.OpCo == OperatingCompany.CPE)
-                {
-                    var num_days = DayOfWeek.Friday - timesheet.TimesheetDate.DayOfWeek;
-
-                    if (num_days < 0)
-                        num_days += 7;
-
-                    timesheet.TimesheetDate = timesheet.TimesheetDate.AddDays(num_days);
-                }
-                else
-                {
-                    var num_days = DayOfWeek.Sunday - timesheet.TimesheetDate.DayOfWeek;
-
-                    if (num_days < 0)
-                        num_days += 7;
-
-                    timesheet.TimesheetDate = timesheet.TimesheetDate.AddDays(num_days);
-                }
+                timesheet.periodEndDateSpecified = true;
+                timesheet.periodEndDate = PeriodEndDate;
             }
 
-            timesheet.EntityReference = TimesheetRef;
-            timesheet.TimesheetNumber = TimesheetRef;
-
-            timesheet.PurchaseOrderNumber = PoNumber;
-
-            //Consultant split[0] is always the owning consultant, user their employer ref but needs to be prefixed with Code from config
-            timesheet.ConsultantCode = consultantPrefixCode + ConsultantSplits[0].Consultant.EmployeeRef;
-
-
-
-            timesheet.AssignmentRef = AssignmentRef;
-            timesheet.BookedBy = Contact;
-            timesheet.Adjustment = YesNo.N;
-
-            timesheet.Costcentre = CostCentre;
-            timesheet.ExternalTSId = TimesheetId;
-
-            if (!string.IsNullOrEmpty(ApprovedBy) && ApprovedDateTime != null)
+            timesheet.periodStartDateSpecified = false;
+            if (timesheet.periodStartDate != null)
             {
-                timesheet.AuthorisedBy = ApprovedBy;
-                timesheet.AuthorisedDate = (DateTime)ApprovedDateTime;
+                timesheet.periodStartDateSpecified = true;
+                timesheet.periodStartDate = PeriodStartDate;
             }
 
-            if (string.IsNullOrEmpty(PaymentType))
-            {
-                throw new Exception("Payment type is not set on the Employee File");
-            }
+            timesheet.placementExternalRef = AssignmentRef;
 
-            switch (PaymentType.ToLower())
-            {
-                case "ltd":
-                    {
-                        timesheet.SupplierName = LtdCompany;
-                        break;
-                    }
-                case "umbrella":
-                    {
-                        timesheet.SupplierName = Umbrella;
-                        break;
-                    }
-                case "outsourced":
-                    {
-                        timesheet.SupplierName = Outsourced;
-                        break;
-                    }
-            }
+            timesheet.purchaseWrittenOffSpecified = true;
+            timesheet.purchaseWrittenOff = false;
 
-            if (!string.IsNullOrEmpty(InvoiceAddressId))
-            {
-                timesheet.InvoiceAddressNumber = int.Parse(InvoiceAddressId);
-            }
+            timesheet.salesWrittenOffSpecified = true;
+            timesheet.salesWrittenOff = false;
+
+            timesheet.freehandRef = TimesheetRef;
+            timesheet.payrollRef = TimesheetRef;
 
             return timesheet;
         }
 
-        private void MapLine(Sti.Timesheet timesheet, TimesheetLine line, int timesheetLineIndex, Dictionary<string, string> rateMap, bool isHourly)
-        {
-            if (line.Rate == null) return;
 
-
-            //get the rate name, default it to Basic Hours first
-            var rateName = "Basic Hours";
-            var rateDescription = "Basic Hours";
-            var frequency = RateFrequency.H;
-
-            if (line.Rate.RateType.ToLower() == "basic rate")
-            {
-                if (line.Rate.PayUnit.ToLower() == "daily")
-                {
-                    rateDescription = "Basic Days";
-                    frequency = RateFrequency.D;
-                }
-            }
-
-            /****************** HACK TO GET PAYROLL THROUGH  ********************************************
-            if (!isHourly)
-            {
-                rateName = "Basic Days";
-            }
-            else
-            {
-                rateName = "Basic Hours";
-            }
-            ****************** END HACK TO GET PAYROLL THROUGH  *********************************************/
-
-            if (line.Rate.RateType.ToLower() == "other rate")
-            {
-                rateName = line.Rate.OvertimeType;
-                rateDescription = line.Rate.FeeName;
-            }
-
-            switch (timesheetLineIndex)
-            {
-
-                case 0:
-                {
-                    timesheet.RateCode1 = rateMap[rateName];
-                    timesheet.Description1 = rateDescription;
-                    timesheet.Line1Frequency = frequency;
-                    //Hourly rate
-                    if (line.TotalDays == null || line.TotalDays <= 0)
-                    {
-                        timesheet.Hours1 = line.TotalHours;
-                    }
-                    //Day rate
-                    else
-                    {
-                        timesheet.Hours1 = (decimal) line.TotalDays;
-                    }
-
-                    timesheet.PayRate1 = line.Rate.PayRateCurrency;
-                    timesheet.BillRate1 = line.Rate.ChargeRateCurrency;
-       
-                    if (!string.IsNullOrEmpty(HolidayPay) && HolidayPay.ToLower() == "rolled up holiday pay")
-                    {
-                        timesheet.Basic1AccrueWTD = YesNo.N;
-                    }
-     
-                    break;
-                }
-                case 1:
-                {
-                    timesheet.RateCode2 = rateMap[rateName];
-                    timesheet.Description2 = rateDescription;
-                    timesheet.Line2Frequency = frequency;
-                    //Hourly rate
-                    if (line.TotalDays == null || line.TotalDays <= 0)
-                    {
-                        timesheet.Hours2 = line.TotalHours;
-                    }
-                        //Day rate
-                        else
-                    {
-                        timesheet.Hours2 = (decimal)line.TotalDays;
-                    }
-
-                    timesheet.PayRate2 = line.Rate.PayRateCurrency;
-                    timesheet.BillRate2 = line.Rate.ChargeRateCurrency;
-
-                    if (!string.IsNullOrEmpty(HolidayPay) && HolidayPay.ToLower() == "rolled up holiday pay")
-                    {
-                        timesheet.Basic2AccrueWTD = YesNo.N;
-                    }
-
-                    break;
-                }
-                case 2:
-                {
-                    timesheet.RateCode3 = rateMap[rateName];
-                    timesheet.Description3 = rateDescription;
-                    timesheet.Line3Frequency = frequency;
-                    //Hourly rate
-                    if (line.TotalDays == null || line.TotalDays <= 0)
-                    {
-                        timesheet.Hours3 = line.TotalHours;
-                    }
-                    //Day rate
-                    else
-                    {
-                        timesheet.Hours3 = (decimal)line.TotalDays;
-                    }
-
-                    timesheet.PayRate3 = line.Rate.PayRateCurrency;
-                    timesheet.BillRate3 = line.Rate.ChargeRateCurrency;
-
-                    if (!string.IsNullOrEmpty(HolidayPay) && HolidayPay.ToLower() == "rolled up holiday pay")
-                    {
-                        timesheet.Basic3AccrueWTD = YesNo.N;
-                    }
-
-                    break;
-                }
-                case 3:
-                {
-                    timesheet.RateCode4 = rateMap[rateName];
-                    timesheet.Description4 = rateDescription;
-                    timesheet.Line4Frequency = frequency;
-                    //Hourly rate
-                    if (line.TotalDays == null || line.TotalDays <= 0)
-                    {
-                        timesheet.Hours4 = line.TotalHours;
-                    }
-                    //Day rate
-                    else
-                    {
-                        timesheet.Hours4 = (decimal)line.TotalDays;
-                    }
-
-                    timesheet.PayRate4 = line.Rate.PayRateCurrency;
-                    timesheet.BillRate4 = line.Rate.ChargeRateCurrency;
-
-                    if (!string.IsNullOrEmpty(HolidayPay) && HolidayPay.ToLower() == "rolled up holiday pay")
-                    {
-                        timesheet.Basic4AccrueWTD = YesNo.N;
-                    }
-
-                    break;
-                }
-                case 4:
-                {
-                    timesheet.RateCode5 = rateMap[rateName];
-                    timesheet.Description5 = rateDescription;
-                    timesheet.Line5Frequency = frequency;
-                    //Hourly rate
-                    if (line.TotalDays == null || line.TotalDays <= 0)
-                    {
-                        timesheet.Hours5 = line.TotalHours;
-                    }
-                    //Day rate
-                    else
-                    {
-                        timesheet.Hours5 = (decimal)line.TotalDays;
-                    }
-
-                    timesheet.PayRate5 = line.Rate.PayRateCurrency;
-                    timesheet.BillRate5 = line.Rate.ChargeRateCurrency;
-
-                    if (!string.IsNullOrEmpty(HolidayPay) && HolidayPay.ToLower() == "rolled up holiday pay")
-                    {
-                        timesheet.Basic5AccrueWTD = YesNo.N;
-                    }
-
-                    break;
-                }
-                default:
-                    throw new Exception("Too many timesheet lines");
-
-            }
-        }
-
-        private void MapExpenseLine(Sti.Timesheet timesheet, Expense expense, int adhocIndex, Dictionary<string, string> rateMap)
-        {
-            switch(adhocIndex)
-            {
-                case 0:
-                {
-                    timesheet.AdhocCode1 = rateMap[expense.Rate.ExpenseType];
-                    timesheet.Adhoc1Description = expense.Rate.ExpenseType;
-
-                    if (expense.Rate.PayRateCurrency != null)
-                        timesheet.Adhoc1PayRate = (decimal) expense.Rate.PayRateCurrency;
-
-                    if (expense.Rate.ChargeRateCurrency != null)
-                        timesheet.Adhoc1BillRate = (decimal) expense.Rate.ChargeRateCurrency;
-
-                    if (expense.Quantity != null)
-                        timesheet.Adhoc1Hours = (decimal) expense.Quantity;
-
-                    if (expense.Amount != null)
-                    {
-                        timesheet.Adhoc1PayRate = (decimal) expense.Amount;
-                        timesheet.Adhoc1BillRate = timesheet.Adhoc1PayRate;
-                    }
-
-                    break;
-                }
-                case 1:
-                {
-                    timesheet.AdhocCode2 = rateMap[expense.Rate.ExpenseType];
-                    timesheet.Adhoc2Description = expense.Rate.ExpenseType;
-
-                    if (expense.Rate.PayRateCurrency != null)
-                        timesheet.Adhoc2PayRate = (decimal) expense.Rate.PayRateCurrency;
-
-                    if (expense.Rate.ChargeRateCurrency != null)
-                        timesheet.Adhoc2BillRate = (decimal) expense.Rate.ChargeRateCurrency;
-
-                    if (expense.Quantity != null)
-                        timesheet.Adhoc2Hours = (decimal) expense.Quantity;
-
-                    if (expense.Amount != null)
-                    {
-                        timesheet.Adhoc2PayRate = (decimal) expense.Amount;
-                        timesheet.Adhoc2BillRate = timesheet.Adhoc2PayRate;
-                    }
-
-                    break;
-                }
-                case 2:
-                {
-                    timesheet.AdhocCode3 = rateMap[expense.Rate.ExpenseType];
-                    timesheet.Adhoc3Description = expense.Rate.ExpenseType;
-
-                    if (expense.Rate.PayRateCurrency != null)
-                        timesheet.Adhoc3PayRate = (decimal) expense.Rate.PayRateCurrency;
-
-                    if (expense.Rate.ChargeRateCurrency != null)
-                        timesheet.Adhoc3BillRate = (decimal) expense.Rate.ChargeRateCurrency;
-
-                    if (expense.Quantity != null)
-                        timesheet.Adhoc3Hours = (decimal) expense.Quantity;
-
-                    if (expense.Amount != null)
-                    {
-                        timesheet.Adhoc3PayRate = (decimal) expense.Amount;
-                        timesheet.Adhoc3BillRate = timesheet.Adhoc3PayRate;
-                    }
-
-                    break;
-                }
-                default:
-                    throw new Exception("Too many expenses added to Timesheet");
-            }
-
-        }
-
-        private void MapConsultantSplit(Sti.Timesheet timesheet, string consultantPrefixCode)
-        {
-            if (ConsultantSplits== null || ConsultantSplits.Count <= 1) return;
-
-            timesheet.RZConsultant1Split = ConsultantSplits[0].Split;
-            timesheet.RZConsultantCode1 = consultantPrefixCode+ConsultantSplits[0].Consultant.EmployeeRef;
-            
-            timesheet.RZConsultant2Split = ConsultantSplits[1].Split;
-            timesheet.RZConsultantCode2 = consultantPrefixCode+ConsultantSplits[1].Consultant.EmployeeRef;
-        }
     }
 }

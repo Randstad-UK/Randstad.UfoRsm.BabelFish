@@ -31,17 +31,13 @@
     <Compile Remove="Dtos\Ufo\ClientContact.cs" />
     <Compile Remove="Dtos\Ufo\ClientContactRelationship.cs" />
     <Compile Remove="Dtos\Ufo\Division.cs" />
-    <Compile Remove="Dtos\Ufo\Expense.cs" />
     <Compile Remove="Dtos\Ufo\HolidayRequest.cs" />
     <Compile Remove="Dtos\Ufo\Job.cs" />
-    <Compile Remove="Dtos\Ufo\Timesheet.cs" />
-    <Compile Remove="Dtos\Ufo\TimesheetLine.cs" />
     <Compile Remove="Translators\AssignmentRateTranslation.cs" />
     <Compile Remove="Translators\ClientContactTranslation.cs" />
     <Compile Remove="Translators\HolidayRequestTranslation.cs" />
     <Compile Remove="Translators\InvoiceAddressTranslation.cs" />
     <Compile Remove="Translators\LtdCompanyTranslation.cs" />
-    <Compile Remove="Translators\TimesheetTranslation.cs" />
   </ItemGroup>
 
   <ItemGroup>

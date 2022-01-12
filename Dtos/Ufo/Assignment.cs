@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.Serialization.Formatters;
 using System.Text;
 using Randstad.Logging;
+using Randstad.Logging.Core;
 using Randstad.OperatingCompanies;
 using Randstad.UfoRsm.BabelFish.Dtos.RsmInherited;
 using Randstad.UfoRsm.BabelFish.Helpers;
@@ -138,7 +139,15 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             placement.excludeFromMissingTime = true;
 
             MapRates(rateCodes, placement);
+            AddDefaultManager(placement);
             return placement;
+        }
+
+        private void AddDefaultManager(RSM.Placement placement)
+        {
+            placement.manager = new Manager();
+            placement.manager.externalId = "MAN001";
+            placement.manager.clientExternalId = "CLI_001";
         }
 
 

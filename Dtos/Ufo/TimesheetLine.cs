@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Randstad.UfoSti.BabelFish.Dtos.Sti;
+using Randstad.UfoRsm.BabelFish.Dtos;
 
-namespace Randstad.UfoSti.BabelFish.Dtos.Ufo
+namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 {
     public class TimesheetLine
     {

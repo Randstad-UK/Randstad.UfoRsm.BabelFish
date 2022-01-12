@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Randstad.UfoSti.BabelFish.Dtos.Ufo
+namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 {
     public class Expense
     {

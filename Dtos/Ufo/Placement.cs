@@ -126,9 +126,16 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             r.pay = 0;
             placement.rates = new Rate[1];
             placement.rates[0] = r;
+            AddDefaultManager(placement);
             return placement;
         }
 
+        private void AddDefaultManager(RSM.Placement placement)
+        {
+            placement.manager = new Manager();
+            placement.manager.externalId = "MAN001";
+            placement.manager.clientExternalId = "CLI_001";
+        }
 
         private void MapConsultantSplit(Dtos.RsmInherited.Placement placement)
         {
