@@ -79,7 +79,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             }
 
             placement.invoiceContactOverride = InvoicePerson.MapInvoiceContact();
-            placement.invoiceContactOverride.address = 
+            placement.invoiceContactOverride.address = xxxx
             placement.jobDescription = PlacementJobTitle;
 
             //todo: Assignment manager needs set to default manager set up in RSM
