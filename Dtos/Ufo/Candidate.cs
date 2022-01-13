@@ -26,7 +26,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
         public string Name { get; set; }
         public string Surname { get; set; }
 
-        public string Gender { get; set; }
+        public string HmrcGender { get; set; }
         public DateTime? DateOfBirth { get; set; }
         public string NiNumber { get; set; }
 
@@ -99,7 +99,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             worker.emailTimesheetRemindersSpecified = false;
             worker.excludeFromAWRSpecified = false;
             worker.externalReference = CandidateRef;
-            worker.gender = Mappers.MapGender(Gender);
+            worker.gender = Mappers.MapGender(HmrcGender);
 
             worker.isCISSpecified = false;
             worker.isInPayLinkedSpecified = false;

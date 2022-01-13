@@ -132,7 +132,8 @@ namespace Randstad.UfoRsm.BabelFish.Helpers
                 }
                 default:
                 {
-                    throw new Exception("Unknown gender recieved");
+                    return "M";
+                    //throw new Exception("Unknown gender recieved");
                 }
             }
         }

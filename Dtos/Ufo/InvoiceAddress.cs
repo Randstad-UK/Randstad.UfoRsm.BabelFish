@@ -21,17 +21,17 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
         public string PostCode { get; set; }
         public List<Client> Client { get; set; }
 
-        public RSM.Contact MapContact()
+        public RSM.Address MapAddress()
         {
-            var contact = new RSM.Contact();
-            contact.address = new RSM.Address();
-            contact.address.line1 = Street;
-            contact.address.town = City;
-            contact.address.county = County;
-            contact.address.country = Country;
-            contact.address.postcode = PostCode;
+            var address = new RSM.Address();
+            address = new RSM.Address();
+            address.line1 = Street;
+            address.town = City;
+            address.county = County;
+            address.country = Country;
+            address.postcode = PostCode;
 
-            return contact;
+            return address;
         }
 
         /*

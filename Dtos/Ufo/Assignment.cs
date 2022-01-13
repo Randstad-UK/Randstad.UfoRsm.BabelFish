@@ -47,7 +47,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
         public string InvoiceAddressId { get; set; }
         public InvoiceAddress InvoiceAddress { get; set; }
         public Address WorkAddress { get; set; }
-        public string InvoiceContact { get; set; }
+        public ClientContact InvoicePerson { get; set; }
         public string Contact { get; set; }
         public string RecordType { get; set; }
         public List<AssignmentRate> Rates { get; set; }
@@ -103,7 +103,8 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                 placement.invoiceRequiresPO = PoRequired;
             }
 
-            placement.invoiceContactOverride = InvoiceAddress.MapContact();
+            placement.invoiceContactOverride = InvoicePerson.MapInvoiceContact();
+            placement.invoiceContactOverride.address = InvoiceAddress.MapAddress();
             placement.jobDescription = AssignmentJobTitle;
 
             //todo: Assignment manager needs set to default manager set up in RSM
@@ -170,7 +171,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
         {
             if (Rates == null) return;
 
-            placement.rates = new Rate[Rates.Count];
+            placement.rates = new RSM.Rate[Rates.Count];
 
 
             var priorityOrder = 1;

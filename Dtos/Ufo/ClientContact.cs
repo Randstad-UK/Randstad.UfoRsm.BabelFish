@@ -7,7 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 
-namespace Randstad.UfoSti.BabelFish.Dtos.Ufo
+namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 {
     public class ClientContact : ObjectBase
     {
@@ -19,34 +19,25 @@ namespace Randstad.UfoSti.BabelFish.Dtos.Ufo
         public string EmailAddress { get; set; }
         public string Phone { get; set; }
         public string Mobile { get; set; }
+        public string Department { get; set; }
         public string OtherPhone { get; set; }
         public Owner Owner { get; set; }
         public bool? HasLeft { get; set; }
         public Client ContactClient { get; set; }
-        public ClientContactRelationship RelatedClientRelationship { get; set; }
+        public Address Address { get; set; }
 
         public string ContactType { get; set; }
         public bool IsCheckedIn { get; set; }
 
-        public Sti.Client MapClient(string consultantPrefixCode, Dictionary<string, string> tomCodes)
+        public RSM.Contact MapInvoiceContact()
         {
-            
-            //map the contacts client first
-            Sti.Client client = null;
-            /*
-            Sti.Client hle = null;
-
-            if (ContactClient == null)
-                client = new Sti.Client();
-            else
-                client = ContactClient.MapClient(consultantPrefixCode, out hle, tomCodes);
-
-            client.ClientTelephone = Phone;
-            client.ClientMobileTelephone = Mobile;
-            client.ClientEmail = EmailAddress;
-            */
-
-            return client;
+            var contact = new RSM.Contact();
+            contact.department = Department;
+            contact.email = EmailAddress;
+            contact.externalId = ContactId;
+            contact.firstname = Forename;
+            contact.lastname = Surname;
+            return null;
         }
 
 

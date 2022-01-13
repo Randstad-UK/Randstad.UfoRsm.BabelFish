@@ -33,6 +33,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
         public Owner Owner { get; set; }
         public InvoiceAddress InvoiceAddress { get; set; }
+        public ClientContact InvoicePerson { get; set; }
 
 
         public Client Client { get; set; }
@@ -121,10 +122,10 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             placement.excludeFromMissingTimeSpecified = true;
             placement.excludeFromMissingTime = false;
 
-            Rate r = new Rate();
+            var r = new RSM.Rate();
             r.charge = Fee;
             r.pay = 0;
-            placement.rates = new Rate[1];
+            placement.rates = new RSM.Rate[1];
             placement.rates[0] = r;
             AddDefaultManager(placement);
             return placement;

@@ -4,6 +4,7 @@ using System.ServiceModel;
 using System.Text;
 //using Randstad.UfoRsm.BabelFish.Dtos.Sti;
 using Randstad.UfoRsm.BabelFish.Helpers;
+using RSM;
 
 namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 {
@@ -34,15 +35,15 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
         public string Status { get; set; }
         public Assignment Assignment { get; set; }
 
-        public RSM.Rate MapRate(Dictionary<string, string> rateCodes, Assignment assignment)
+        public Dtos.RsmInherited.Rate MapRate(Dictionary<string, string> rateCodes, Assignment assignment)
         {
             Assignment = assignment;
             return MapRate(rateCodes);
         }
 
-        public RSM.Rate MapRate(Dictionary<string, string> rateCodes)
+        public Dtos.RsmInherited.Rate MapRate(Dictionary<string, string> rateCodes)
         {
-            var rate = new RSM.Rate();
+            var rate = new Dtos.RsmInherited.Rate();;
             rate.awrSpecified = true;
             rate.awrSpecified = false;
             rate.chargeSpecified = false;
@@ -52,7 +53,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             rate.name = FeeName;
             rate.pay = PayRateCurrency;
             rate.payableSpecified = false;
-
+            rate.ExternalAssignmentRef = Assignment.AssignmentRef;
             SetRateType(rate, rateCodes);
 
             return rate;
