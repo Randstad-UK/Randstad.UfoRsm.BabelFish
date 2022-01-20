@@ -79,27 +79,25 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             client.paperOnInvoices = 7;
 
             client.termsDaysSpecified = true;
-            client.termsDays = 7;
+            client.termsDays = 14;
 
-            //TODO: set terms template on client when set up in RSM
-            //client.termsTemplateName = "";
+            //TODO: (Done) set terms template on client when set up in RSM
+            client.termsTemplateName = "Default Charge Terms";
 
-            client.termsType = "Day From Invoice Date";
+            client.termsType = "Days From Invoice Date";
             
             client.timesheetsOnInvoicesSpecified = true;
             client.timesheetsOnInvoices = 0;
 
-            //TODO: set vat code on client when set up in RSM
-            //client.vatCode = "20% VAT";
+            //TODO: (Done) set vat code on client when set up in RSM
+            client.vatCode = "T1";
 
             client.defaultContractedHoursSpecified = true;
             client.defaultContractedHours = 40;
 
 
-            //TODO: set default expense template on client once set up in RSM
-            //client.defaultExpenseTemplate = "";
+            client.defaultTimesheetDateCalculator = "weekly";
 
-            client.defaultTimesheetDateCalculator = "WEEKLY";
 
             return client;
         }

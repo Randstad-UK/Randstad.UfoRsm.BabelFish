@@ -32,7 +32,6 @@
     <Compile Remove="Dtos\Ufo\Division.cs" />
     <Compile Remove="Dtos\Ufo\HolidayRequest.cs" />
     <Compile Remove="Dtos\Ufo\Job.cs" />
-    <Compile Remove="Translators\ClientContactTranslation.cs" />
     <Compile Remove="Translators\HolidayRequestTranslation.cs" />
     <Compile Remove="Translators\InvoiceAddressTranslation.cs" />
     <Compile Remove="Translators\LtdCompanyTranslation.cs" />

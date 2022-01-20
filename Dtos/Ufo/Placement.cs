@@ -17,7 +17,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
         public string PlacementRef { get; set; }
         public string PoNumber { get; set; }
-        public bool PoRequired { get; set; }
+        public string PoRequired { get; set; }
         public DateTime StartDate { get; set; }
         public string PlacementJobTitle { get; set; }
 
@@ -36,7 +36,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
         public ClientContact InvoicePerson { get; set; }
 
 
-        public Client Client { get; set; }
+        public Client RsmClient { get; set; }
 
         public List<ConsultantSplit> ConsultantSplits { get; set; }
 
@@ -52,7 +52,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             placement.cisApplicableSpecified = true;
             placement.cisApplicable = false;
 
-            placement.client = Client.MapClient();
+            placement.client = RsmClient.MapClient();
             placement.consultant = Owner.MapConsultant();
 
             placement.contractedHoursSpecified = true;
@@ -75,12 +75,13 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             if (PoRequired != null)
             {
                 placement.invoiceRequiresPOSpecified = true;
-                placement.invoiceRequiresPO = PoRequired;
+                placement.invoiceRequiresPO = Mappers.MapBool(PoRequired);
             }
 
-            placement.invoiceContactOverride = InvoicePerson.MapInvoiceContact();
-            placement.invoiceContactOverride.address = xxxx
+            placement.invoiceContactOverride = InvoicePerson.MapContact();
+            placement.invoiceContactOverride.address = InvoiceAddress.MapAddress();
             placement.jobDescription = PlacementJobTitle;
+            placement.jobTitle = PlacementJobTitle;
 
             //todo: Assignment manager needs set to default manager set up in RSM
             placement.manager = new Manager();
@@ -100,10 +101,11 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             placement.salesBranch = Unit.Name;
             placement.salesCostCentre = tomCodes[Unit.FinanceCode];
 
-            placement.siteAddress = Client.WorkAddress.GetAddress();
+            placement.siteAddress = RsmClient.WorkAddress.GetAddress();
 
             MapConsultantSplit(placement);
 
+            placement.startSpecified = true;
             placement.start = StartDate;
 
             placement.timesheetEmailApprovalSpecified = true;
@@ -124,20 +126,19 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             placement.excludeFromMissingTime = false;
 
             var r = new RSM.Rate();
+            r.chargeSpecified = true;
             r.charge = Fee;
+            r.paySpecified = true;
             r.pay = 0;
+            r.name = "Perm Placement Fee";
+            r.payElementCode = "P280";
+
             placement.rates = new RSM.Rate[1];
             placement.rates[0] = r;
-            AddDefaultManager(placement);
+            placement.manager = Mappers.GetDefaultManager();
             return placement;
         }
 
-        private void AddDefaultManager(RSM.Placement placement)
-        {
-            placement.manager = new Manager();
-            placement.manager.externalId = "MAN001";
-            placement.manager.clientExternalId = "CLI_001";
-        }
 
         private void MapConsultantSplit(Dtos.RsmInherited.Placement placement)
         {

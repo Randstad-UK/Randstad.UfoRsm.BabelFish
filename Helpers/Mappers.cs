@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Randstad.OperatingCompanies;
+using RSM;
 
 namespace Randstad.UfoRsm.BabelFish.Helpers
 {
@@ -136,6 +137,21 @@ namespace Randstad.UfoRsm.BabelFish.Helpers
                     //throw new Exception("Unknown gender recieved");
                 }
             }
+        }
+
+        public static RSM.Manager GetDefaultManager()
+        {
+            var manager = new RSM.Manager();
+            manager = new Manager();
+            manager.externalId = "MAN001";
+            manager.clientExternalId = "CLI_001";
+            manager.email = "man01@randstad.co.uk";
+            manager.title = "Mr";
+            manager.firstname = "Dummy";
+            manager.lastname = "Manager";
+
+            return manager;
+
         }
         
     }

@@ -70,7 +70,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             rate.selectableByWorkers = false;
             rate.taxableSpecified = false;
             rate.timePattern = "default";
-
+            
             rate.timesheetFields = @"start = ""false"" finish = ""false"" break= ""false"" hours = ""false"" dayDecimal = ""true"" isDay = ""false"" comment = ""false""";
             switch (RateType)
             {
@@ -79,12 +79,13 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                     //Concat  the mapname to be Basic Hours or Basic Days
                     var mapName = "Basic ";
 
-                    
-                    if (PayUnit == "Hourly")
+                    rate.timesheetFields = "Hours";
+
+                        if (PayUnit == "Hourly")
                     {
                         mapName += "Hours";
                         rate.periodDuration = 60;
-                        rate.timesheetFields = @"start = ""false"" finish = ""false"" break= ""false"" hours = ""true"" dayDecimal = ""false"" isDay = ""false"" comment = ""false""";
+                        
                     }
 
                     if (PayUnit == "Daily")
@@ -95,15 +96,21 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
 
                     rate.payElementCode = rateCodes[mapName];
-                    rate.period = mapName;
+                    rate.period = PayUnit;
 
                     if (PayRateCurrency != null)
+                    {
                         rate.pay = (decimal) PayRateCurrency;
+                        rate.paySpecified = true;
+                    }
 
                     if (ChargeRateCurrency != null)
+                    {
                         rate.charge = (decimal) ChargeRateCurrency;
+                        rate.chargeSpecified = true;
+                    }
 
-
+                    rate.name = mapName;
 
                     break;
                 }
@@ -112,10 +119,18 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                     rate.payElementCode = rateCodes[OvertimeType];
 
                     if (PayRateCurrency != null)
-                        rate.pay = (decimal)PayRateCurrency;
+                    {
+                        rate.pay = (decimal) PayRateCurrency;
+                        rate.paySpecified = true;
+                    }
 
                     if (ChargeRateCurrency != null)
-                        rate.charge = (decimal)ChargeRateCurrency;
+                    {
+                        rate.charge = (decimal) ChargeRateCurrency;
+                        rate.chargeSpecified = true;
+                    }
+
+                    rate.name = FeeName;
                     break;
                 }
 

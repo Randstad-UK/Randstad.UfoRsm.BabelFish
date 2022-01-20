@@ -456,7 +456,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
             
             //map all the expenses
-            if (consolidatedExpenseses.Any())
+            if (consolidatedExpenseses != null && consolidatedExpenseses.Any())
             {
                 timesheet.Expenses= new List<RSM.ExpenseItem>();
                 foreach (var expense in consolidatedExpenseses)

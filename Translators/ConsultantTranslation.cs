@@ -28,14 +28,12 @@ namespace Randstad.UfoRsm.BabelFish.Translators
             {
                 consultant = JsonConvert.DeserializeObject<Dtos.Ufo.Consultant>(entity.Payload);
 
-
-                if (BlockExport(Mappers.MapOpCoFromName(consultant.OpCo.Name)))
+                if (consultant.OpCo == null)
                 {
-                    _logger.Warn($"Consultant OpCo not live in RSM {consultant.OpCo}", entity.CorrelationId, entity, entity.ObjectId, "Dtos.Ufo.ExportedEntity", null);
+                    _logger.Warn($"Consultant not correctly set up in UFO (Probably no primary unit) {consultant.EmployeeRef}", entity.CorrelationId, entity, entity.ObjectId, "Dtos.Ufo.ExportedEntity", null);
                     entity.ExportSuccess = false;
                     return;
                 }
-
 
                 if (string.IsNullOrEmpty(consultant.OpCo.FinanceCode))
                 {

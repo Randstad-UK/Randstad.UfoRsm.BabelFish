@@ -12,24 +12,16 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
     public class ClientContact : ObjectBase
     {
         public string ContactId { get; set; }
-        public string MigratedPersonId { get; set; }
-        public string MigratedClientContactId { get; set; }
         public string Forename { get; set; }
         public string Surname { get; set; }
         public string EmailAddress { get; set; }
-        public string Phone { get; set; }
-        public string Mobile { get; set; }
         public string Department { get; set; }
-        public string OtherPhone { get; set; }
-        public Owner Owner { get; set; }
-        public bool? HasLeft { get; set; }
-        public Client ContactClient { get; set; }
-        public Address Address { get; set; }
+        public Team OpCo { get; set; }
+        public Address MailingAddress { get; set; }
 
-        public string ContactType { get; set; }
         public bool IsCheckedIn { get; set; }
 
-        public RSM.Contact MapInvoiceContact()
+        public RSM.Contact MapContact()
         {
             var contact = new RSM.Contact();
             contact.department = Department;
@@ -37,7 +29,12 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             contact.externalId = ContactId;
             contact.firstname = Forename;
             contact.lastname = Surname;
-            return null;
+            if (MailingAddress != null)
+            {
+                contact.address = MailingAddress.GetAddress();
+            }
+
+            return contact;
         }
 
 

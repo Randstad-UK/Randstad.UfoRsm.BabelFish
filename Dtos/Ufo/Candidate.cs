@@ -136,8 +136,8 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
         {
             if (PayType != PaymentTypes.PAYE) return;
 
-            //TODO: update inputHOlidayScheme and PaymentFrequency when RMS is set up
-            //worker.inpayHolidayScheme = "inputHolidayScheme";
+            //TODO: (DONE) update inputHOlidayScheme and PaymentFrequency when RMS is set up
+            worker.inpayHolidayScheme = "HS1";
 
             //TODO: update payment frequency when set up in RSM
             worker.paymentFrequency = "Weekly";
@@ -206,23 +206,22 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             worker.limitedCompany.invoicePeriodSpecified = true;
             worker.limitedCompany.invoicePeriod = 1;
             worker.limitedCompany.name = LtdCompany.Name;
-
-            //TODO: Update limitedCompany VAT Code once set up in RMS
-            worker.limitedCompany.vatCode = "Standard";
-
-            //map address
-            worker.ltdCompanyContact = new Contact();
-            worker.ltdCompanyContact.address = LtdCompany.InvoiceAddress.GetAddress();
+            
+            //TODO: (Done) Update limitedCompany VAT Code once set up in RMS
+            worker.limitedCompany.vatCode = "T1";
+            
+            worker.limitedCompany.invoicingContact =new Contact();
+            worker.limitedCompany.invoicingContact.address = LtdCompany.InvoiceAddress.GetAddress();
             
             //TODO: currently don't export department for LTD not even sure we have it
             //worker.ltdCompanyContact.department = "Department";
 
-            worker.ltdCompanyContact.email = EmailAddress;
-            worker.ltdCompanyContact.externalId = EmployeeFileId;
-            worker.ltdCompanyContact.firstname = Name;
-            worker.ltdCompanyContact.lastname = Surname;
-            worker.ltdCompanyContact.mobile = Mobile;
-            worker.ltdCompanyContact.phone = Phone;
+            worker.limitedCompany.invoicingContact.email = EmailAddress;
+            worker.limitedCompany.invoicingContact.externalId = EmployeeFileId;
+            worker.limitedCompany.invoicingContact.firstname = Name;
+            worker.limitedCompany.invoicingContact.lastname = Surname;
+            worker.limitedCompany.invoicingContact.mobile = Mobile;
+            worker.limitedCompany.invoicingContact.phone = Phone;
 
             //TODO: Update once LTD Payment frequency set up in RMS
             //worker.paymentFrequency = "weekly";
@@ -252,7 +251,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             worker.limitedCompanyProviderExternalId = UmbrellaAgency.AslRef;
 
             //TODO: Set payment frequency for umbrella candidate once updated in RMS
-            //worker.paymentFrequency = "weekly";
+            worker.paymentFrequency = "Monthly Paid";
 
             worker.paymentMethod = "BACS";
         }
@@ -265,7 +264,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             worker.limitedCompanyProviderExternalId = OutsourcedAgency.AslRef;
 
             //TODO: Set payment frequency for outsourced candidate once updated in RMS
-            //worker.paymentFrequency = "weekly";
+            worker.paymentFrequency = "weekly";
 
             worker.paymentMethod = "BACS";
         }

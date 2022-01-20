@@ -4,40 +4,65 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Randstad.Logging;
-using Randstad.UfoSti.BabelFish.Dtos.Ufo;
+using Randstad.UfoRsm.BabelFish.Dtos.Ufo;
+using Randstad.UfoRsm.BabelFish.Helpers;
 using RandstadMessageExchange;
 
-namespace Randstad.UfoSti.BabelFish.Translators
+namespace Randstad.UfoRsm.BabelFish.Translators
 {
     public class ClientContactTranslation : TranslatorBase, ITranslator
     {
-        private readonly string _consultantCodePrefix;
 
-        public ClientContactTranslation(IProducerService producer, string routingKeyBase, string consultantCodePrefix, ILogger logger) : base(producer, routingKeyBase, logger)
+        public ClientContactTranslation(IProducerService producer, string routingKeyBase, ILogger logger) : base(producer, routingKeyBase, logger)
         {
-            _consultantCodePrefix = consultantCodePrefix;
+
         }
 
         public async Task Translate(ExportedEntity entity)
         {
             if (entity.ObjectType != "ClientContact") return;
 
-            var contact = JsonConvert.DeserializeObject<Dtos.Ufo.ClientContact>(entity.Payload);
-
-            if ( contact.IsCheckedIn == false)
+            ClientContact contact = null;
+            RSM.Contact mappedContact = null;
+            try
             {
-                if (entity.ValidationErrors == null)
-                    entity.ValidationErrors = new List<string>();
+                contact = JsonConvert.DeserializeObject<Dtos.Ufo.ClientContact>(entity.Payload);
 
-                var message = "Client Contact is not checked in";
-                _logger.Warn(message, entity.CorrelationId, contact, entity.ObjectId, "Dtos.Ufo.ClientContact", null);
-                entity.ValidationErrors.Add(message);
+                if (BlockExport(Mappers.MapOpCoFromName(contact.OpCo.Name)))
+                {
+                    _logger.Warn(
+                        $"Contact OpCo not live in RSWM {contact.Forename} {contact.Surname} {contact.OpCo.Name}",
+                        entity.CorrelationId, entity, entity.ObjectId, "Dtos.Ufo.ExportedEntity", null);
+                    entity.ExportSuccess = false;
+                    return;
+                }
+
+                if (contact.IsCheckedIn == false)
+                {
+                    if (entity.ValidationErrors == null)
+                        entity.ValidationErrors = new List<string>();
+
+                    var message = $"Client Contact {contact.Forename} {contact.Surname} is not checked in";
+                    _logger.Warn(message, entity.CorrelationId, contact, entity.ObjectId, "Dtos.Ufo.ClientContact",
+                        null);
+                    entity.ValidationErrors.Add(message);
+                    return;
+                }
+
+                _logger.Success($"Recieved ClientContact {contact.Forename} {contact.Surname}", entity.CorrelationId, contact, entity.ObjectId, "Dtos.Ufo.Candidate", null);
+
+                mappedContact = contact.MapContact();
+            }
+            catch (Exception exp)
+            {
+                _logger.Warn($"Problem deserialising ClientContact from UFO {exp.Message}", entity.CorrelationId, entity, entity.ObjectId, "Dtos.Ufo.ExportedEntity", null);
+                entity.ExportSuccess = false;
                 return;
             }
 
-            entity.ValidationErrors = new List<string>();
-            entity.ValidationErrors.Add("Client Contacts not mapped to STI");
-            entity.ExportSuccess = false;
+            SendToRsm(JsonConvert.SerializeObject(mappedContact), Mappers.MapOpCoFromName(contact.OpCo.Name.ToLower()).ToString(), "Client", entity.CorrelationId, (bool)contact.IsCheckedIn);
+            _logger.Success($"Successfully mapped ClientContact {contact.Forename} {contact.Surname} and Sent To RSM", entity.CorrelationId, mappedContact, contact.ContactId, "Dtos.Ufo.Client", null, contact, "RSM.Client");
+            entity.ExportSuccess = true;
 
         }
     }

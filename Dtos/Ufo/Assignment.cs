@@ -71,9 +71,8 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
             placement.bulkEntrySpecified = false;
 
-            //todo: Assignment CIS needs to be pulled once UFO solution specced
-            placement.cisApplicableSpecified = true;
-            placement.cisApplicable = true;
+            //TODO: Assignment CIS needs to be pulled once UFO solution specced
+            placement.cisApplicableSpecified = false;
 
             placement.client = Client.MapClient();
             placement.consultant = Owner.MapConsultant();
@@ -94,6 +93,13 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             placement.faxbackEnabled = false;
 
             placement.holidayAccrualRateSpecified = false;
+            
+            if (EnhancedHolidayDays != null)
+            {
+                placement.holidayAccrualRateSpecified = true;
+                placement.holidayAccrualRate = EnhancedHolidayDays;
+            }
+
             placement.holidayAccrualRatePostAWRSpecified = false;
 
             placement.invoiceRequiresPOSpecified = false;
@@ -103,12 +109,10 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                 placement.invoiceRequiresPO = PoRequired;
             }
 
-            placement.invoiceContactOverride = InvoicePerson.MapInvoiceContact();
+            placement.invoiceContactOverride = InvoicePerson.MapContact();
             placement.invoiceContactOverride.address = InvoiceAddress.MapAddress();
-            placement.jobDescription = AssignmentJobTitle;
-
-            //todo: Assignment manager needs set to default manager set up in RSM
-            //placement.manager = new Manager();
+            placement.jobTitle = AssignmentJobTitle;
+            placement.jobDescription = Description;
 
             placement.noCommunications = "WMCL";
             placement.permSpecified = true;
@@ -129,6 +133,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
             MapConsultantSplit(placement);
 
+            placement.startSpecified = true;
             placement.start = StartDate;
 
             placement.timesheetEmailApprovalSpecified = true;
@@ -140,17 +145,18 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             placement.excludeFromMissingTime = true;
 
             MapRates(rateCodes, placement);
-            AddDefaultManager(placement);
+
+            //TODO: (Done) Assignment manager needs set to default manager set up in RSM
+            placement.manager = Mappers.GetDefaultManager();
             return placement;
         }
 
-        private void AddDefaultManager(RSM.Placement placement)
+        private void MapLtdValues(RSM.Placement placement)
         {
-            placement.manager = new Manager();
-            placement.manager.externalId = "MAN001";
-            placement.manager.clientExternalId = "CLI_001";
-        }
+            if (Candidate.PayType != PaymentTypes.LTD) return;
 
+            placement.cisApplicable = Mappers.MapBool(Candidate.LtdCompany.Cis);
+        }
 
         private void MapConsultantSplit(Dtos.RsmInherited.Placement placement)
         {
@@ -176,18 +182,20 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
             var priorityOrder = 1;
             var rateIndex = 0;
-            //Sti.AssignmentRate stiRate = null;
+
             foreach (var rate in Rates)
             {
-                var rsmRate = rate.MapRate(rateCodes);
+                var rsmRate = rate.MapRate(rateCodes, this);
 
                 rsmRate.priorityOrderSpecified = true;
                 rsmRate.priorityOrder = priorityOrder;
+
+
                 if (rate.PayUnit == "Hourly")
                 {
                     rsmRate.priorityOrder = 0;
                 }
-
+                
                 priorityOrder++;
                 placement.rates[rateIndex]=rsmRate;
                 rateIndex++;
