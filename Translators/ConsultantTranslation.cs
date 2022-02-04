@@ -21,7 +21,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
 
         public async Task Translate(ExportedEntity entity)
         {
-            if (entity.ObjectType != "Consultant") return;
+            if (entity.ObjectType != "Consultant" && entity.ObjectType != "User") return;
 
             Dtos.Ufo.Consultant consultant;
             try
@@ -30,14 +30,14 @@ namespace Randstad.UfoRsm.BabelFish.Translators
 
                 if (consultant.OpCo == null)
                 {
-                    _logger.Warn($"Consultant not correctly set up in UFO (Probably no primary unit) {consultant.EmployeeRef}", entity.CorrelationId, entity, entity.ObjectId, "Dtos.Ufo.ExportedEntity", null);
+                    _logger.Warn($"Consultant not correctly set up in UFO (Probably no primary unit) {consultant.EmployeeRef}", entity.CorrelationId, entity, consultant.EmployeeRef, "Dtos.Ufo.ExportedEntity", null);
                     entity.ExportSuccess = false;
                     return;
                 }
 
                 if (string.IsNullOrEmpty(consultant.OpCo.FinanceCode))
                 {
-                    _logger.Warn($"No Finance Code On {consultant.EmployeeRef} Opco", entity.CorrelationId, entity, entity.ObjectId, "Dtos.Ufo.ExportedEntity", null);
+                    _logger.Warn($"No Finance Code On {consultant.EmployeeRef} Opco", entity.CorrelationId, entity, consultant.EmployeeRef, "Dtos.Ufo.ExportedEntity", null);
                     entity.ExportSuccess = false;
                     return;
                 }
@@ -50,7 +50,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                 return;
             }
 
-            _logger.Success($"Recieved Consultant {consultant.EmployeeRef}", entity.CorrelationId, consultant, entity.ObjectId, "Dtos.Ufo.Consultant", null);
+            _logger.Success($"Recieved Consultant {consultant.EmployeeRef}", entity.CorrelationId, consultant, consultant.EmployeeRef, "Dtos.Ufo.Consultant", null);
 
             RSM.Consultant rsmConsultant = null;
             try
@@ -62,7 +62,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                 if (entity.ValidationErrors == null)
                     entity.ValidationErrors = new List<string>();
 
-                _logger.Warn($"Failed to map consultant {consultant.EmployeeRef}: {exp.Message}", entity.CorrelationId, consultant, entity.ObjectId, "Dtos.Ufo.Consultant", null);
+                _logger.Warn($"Failed to map consultant {consultant.EmployeeRef}: {exp.Message}", entity.CorrelationId, consultant, consultant.EmployeeRef, "Dtos.Ufo.Consultant", null);
                 entity.ValidationErrors.Add(exp.Message);
                 entity.ExportSuccess = false;
                 return;
@@ -72,7 +72,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
 
             //send the consultant
             SendToRsm(JsonConvert.SerializeObject(rsmConsultant), opco, "consultant", entity.CorrelationId, true);
-            _logger.Success($"Successfully sent consultant {consultant.EmployeeRef} to RSM", entity.CorrelationId, consultant, entity.ObjectId, "Dtos.Ufo.Consultant", null, rsmConsultant, "RSM.Consultant");
+            _logger.Success($"Successfully sent consultant {consultant.EmployeeRef} to RSM", entity.CorrelationId, consultant, consultant.EmployeeRef, "Dtos.Ufo.Consultant", null, rsmConsultant, "RSM.Consultant");
 
         
             entity.ExportSuccess = true;

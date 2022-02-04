@@ -30,21 +30,21 @@ namespace Randstad.UfoRsm.BabelFish.Translators
 
                 if (BlockExport(Mappers.MapOpCoFromName(client.OpCo.Name)))
                 {
-                    _logger.Warn($"Client OpCo not live in RSWM {client.ClientRef} {client.OpCo.Name}", entity.CorrelationId, entity, entity.ObjectId, "Dtos.Ufo.ExportedEntity", null);
+                    _logger.Warn($"Client OpCo not live in RSWM {client.ClientRef} {client.OpCo.Name}", entity.CorrelationId, entity, client.ClientRef, "Dtos.Ufo.ExportedEntity", null);
                     entity.ExportSuccess = false;
                     return;
                 }
 
                 if (string.IsNullOrEmpty(client.OpCo.FinanceCode))
                 {
-                    _logger.Warn($"No Finance Code On {client.ClientRef} Opco", entity.CorrelationId, entity, entity.ObjectId, "Dtos.Ufo.ExportedEntity", null);
+                    _logger.Warn($"No Finance Code On {client.ClientRef} Opco", entity.CorrelationId, entity, client.ClientRef, "Dtos.Ufo.ExportedEntity", null);
                     entity.ExportSuccess = false;
                     return;
                 }
 
                 if (string.IsNullOrEmpty(client.Unit.FinanceCode))
                 {
-                    _logger.Warn($"No Finance Code On {client.ClientRef} Unit", entity.CorrelationId, entity, entity.ObjectId, "Dtos.Ufo.ExportedEntity", null);
+                    _logger.Warn($"No Finance Code On {client.ClientRef} Unit", entity.CorrelationId, entity, client.ClientRef, "Dtos.Ufo.ExportedEntity", null);
                     entity.ExportSuccess = false;
                     return;
                 }
@@ -59,7 +59,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
 
 
 
-            _logger.Success($"Recieved Client {client.ClientRef}", entity.CorrelationId, client, entity.ObjectId, "Dtos.Ufo.Client", null);
+            _logger.Success($"Recieved Client {client.ClientRef}", entity.CorrelationId, client, client.ClientRef, "Dtos.Ufo.Client", null);
 
             if (client.IsCheckedIn == null || client.IsCheckedIn == false)
             {
@@ -67,7 +67,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                     entity.ValidationErrors = new List<string>();
 
                 var message = $"Client {client.ClientRef} is not checked in";
-                _logger.Warn(message, entity.CorrelationId, message, entity.ObjectId, "Dtos.Ufo.Client", null);
+                _logger.Warn(message, entity.CorrelationId, message, client.ClientRef, "Dtos.Ufo.Client", null);
                 entity.ValidationErrors.Add(message);
                 return;
             }
@@ -83,7 +83,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                 if (entity.ValidationErrors == null)
                     entity.ValidationErrors = new List<string>();
 
-                _logger.Warn($"Failed to map client {client.ClientRef} {exp.Message}", entity.CorrelationId, client, entity.ObjectId, "Dtos.Ufo.Client", null);
+                _logger.Warn($"Failed to map client {client.ClientRef} {exp.Message}", entity.CorrelationId, client, client.ClientRef, "Dtos.Ufo.Client", null);
                 entity.ValidationErrors.Add(exp.Message);
                 entity.ExportSuccess = false;
                 return;
@@ -92,7 +92,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
 
 
             SendToRsm(JsonConvert.SerializeObject(rmsClient), Mappers.MapOpCoFromName(client.OpCo.Name.ToLower()).ToString(), "Client", entity.CorrelationId, (bool)client.IsCheckedIn);
-            _logger.Success($"Successfully mapped Client {client.ClientRef} and Sent To RSM", entity.CorrelationId, rmsClient, client.ClientId, "Dtos.Ufo.Client", null, client, "RSM.Client");
+            _logger.Success($"Successfully mapped Client {client.ClientRef} and Sent To RSM", entity.CorrelationId, rmsClient, client.ClientRef, "Dtos.Ufo.Client", null, client, "RSM.Client");
             entity.ExportSuccess = true;
 
         }

@@ -31,21 +31,21 @@ namespace Randstad.UfoRsm.BabelFish.Translators
 
                 if (BlockExport(Mappers.MapOpCoFromName(candidate.OperatingCo.Name)))
                 {
-                    _logger.Warn($"Candidate OpCo not live in RSWM {candidate.CandidateRef} {candidate.OperatingCo.Name}", entity.CorrelationId, entity, entity.ObjectId, "Dtos.Ufo.ExportedEntity", null);
+                    _logger.Warn($"Candidate OpCo not live in RSM {candidate.CandidateRef} {candidate.OperatingCo.Name}", entity.CorrelationId, entity, candidate.CandidateRef, "Dtos.Ufo.ExportedEntity", null);
                     entity.ExportSuccess = false;
                     return;
                 }
 
                 if (string.IsNullOrEmpty(candidate.OperatingCo.FinanceCode))
                 {
-                    _logger.Warn($"No Finance Code On {candidate.CandidateRef} Opco", entity.CorrelationId, entity, entity.ObjectId, "Dtos.Ufo.ExportedEntity", null);
+                    _logger.Warn($"No Finance Code On {candidate.CandidateRef} Opco", entity.CorrelationId, entity, candidate.CandidateRef, "Dtos.Ufo.ExportedEntity", null);
                     entity.ExportSuccess = false;
                     return;
                 }
 
-                if (candidate.LiveInPayroll == null)
+                if (candidate.LiveInPayroll == null || candidate.LiveInPayroll==false)
                 {
-                    _logger.Warn($"Candidate is not live in payroll {candidate.CandidateRef}", entity.CorrelationId, entity, entity.ObjectId, "Dtos.Ufo.ExportedEntity", null);
+                    _logger.Warn($"Candidate is not live in payroll {candidate.CandidateRef}", entity.CorrelationId, entity, candidate.CandidateRef, "Dtos.Ufo.ExportedEntity", null);
                     entity.ExportSuccess = false;
                     return;
                 }
@@ -58,11 +58,11 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                 return;
             }
 
-            _logger.Success($"Recieved Candidate {candidate.CandidateRef}", entity.CorrelationId, candidate, entity.ObjectId, "Dtos.Ufo.Candidate", null);
+            _logger.Success($"Recieved Candidate {candidate.CandidateRef}", entity.CorrelationId, candidate, candidate.CandidateRef, "Dtos.Ufo.Candidate", null);
 
             if (candidate.Status.Status.ToLower() != "live" && candidate.Status.Status.ToLower() != "scheduledforwork" && candidate.Status.Status.ToLower() != "working" && candidate.Status.Status.ToLower() != "leaver" && candidate.Status.Status.ToLower() != "placed")
             {
-                _logger.Debug($"Candidate{candidate.CandidateRef} is at the status {candidate.Status}", entity.CorrelationId, entity, entity.ObjectId, "Dtos.Ufo.Candidate", null);
+                _logger.Debug($"Candidate{candidate.CandidateRef} is at the status {candidate.Status}", entity.CorrelationId, entity, candidate.CandidateRef, "Dtos.Ufo.Candidate", null);
                 entity.ExportSuccess = false;
                 return;
             }
@@ -75,7 +75,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                  var message = $"Candidate {candidate.CandidateRef} has no payment method";
                  entity.ValidationErrors.Add(message);
 
-                _logger.Warn(message, entity.CorrelationId, candidate, entity.ObjectId, "Dtos.Ufo.Candidate", null);
+                _logger.Warn(message, entity.CorrelationId, candidate, candidate.CandidateRef, "Dtos.Ufo.Candidate", null);
                 entity.ExportSuccess = false;
                 return;
             }
@@ -108,7 +108,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
             }
 
             SendToRsm(JsonConvert.SerializeObject(rmsWorker), Mappers.MapOpCoFromName(candidate.OperatingCo.Name.ToLower()).ToString(), "Worker", entity.CorrelationId, liveInPayroll);
-            _logger.Success($"Successfully mapped Candidate {candidate.CandidateRef} and sent to RSM", entity.CorrelationId, candidate, entity.ObjectId, "Dtos.Ufo.Candidate", null, rmsWorker, "RSM.Worker");
+            _logger.Success($"Successfully mapped Candidate {candidate.CandidateRef} and sent to RSM", entity.CorrelationId, candidate, candidate.CandidateRef, "Dtos.Ufo.Candidate", null, rmsWorker, "RSM.Worker");
             entity.ExportSuccess = true;
         }
     }

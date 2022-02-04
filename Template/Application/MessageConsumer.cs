@@ -106,15 +106,12 @@ namespace Randstad.UfoRsm.BabelFish.Template.Application
 
             await Task.Run(async () =>
               {
-                  _logger.Debug($"Entering {nameof(ExecuteAsync)}.", _correlationId, null, null, null, null);
-
                   while (!cancellationToken.IsCancellationRequested)
                   {
                       try
                       {
                           await ProcessMessages(cancellationToken);
-                          _logger.Debug($"{_serviceName}: waiting {_delay} seconds.", _correlationId, null, null, null,
-                              null);
+
                           await Task.Delay(TimeSpan.FromSeconds(_delay), cancellationToken);
                           SetPollingInterval();
                           _errorHandler.ResetKnownErrorsCount();
@@ -128,6 +125,7 @@ namespace Randstad.UfoRsm.BabelFish.Template.Application
 
                           if (_errorHandler.Handle(ex, _correlationId))
                           {
+                              _logger.Debug($"Handle known error {ex.Message}.", _correlationId, null, null, null, null);
                               continue;
                           }
 

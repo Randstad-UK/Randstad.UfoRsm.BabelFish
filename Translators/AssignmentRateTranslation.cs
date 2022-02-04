@@ -35,21 +35,21 @@ namespace Randstad.UfoRsm.BabelFish.Translators
 
                 if (BlockExport(Mappers.MapOpCoFromName(rate.Assignment.OpCo.Name)))
                 {
-                    _logger.Warn($"Assignment OpCo not live in RSWM for assignment {rate.Assignment.AssignmentRef} {rate.Assignment.OpCo.Name}", entity.CorrelationId, entity, entity.ObjectId, "Dtos.Ufo.ExportedEntity", null);
+                    _logger.Warn($"Assignment OpCo not live in RSWM for assignment {rate.Assignment.AssignmentRef} {rate.Assignment.OpCo.Name}", entity.CorrelationId, entity, rate.FeeRef, "Dtos.Ufo.ExportedEntity", null);
                     entity.ExportSuccess = false;
                     return;
                 }
 
                 if (string.IsNullOrEmpty(rate.Assignment.OpCo.FinanceCode))
                 {
-                    _logger.Warn($"No Finance Code On {rate.FeeRef} Opco", entity.CorrelationId, entity, entity.ObjectId, "Dtos.Ufo.ExportedEntity", null);
+                    _logger.Warn($"No Finance Code On {rate.FeeRef} Opco", entity.CorrelationId, entity, rate.FeeRef, "Dtos.Ufo.ExportedEntity", null);
                     entity.ExportSuccess = false;
                     return;
                 }
 
                 if (string.IsNullOrEmpty(rate.Assignment.PreferredPeriod))
                 {
-                    _logger.Warn($"Assignment Rate ${rate.FeeRef} attached assignment {rate.Assignment.AssignmentRef} is historic should not export", entity.CorrelationId, entity, entity.ObjectId, "Dtos.Ufo.ExportedEntity", null);
+                    _logger.Warn($"Assignment Rate ${rate.FeeRef} attached assignment {rate.Assignment.AssignmentRef} is historic should not export", entity.CorrelationId, entity, rate.FeeRef, "Dtos.Ufo.ExportedEntity", null);
                     entity.ExportSuccess = false;
                     return;
                 }
@@ -62,7 +62,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                 return;
             }
 
-            _logger.Success($"Recieved Assignment Rate for Assignment {rate.Assignment.AssignmentRef}", entity.CorrelationId, rate, entity.ObjectId, "Dtos.Ufo.AssignmentRate", null);
+            _logger.Success($"Recieved Assignment Rate for Assignment {rate.Assignment.AssignmentRef}", entity.CorrelationId, rate, rate.FeeRef, "Dtos.Ufo.AssignmentRate", null);
 
             if (string.IsNullOrEmpty(rate.Assignment.CheckIn) || rate.Assignment.CheckIn != "Checked In")
             {
@@ -71,7 +71,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
 
                 var message = $"Rate Assignment {rate.Assignment.AssignmentRef} Not Checked In Do not send";
                 entity.ValidationErrors.Add(message);
-                _logger.Warn(message, entity.CorrelationId, rate, entity.ObjectId, "Dtos.Ufo.AssignmentRate", null);
+                _logger.Warn(message, entity.CorrelationId, rate, rate.FeeRef, "Dtos.Ufo.AssignmentRate", null);
 
                 entity.ExportSuccess = false;
                 return;
@@ -87,7 +87,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                 if (entity.ValidationErrors == null)
                     entity.ValidationErrors = new List<string>();
 
-                _logger.Warn($"Failed to map assignment {rate.Assignment.AssignmentRef} rate: {exp.Message}", entity.CorrelationId, rate, entity.ObjectId, "AssignmentRate", null);
+                _logger.Warn($"Failed to map assignment {rate.Assignment.AssignmentRef} rate: {exp.Message}", entity.CorrelationId, rate, rate.FeeRef, "AssignmentRate", null);
                 entity.ValidationErrors.Add(exp.Message);
                 entity.ExportSuccess = false;
                 return;
@@ -95,7 +95,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
 
             SendToRsm(JsonConvert.SerializeObject(mappedRate), Mappers.MapOpCoFromName(rate.Assignment.OpCo.Name).ToString(), "AssignmentRate", entity.CorrelationId, entity.IsCheckedIn);
 
-            _logger.Success($"Successfully sent mapped Assignment {rate.Assignment.AssignmentRef} Rate to RSM", entity.CorrelationId, rate, entity.ObjectId, "Dtos.Ufo.AssignmentRate", null, mappedRate, "Dtos.Sti.AssignmentRate");
+            _logger.Success($"Successfully sent mapped Assignment {rate.Assignment.AssignmentRef} Rate to RSM", entity.CorrelationId, rate, rate.FeeRef, "Dtos.Ufo.AssignmentRate", null, mappedRate, "Dtos.Sti.AssignmentRate");
             entity.ExportSuccess = true;
         }
     }

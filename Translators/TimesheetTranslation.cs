@@ -11,16 +11,18 @@ using Randstad.UfoRsm.BabelFish.Helpers;
 using Randstad.UfoRsm.BabelFish.Translators;
 using RandstadMessageExchange;
 
-namespace Randstad.UfoSti.BabelFish.Translators
+namespace Randstad.UfoRsm.BabelFish.Translators
 {
     public class TimesheetTranslation : TranslatorBase, ITranslator
     {
 
         private readonly string _baseRoutingKey;
+        private readonly Dictionary<string, string> _rateCodes;
 
-        public TimesheetTranslation(IProducerService producer, string baseRoutingKey, ILogger logger) : base(producer, baseRoutingKey, logger)
+        public TimesheetTranslation(IProducerService producer, string baseRoutingKey, ILogger logger, Dictionary<string, string> rateCodes) : base(producer, baseRoutingKey, logger)
         {
             _baseRoutingKey = baseRoutingKey;
+            _rateCodes = rateCodes;
 
         }
 
@@ -36,14 +38,14 @@ namespace Randstad.UfoSti.BabelFish.Translators
 
                 if (BlockExport(Mappers.MapOpCoFromName(timesheet.OpCo.Name)))
                 {
-                    _logger.Warn($"Timesheet OpCo not live in RSWM {timesheet.OpCo.Name} {timesheet.TimesheetRef}", entity.CorrelationId, entity, entity.ObjectId, "Dtos.Ufo.ExportedEntity", null);
+                    _logger.Warn($"Timesheet OpCo not live in RSWM {timesheet.OpCo.Name} {timesheet.TimesheetRef}", entity.CorrelationId, entity, timesheet.TimesheetRef, "Dtos.Ufo.ExportedEntity", null);
                     entity.ExportSuccess = false;
                     return;
                 }
 
                 if ((timesheet.TimesheetLines==null || !timesheet.TimesheetLines.Any()) && (timesheet.Expenses==null || !timesheet.Expenses.Any()))
                 {
-                    _logger.Warn($"No Timesheetlines or expenses on {timesheet.TimesheetRef} Opco", entity.CorrelationId, entity, entity.ObjectId, "Dtos.Ufo.ExportedEntity", null);
+                    _logger.Warn($"No Timesheetlines or expenses on {timesheet.TimesheetRef} Opco", entity.CorrelationId, entity, timesheet.TimesheetRef, "Dtos.Ufo.ExportedEntity", null);
                     entity.ExportSuccess = false;
                     return;
                 }
@@ -55,7 +57,7 @@ namespace Randstad.UfoSti.BabelFish.Translators
                     if (noRate.Any())
                     {
                         _logger.Warn($"Timesheet contains lines with no rates on {timesheet.TimesheetRef}",
-                            entity.CorrelationId, entity, entity.ObjectId, "Dtos.Ufo.ExportedEntity", null);
+                            entity.CorrelationId, entity, timesheet.TimesheetRef, "Dtos.Ufo.ExportedEntity", null);
                         entity.ExportSuccess = false;
                         return;
                     }
@@ -69,23 +71,22 @@ namespace Randstad.UfoSti.BabelFish.Translators
                 return;
             }
 
-            _logger.Success($"Recieved Timesheet {timesheet.TimesheetRef}", entity.CorrelationId, timesheet, entity.ObjectId, "Dtos.Ufo.Timesheet", null);
+            _logger.Success($"Recieved Timesheet {timesheet.TimesheetRef}", entity.CorrelationId, timesheet, timesheet.TimesheetRef, "Dtos.Ufo.Timesheet", null);
 
-            
-
-            List<UfoRsm.BabelFish.Dtos.RsmInherited.Timesheet> mappedTimesheetList = null;
+            RSM.ExpenseClaim claim = null;
+            List<RSM.Timesheet> mappedTimesheetList = null;
 
 
             try
             {
-                mappedTimesheetList = timesheet.MapTimesheet();
+                mappedTimesheetList = timesheet.MapTimesheet(_logger, _rateCodes, entity.CorrelationId, out claim);
             }
             catch (Exception exp)
             {
                 if (entity.ValidationErrors == null)
                     entity.ValidationErrors = new List<string>();
 
-                _logger.Warn($"Failed to map timesheet {timesheet.TimesheetRef}: {exp.Message}", entity.CorrelationId, timesheet, entity.ObjectId, "Dtos.Ufo.Timesheet", null);
+                _logger.Warn($"Failed to map timesheet {timesheet.TimesheetRef}: {exp.Message}", entity.CorrelationId, timesheet, timesheet.TimesheetRef, "Dtos.Ufo.Timesheet", null);
                 entity.ValidationErrors.Add(exp.Message);
                 entity.ExportSuccess = false;
                 return;
@@ -94,7 +95,13 @@ namespace Randstad.UfoSti.BabelFish.Translators
             foreach (var ts in mappedTimesheetList)
             {
                 SendToRsm(JsonConvert.SerializeObject(ts), Mappers.MapOpCoFromName(timesheet.OpCo.Name.ToLower()).ToString(), "Timesheet", entity.CorrelationId, true);
-                _logger.Success($"Successfully mapped Timesheet {timesheet.TimesheetRef} and sent to RSM", entity.CorrelationId, timesheet, timesheet.TimesheetId, "Dtos.Ufo.Timesheet", null, ts, "Dtos.Sti.Timesheet");
+                _logger.Success($"Successfully mapped Timesheet {timesheet.TimesheetRef} and sent to RSM", entity.CorrelationId, timesheet, timesheet.TimesheetRef, "Dtos.Ufo.Timesheet", null, ts, "RSM.Timesheet");
+            }
+
+            if (claim != null)
+            {
+                SendToRsm(JsonConvert.SerializeObject(claim), Mappers.MapOpCoFromName(timesheet.OpCo.Name.ToLower()).ToString(), "ExpenseClaim", entity.CorrelationId, true);
+                _logger.Success($"Successfully mapped expenses for {timesheet.TimesheetRef} and sent to RSM", entity.CorrelationId, claim, timesheet.TimesheetRef, "Dtos.Ufo.Timesheet", null, claim, "RSM.ExpenseClaim");
             }
 
             entity.ExportSuccess = true;

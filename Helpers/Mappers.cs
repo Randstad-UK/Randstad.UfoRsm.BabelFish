@@ -121,6 +121,9 @@ namespace Randstad.UfoRsm.BabelFish.Helpers
 
         public static string MapGender(string value)
         {
+            //TODO: Remove the default once UFO has been updated
+            if (string.IsNullOrEmpty(value)) return "M";
+
             switch (value.ToLower())
             {
                 case "male":

@@ -3,7 +3,7 @@
     "Randstad.UfoRsm.BabelFish": {
       "commandName": "Project",
       "environmentVariables": {
-        "DOTNET_ENVIRONMENT": "dev"
+        "DOTNET_ENVIRONMENT": "staging"
       }
     }
   }

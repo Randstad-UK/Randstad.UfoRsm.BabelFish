@@ -35,7 +35,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
 
                 if (BlockExport(Mappers.MapOpCoFromName(placement.OpCo.Name)))
                 {
-                    _logger.Warn($"Placement OpCo not live in RSWM {placement.PlacementRef} {placement.OpCo.Name}", entity.CorrelationId, entity, entity.ObjectId, "Dtos.Ufo.ExportedEntity", null);
+                    _logger.Warn($"Placement OpCo not live in RSWM {placement.PlacementRef} {placement.OpCo.Name}", entity.CorrelationId, entity, placement.PlacementRef, "Dtos.Ufo.ExportedEntity", null);
                     entity.ExportSuccess = false;
                     return;
                 }
@@ -47,7 +47,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                 return;
             }
 
-            _logger.Success($"Recieved Placement {placement.PlacementRef}", entity.CorrelationId, placement, entity.ObjectId, "Dtos.Ufo.Placement", null);
+            _logger.Success($"Recieved Placement {placement.PlacementRef}", entity.CorrelationId, placement, placement.PlacementRef, "Dtos.Ufo.Placement", null);
 
             if (string.IsNullOrEmpty(placement.CheckIn) || placement.CheckIn=="No Show")
             {
@@ -55,7 +55,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                     entity.ValidationErrors = new List<string>();
 
                 var message = $"Placement {placement.PlacementRef} is not checked in";
-                _logger.Warn(message, entity.CorrelationId, message, entity.ObjectId, "Dtos.Ufo.Placement", null);
+                _logger.Warn(message, entity.CorrelationId, message, placement.PlacementRef, "Dtos.Ufo.Placement", null);
                 entity.ValidationErrors.Add(message);
 
                 entity.ExportSuccess = false;
@@ -73,14 +73,14 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                 if (entity.ValidationErrors == null)
                     entity.ValidationErrors = new List<string>();
 
-                _logger.Warn($"Failed to map placement {placement.PlacementRef}: {exp.Message}", entity.CorrelationId, placement, entity.ObjectId, "Dtos.Ufo.Placement", null);
+                _logger.Warn($"Failed to map placement {placement.PlacementRef}: {exp.Message}", entity.CorrelationId, placement, placement.PlacementRef, "Dtos.Ufo.Placement", null);
                 entity.ValidationErrors.Add(exp.Message);
                 entity.ExportSuccess = false;
                 return;
             }
 
             SendToRsm(JsonConvert.SerializeObject(mappedPlacement), Mappers.MapOpCoFromName(placement.OpCo.Name).ToString(), "Placement", entity.CorrelationId, Mappers.MapCheckin(placement.CheckIn));
-            _logger.Success($"Successfully mapped Placement {placement.PlacementRef} and sent to Sti", entity.CorrelationId, placement, entity.ObjectId, "Dtos.Ufo.Placement", null, mappedPlacement, "Dtos.Sti.Placement");
+            _logger.Success($"Successfully mapped Placement {placement.PlacementRef} and sent to Sti", entity.CorrelationId, placement, placement.PlacementRef, "Dtos.Ufo.Placement", null, mappedPlacement, "Dtos.Sti.Placement");
             entity.ExportSuccess = true;
         }
 

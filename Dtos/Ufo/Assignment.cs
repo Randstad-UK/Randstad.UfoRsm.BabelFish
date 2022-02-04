@@ -57,6 +57,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
         public string PreferredPeriod { get; set; }
         public decimal? EnhancedHolidayDays { get; set; }
         public Client Client { get; set; }
+        public Client Hle { get; set; }
         public Candidate Candidate { get; set; }
 
         public Dtos.RsmInherited.Placement MapAssignment(Dictionary<string, string> tomCodes, ILogger logger, Dictionary<string, string> rateCodes, Guid correlationId)
@@ -74,7 +75,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             //TODO: Assignment CIS needs to be pulled once UFO solution specced
             placement.cisApplicableSpecified = false;
 
-            placement.client = Client.MapClient();
+            placement.client = Hle.MapClient();
             placement.consultant = Owner.MapConsultant();
 
             placement.contractedHoursSpecified = true;
@@ -109,10 +110,38 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                 placement.invoiceRequiresPO = PoRequired;
             }
 
+            placement.expenseTemplate = "Standard Expenses";
             placement.invoiceContactOverride = InvoicePerson.MapContact();
+
+            var invoiceEmailList = new List<string>();
+            if (!string.IsNullOrEmpty(Client.InvoiceEmail))
+            {
+                invoiceEmailList.Add(Client.InvoiceEmail);
+            }
+
+            if (!string.IsNullOrEmpty(Client.InvoiceEmail2))
+            {
+                invoiceEmailList.Add(Client.InvoiceEmail2);
+            }
+
+            if (!string.IsNullOrEmpty(Client.InvoiceEmail3))
+            {
+                invoiceEmailList.Add(Client.InvoiceEmail3);
+            }
+
+            foreach (var email in invoiceEmailList)
+            {
+                placement.invoiceContactOverride.email = placement.invoiceContactOverride.email + email + "; ";
+            }
+
+            if (!string.IsNullOrEmpty(placement.invoiceContactOverride.email) && placement.invoiceContactOverride.email.EndsWith(";"))
+            {
+                placement.invoiceContactOverride.email.Remove(placement.invoiceContactOverride.email.Length, 1);
+            }
+
             placement.invoiceContactOverride.address = InvoiceAddress.MapAddress();
-            placement.jobTitle = AssignmentJobTitle;
-            placement.jobDescription = Description;
+            placement.jobTitle = PositionRef;
+            placement.jobDescription = AssignmentJobTitle;
 
             placement.noCommunications = "WMCL";
             placement.permSpecified = true;
@@ -143,6 +172,9 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             placement.awrWeekSpecified = false;
             placement.excludeFromMissingTimeSpecified = true;
             placement.excludeFromMissingTime = true;
+            placement.customText2 = Client.ClientRef;
+            
+            placement.clientSite = Client.ClientName + ", " + Client.WorkAddress.Street+", "+Client.WorkAddress.City+", "+Client.WorkAddress.County+", "+Client.WorkAddress.PostCode;
 
             MapRates(rateCodes, placement);
 

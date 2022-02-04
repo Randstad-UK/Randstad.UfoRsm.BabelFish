@@ -35,21 +35,21 @@ namespace Randstad.UfoRsm.BabelFish.Translators
 
                 if (BlockExport(Mappers.MapOpCoFromName(assign.OpCo.Name)))
                 {
-                    _logger.Warn($"Assignment OpCo not live in RSWM {assign.AssignmentRef} {assign.OpCo.Name}", entity.CorrelationId, entity, entity.ObjectId, "Dtos.Ufo.ExportedEntity", null);
+                    _logger.Warn($"Assignment OpCo not live in RSWM {assign.AssignmentRef} {assign.OpCo.Name}", entity.CorrelationId, entity, assign.AssignmentRef, "Dtos.Ufo.ExportedEntity", null);
                     entity.ExportSuccess = false;
                     return;
                 }
 
                 if (string.IsNullOrEmpty(assign.OpCo.FinanceCode))
                 {
-                    _logger.Warn($"No Finance Code On {assign.AssignmentRef} Opco", entity.CorrelationId, entity, entity.ObjectId, "Dtos.Ufo.ExportedEntity", null);
+                    _logger.Warn($"No Finance Code On {assign.AssignmentRef} Opco", entity.CorrelationId, entity, assign.AssignmentRef, "Dtos.Ufo.ExportedEntity", null);
                     entity.ExportSuccess = false;
                     return;
                 }
 
                 if (string.IsNullOrEmpty(assign.PreferredPeriod))
                 {
-                    _logger.Warn($"Assignment {assign.AssignmentRef} is historic should not export", entity.CorrelationId, entity, entity.ObjectId, "Dtos.Ufo.ExportedEntity", null);
+                    _logger.Warn($"Assignment {assign.AssignmentRef} is historic should not export", entity.CorrelationId, entity, assign.AssignmentRef, "Dtos.Ufo.ExportedEntity", null);
                     entity.ExportSuccess = false;
                     return;
                 }
@@ -62,7 +62,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                 return;
             }
 
-            _logger.Success($"Recieved Assignment {assign.AssignmentRef}", entity.CorrelationId, assign, entity.ObjectId, "Dtos.Ufo.Assignment", null);
+            _logger.Success($"Recieved Assignment {assign.AssignmentRef}", entity.CorrelationId, assign, assign.AssignmentRef, "Dtos.Ufo.Assignment", null);
 
             if (string.IsNullOrEmpty(assign.CheckIn) || assign.CheckIn!="Checked In")
             {
@@ -72,7 +72,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                 var message = $"Assignment {assign.AssignmentRef} is not checked in";
                 entity.ValidationErrors.Add(message);
 
-                _logger.Warn(message, entity.CorrelationId, assign, entity.ObjectId, "Dtos.Ufo.Assignment", null);
+                _logger.Warn(message, entity.CorrelationId, assign, assign.AssignmentRef, "Dtos.Ufo.Assignment", null);
                 entity.ExportSuccess = false;
                 return;
                 
@@ -90,7 +90,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                 if (entity.ValidationErrors == null)
                     entity.ValidationErrors = new List<string>();
 
-                _logger.Warn($"Failed to map assignment {assign.AssignmentRef}: {exp.Message}", entity.CorrelationId, assignment, entity.ObjectId, "Assignment", null);
+                _logger.Warn($"Failed to map assignment {assign.AssignmentRef}: {exp.Message}", entity.CorrelationId, assignment, assign.AssignmentRef, "Assignment", null);
                 entity.ValidationErrors.Add(exp.Message);
                 entity.ExportSuccess = false;
 
@@ -100,7 +100,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
 
             SendToRsm(JsonConvert.SerializeObject(assignment), Mappers.MapOpCoFromName(assign.OpCo.Name).ToString(), "Assignment", entity.CorrelationId, Helpers.Mappers.MapCheckin(assign.CheckIn));
 
-            _logger.Success($"Successfully mapped Assignment {assign.AssignmentRef} and sent to RSM", entity.CorrelationId, assign, entity.ObjectId, "Dtos.Ufo.Assignment", null, assignment, "Dtos.Sti.Assignment");
+            _logger.Success($"Successfully mapped Assignment {assign.AssignmentRef} and sent to RSM", entity.CorrelationId, assign, assign.AssignmentRef, "Dtos.Ufo.Assignment", null, assignment, "Dtos.Sti.Assignment");
             
             entity.ExportSuccess = true;
         }

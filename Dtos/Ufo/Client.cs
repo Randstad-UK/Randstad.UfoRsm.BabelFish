@@ -19,6 +19,9 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
         public string VatNo { get; set; }
         public string InvoiceDeliveryMethod { get; set; }
+        public string InvoiceEmail { get; set; }
+        public string InvoiceEmail2 { get; set; }
+        public string InvoiceEmail3 { get; set; }
 
         public bool? IsCheckedIn { get; set; }
 
@@ -90,7 +93,12 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             client.timesheetsOnInvoices = 0;
 
             //TODO: (Done) set vat code on client when set up in RSM
-            client.vatCode = "T1";
+            client.vatCode = "T0";
+            if (!string.IsNullOrEmpty(VatNo))
+            {
+                client.vatCode = "T1";
+            }
+ 
 
             client.defaultContractedHoursSpecified = true;
             client.defaultContractedHours = 40;

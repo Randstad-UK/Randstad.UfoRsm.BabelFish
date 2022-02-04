@@ -30,48 +30,29 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
             var streetTemp = Street;
 
-            var addressLines = new List<string>();
+            if (string.IsNullOrEmpty(streetTemp)) return;
 
+            var temp = string.Empty;
 
-
-            while (1 == 1)
+            if (streetTemp.Length > 35)
+                temp = streetTemp.Substring(0, 35);
+            else
             {
-                var temp = string.Empty;
-
-                if (streetTemp!=null && streetTemp.Length > 40)
-                    temp = streetTemp.Substring(0, 40);
-                else
-                {
-                    addressLines.Add(streetTemp);
-                    break;
-                }
-
-                //get to last whole word
-                temp = temp.Substring(0, temp.LastIndexOf(" "));
-                addressLines.Add(temp);
-
-                streetTemp = streetTemp.Remove(0, temp.Length).Trim();
+                address.line1 = Street;
+                return;
             }
 
-            var count = 1;
-            foreach (var s in addressLines)
+            //get to last whole word
+            var a = temp.LastIndexOf(" ");
+            if (a > 0)
             {
-                switch (count)
-                {
-                    case 1:
-                    {
-                        address.line1 = s;
-                        count++;
-                        continue;
-                    }
-                    case 2:
-                    {
-                        address.line2 = s;
-                        count++;
-                        continue;
-                    }
-                }
+                temp = temp.Substring(0, a);
             }
+
+            address.line1 = temp;
+
+            address.line2 = streetTemp.Remove(0, temp.Length).Trim();
+
         }
     }
 }

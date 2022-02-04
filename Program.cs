@@ -137,7 +137,8 @@ namespace Randstad.UfoRsm.BabelFish
                     var consultantTranslator = new ConsultantTranslation(producer, applicationSettings.RsmRoutingKeyBase, logger);
                     var assignmentTranslator = new AssignmentTranslation(producer, applicationSettings.RsmRoutingKeyBase, tomCodes, rateMap, logger);
                     var placementTranslator = new PlacementTranslation(producer, applicationSettings.RsmRoutingKeyBase, tomCodes, logger);
-
+                    var timesheetTranslator = new TimesheetTranslation(producer, applicationSettings.RsmRoutingKeyBase, logger, rateMap);
+                    var holidayRequestTranslator = new HolidayRequestTranslation(producer, applicationSettings.RsmRoutingKeyBase, logger);
 
                     /*
                     var rateTranslator = new AssignmentRateTranslation(rateMap, producer, applicationSettings.StiRoutingKeyBase, applicationSettings.EmployeeCodePrefix, logger);
@@ -147,7 +148,7 @@ namespace Randstad.UfoRsm.BabelFish
                     
                     var timesheetTranslator = new TimesheetTranslation(rateMap, producer, applicationSettings.StiRoutingKeyBase, applicationSettings.EmployeeCodePrefix, tomCodes, logger, employerRefs);
                     
-                    var holidayRequestTranslator = new HolidayRequestTranslation(producer, applicationSettings.StiRoutingKeyBase, employerRefs, logger);
+                    
                     var invoiceAddressTranslator = new InvoiceAddressTranslation(producer, applicationSettings.StiRoutingKeyBase, employerRefs, logger);
                     var ltdTranslator = new LtdCompanyTranslation(producer, applicationSettings.StiRoutingKeyBase, applicationSettings.EmployeeCodePrefix, applicationSettings.RemoveFromCandidateRef, employerRefs, tomCodes, logger); 
                     */
@@ -158,7 +159,9 @@ namespace Randstad.UfoRsm.BabelFish
                         clientTranslator,
                         consultantTranslator,
                         assignmentTranslator,
-                        placementTranslator
+                        placementTranslator,
+                        timesheetTranslator,
+                        holidayRequestTranslator
                     };
 
                     services.AddSingleton(translators);
