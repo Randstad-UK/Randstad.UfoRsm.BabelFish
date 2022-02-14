@@ -54,6 +54,13 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                     return;
                 }
 
+                if (assign.Hle.Unit == null || string.IsNullOrEmpty(assign.Hle.Unit.FinanceCode))
+                {
+                    _logger.Warn($"HLE for Assignment {assign.AssignmentRef} has no owning team or finance code is not set", entity.CorrelationId, entity, assign.AssignmentRef, "Dtos.Ufo.ExportedEntity", null);
+                    entity.ExportSuccess = false;
+                    return;
+                }
+
             }
             catch (Exception exp)
             {

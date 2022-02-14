@@ -506,7 +506,6 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                         expenseItem.unitSpecified = true;
                         expenseItem.unit =  expense.Quantity;
                         expenseItem.grossValueSpecified = true;
-                        expenseItem.grossValue = 45;
                     }
                     else
                     {
@@ -515,7 +514,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                         expenseItem.unitSpecified = true;
                         expenseItem.unit = expense.Amount;
                         expenseItem.grossValueSpecified = true;
-                        expenseItem.grossValue = 345;
+                        expenseItem.grossValue = expense.Amount;
                     }
 
                     expenseItem.exportedSpecified = false;

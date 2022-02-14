@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ServiceModel;
 using System.Text;
+using Newtonsoft.Json;
 //using Randstad.UfoRsm.BabelFish.Dtos.Sti;
 using Randstad.UfoRsm.BabelFish.Helpers;
 using RSM;
@@ -54,6 +55,8 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             rate.pay = PayRateCurrency;
             rate.payableSpecified = false;
             rate.ExternalAssignmentRef = Assignment.AssignmentRef;
+            rate.frontendRef = FeeRef;
+            rate.backendRef = Assignment.AssignmentRef;
             SetRateType(rate, rateCodes);
 
             return rate;
@@ -65,13 +68,15 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
         private void SetRateType(RSM.Rate rate, Dictionary<string, string> rateCodes)
         {
             rate.proRataSpecified = false;
+            rate.periodDurationSpecified = false;
             rate.secondaryPaySpecified = false;
+            rate.periodDurationSpecified = false;
             rate.selectableByWorkersSpecified = true;
             rate.selectableByWorkers = false;
             rate.taxableSpecified = false;
             rate.timePattern = "default";
             
-            rate.timesheetFields = @"start = ""false"" finish = ""false"" break= ""false"" hours = ""false"" dayDecimal = ""true"" isDay = ""false"" comment = ""false""";
+            
             switch (RateType)
             {
                 case "Basic Rate":
@@ -85,17 +90,23 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                     {
                         mapName += "Hours";
                         rate.periodDuration = 60;
-                        
+                        rate.periodDurationSpecified = true;
+
+                            //rate.timesheetFields = @"start = ""false"" finish = ""false"" break= ""false"" hours = ""true"" dayDecimal = ""false"" isDay = ""false"" comment = ""false""";
+                        rate.timesheetFields = "HOURS";
+
                     }
 
                     if (PayUnit == "Daily")
                     {
                         mapName += "Days";
                         rate.periodDuration = 480;
+                        rate.timesheetFields = "DAYS";
                     }
 
 
                     rate.payElementCode = rateCodes[mapName];
+                    
                     rate.period = PayUnit;
 
                     if (PayRateCurrency != null)
@@ -117,11 +128,16 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                 case "Other Rate":
                 {
                     rate.payElementCode = rateCodes[OvertimeType];
+                    rate.periodDuration = 60;
+                    rate.periodDurationSpecified = true;
+                    rate.period = PayUnit;
 
+                    rate.timesheetFields = "HOURS";
                     if (PayRateCurrency != null)
                     {
                         rate.pay = (decimal) PayRateCurrency;
                         rate.paySpecified = true;
+
                     }
 
                     if (ChargeRateCurrency != null)
@@ -133,6 +149,28 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                     rate.name = FeeName;
                     break;
                 }
+                case "Expense Rate":
+                    {
+                        rate.payElementCode = rateCodes[ExpenseType];
+                        rate.period = PayUnit;
+
+                        rate.timesheetFields = "DAYDECIMAL";
+                        if (PayRateCurrency != null)
+                        {
+                            rate.pay = (decimal)PayRateCurrency;
+                            rate.paySpecified = true;
+
+                        }
+
+                        if (ChargeRateCurrency != null)
+                        {
+                            rate.charge = (decimal)ChargeRateCurrency;
+                            rate.chargeSpecified = true;
+                        }
+
+                        rate.name = FeeName;
+                        break;
+                    }
 
             }
         }

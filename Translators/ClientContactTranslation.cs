@@ -28,15 +28,6 @@ namespace Randstad.UfoRsm.BabelFish.Translators
             {
                 contact = JsonConvert.DeserializeObject<Dtos.Ufo.ClientContact>(entity.Payload);
 
-                if (BlockExport(Mappers.MapOpCoFromName(contact.OpCo.Name)))
-                {
-                    _logger.Warn(
-                        $"Contact OpCo not live in RSWM {contact.Forename} {contact.Surname} {contact.OpCo.Name}",
-                        entity.CorrelationId, entity, entity.ObjectId, "Dtos.Ufo.ExportedEntity", null);
-                    entity.ExportSuccess = false;
-                    return;
-                }
-
                 if (contact.IsCheckedIn == false)
                 {
                     if (entity.ValidationErrors == null)

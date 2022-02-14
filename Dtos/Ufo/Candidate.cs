@@ -131,7 +131,6 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             MapLtd(worker);
             MapUmbrella(worker);
             MapOutsourced(worker);
-
             return worker;
         }
 
@@ -174,6 +173,8 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             worker.vatCode = "T0";
 
             GetStarterDec(worker);
+            GetStudentLoan(worker);
+            GetPostgradLoan(worker);
         }
 
         private void MapLtd(RSM.Worker worker)
@@ -193,6 +194,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                 worker.cisPercentage = 30;
                 worker.cisTradingName = LtdCompany.Name;
             }
+
 
             worker.limitedCompany = new RSM.Company();
  
@@ -279,75 +281,138 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
         {
             if (Paye.StudentLoan == null)
             {
-                _logger.Warn($"Candidate {CandidateRef} has no student loan values", _correlationId, this, this.CandidateId, "Dtos.Ufo.Candidate", null);
+                _logger.Warn($"Candidate {CandidateRef} has no student loan values", _correlationId, this,
+                    this.CandidateId, "Dtos.Ufo.Candidate", null);
                 return;
             }
 
             if (Paye.PostgradLoan == null)
             {
-                _logger.Warn($"Candidate {CandidateRef} has no post grad loan values", _correlationId, this, this.CandidateId, "Dtos.Ufo.Candidate", null);
+                _logger.Warn($"Candidate {CandidateRef} has no post grad loan values", _correlationId, this,
+                    this.CandidateId, "Dtos.Ufo.Candidate", null);
                 return;
             }
 
-            if (
-                Paye.StartDec.ToString()=="A" &&
-                Paye.StudentLoan.HasLoan == "Yes" && 
-                Paye.StudentLoan.PayingBackDirectly == "Yes" &&
-                Paye.StudentLoan.LeftBeforeLast6thApril == "No" &&
-
-                Paye.PostgradLoan.HasLoan == "No" &&
-                Paye.PostgradLoan.PayingBackDirectly == "No" && 
-                Paye.PostgradLoan.LeftBeforeLast6thApril == "No")
-            {
-                worker.starterStatementA = "AYY NNNN";
-            }
-
-            if (
-                Paye.StartDec.ToString() == "B" &&
-                Paye.StudentLoan.HasLoan == "No" &&
-
-                Paye.PostgradLoan.HasLoan == "No" &&
-                Paye.PostgradLoan.PayingBackDirectly == "No" &&
-                Paye.PostgradLoan.LeftBeforeLast6thApril == "No")
-            {
-                worker.starterStatementA = "BN   NNN";
-            }
-
-            if (
-                Paye.StartDec.ToString() == "C" &&
-                Paye.StudentLoan.HasLoan == "Yes" &&
-                Paye.StudentLoan.PayingBackDirectly == "No" &&
-                Paye.StudentLoan.PlanType == "1" &&
-                Paye.StudentLoan.LeftBeforeLast6thApril == "Yes" &&
-
-                Paye.PostgradLoan.HasLoan == "No" &&
-                Paye.PostgradLoan.PayingBackDirectly == "No" &&
-                Paye.PostgradLoan.LeftBeforeLast6thApril == "No")
-            {
-                worker.starterStatementA = "CYN1YNNN";
-            }
-
-            if (
-                Paye.StartDec.ToString() == "A" &&
-                Paye.StudentLoan.HasLoan == "No" &&
-
-                Paye.PostgradLoan.HasLoan == "Yes" &&
-                Paye.PostgradLoan.PayingBackDirectly == "Yes" &&
-                Paye.PostgradLoan.LeftBeforeLast6thApril == "No")
-            {
-                worker.starterStatementA = "AN   YYN";
-            }
-
-            if (
-                Paye.StartDec.ToString() == "B" &&
-                Paye.StudentLoan.HasLoan == "No" &&
-
-                Paye.PostgradLoan.HasLoan == "Yes" &&
-                Paye.PostgradLoan.PayingBackDirectly == "No" &&
-                Paye.PostgradLoan.LeftBeforeLast6thApril == "Yes")
-            {
-                worker.starterStatementA = "AN   YNY";
-            }
+            worker.starterStatementA = Paye.StartDec.ToString();
+            
         }
+
+        private void GetStudentLoan(RSM.Worker worker)
+        {
+            switch (Paye.StudentLoan.HasLoan)
+            {
+
+                case "Yes":
+                {
+                    worker.starterStatementA = worker.starterStatementA + "Y";
+                    break;
+                }
+                case "No":
+                {
+                    worker.starterStatementA = worker.starterStatementA + "N   ";
+                    return;
+                }
+            }
+
+            switch (Paye.StudentLoan.PayingBackDirectly)
+            {
+                case "Yes":
+                {
+                    worker.starterStatementA = worker.starterStatementA + "Y";
+
+                    //no plan type
+                    worker.starterStatementA = worker.starterStatementA + " ";
+                    break;
+                }
+                case "No":
+                {
+                    worker.starterStatementA = worker.starterStatementA + "N";
+                    worker.starterStatementA = worker.starterStatementA + Paye.StudentLoan.PlanType;
+                    break;
+                }
+                default:
+                {
+                    worker.starterStatementA = worker.starterStatementA + "Y";
+
+                    //no plan type
+                    worker.starterStatementA = worker.starterStatementA + " ";
+                    break;
+                }
+            }
+
+            switch (Paye.StudentLoan.LeftBeforeLast6thApril)
+            {
+                case "Yes":
+                {
+                    worker.starterStatementA = worker.starterStatementA + "Y";
+                    break;
+                }
+                case "No":
+                {
+                    worker.starterStatementA = worker.starterStatementA + "N";
+                    break;
+                }
+            }
+
+        }
+
+        private void GetPostgradLoan(RSM.Worker worker)
+        {
+            switch (Paye.PostgradLoan.HasLoan)
+            {
+                case "Yes":
+                {
+                    worker.starterStatementA = worker.starterStatementA + "Y";
+                    break;
+                }
+                default:
+                {
+                    worker.starterStatementA = worker.starterStatementA + "N";
+                    break;
+                }
+            }
+
+
+            switch (Paye.PostgradLoan.PayingBackDirectly)
+            {
+                case "Yes":
+                {
+                    worker.starterStatementA = worker.starterStatementA + "Y";
+                    break;
+                }
+                case "No":
+                {
+                    worker.starterStatementA = worker.starterStatementA + "N";
+                    break;
+                }
+                default:
+                {
+                    worker.starterStatementA = worker.starterStatementA + "N";
+                    break;
+                }
+            }
+
+            switch (Paye.PostgradLoan.LeftBeforeLast6thApril)
+            {
+                case "Yes":
+                {
+                    worker.starterStatementA = worker.starterStatementA + "Y";
+                    break;
+                }
+                case "No":
+                {
+                    worker.starterStatementA = worker.starterStatementA + "N";
+                    break;
+                }
+                default:
+                {
+                    worker.starterStatementA = worker.starterStatementA + "N";
+                    break;
+                }
+
+            }
+
+        }
+        
     }
 }

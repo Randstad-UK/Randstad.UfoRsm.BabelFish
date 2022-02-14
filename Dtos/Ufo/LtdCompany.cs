@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Transactions;
 using Randstad.UfoRsm.BabelFish.Helpers;
+using RSM;
 
 namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 {
@@ -19,6 +20,14 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
         public Bank BankAccount { get; set; }
         public string PLIOptOut { get; set; }
         public List<Candidate> Candidates { get; set; }
+
+        //public Company GetCompany()
+        //{
+        //    var company = new Company();
+        //    company.companyNo = RegNo;
+        //    company.companyVatNo = VatNumber;
+        //    company.externalId = 
+        //}
 
         /*
         public Supplier GetSupplier(string paymentMethod)

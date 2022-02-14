@@ -85,6 +85,7 @@ namespace Randstad.UfoRsm.BabelFish.Helpers
         {
             switch (value.ToLower())
             {
+                case "executive search":
                 case "cpe":
                     return OperatingCompany.CPE;
                 case "business solutions":

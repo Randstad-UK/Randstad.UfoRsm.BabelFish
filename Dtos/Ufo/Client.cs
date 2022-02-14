@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
+using Randstad.Logging;
 using Randstad.OperatingCompanies;
 using Randstad.UfoRsm.BabelFish.Helpers;
 
@@ -16,6 +18,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
         public string ClientId { get; set; }
         public string ClientRef { get; set; }
         public string ClientName { get; set; }
+        public bool IsLegalHirer { get; set; }
 
         public string VatNo { get; set; }
         public string InvoiceDeliveryMethod { get; set; }
@@ -29,10 +32,27 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
         public Team OpCo { get; set; }
 
+        public Team Unit { get; set; }
+
+        public Client HleClient { get; set; }
 
         public RSM.Client MapClient()
         {
             var client = new RSM.Client();
+
+            if (IsLegalHirer)
+            {
+                client.accountsRef = Unit.FinanceCode;
+            }
+
+            if (HleClient != null)
+            {
+                client.customText1 = HleClient.ClientRef;
+            }
+            else
+            {
+                client.customText1 = ClientRef;
+            }
 
             client.awrCanConfirmComparableSpecified = true;
             client.awrCanConfirmComparable = false;

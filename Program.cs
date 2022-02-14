@@ -139,6 +139,7 @@ namespace Randstad.UfoRsm.BabelFish
                     var placementTranslator = new PlacementTranslation(producer, applicationSettings.RsmRoutingKeyBase, tomCodes, logger);
                     var timesheetTranslator = new TimesheetTranslation(producer, applicationSettings.RsmRoutingKeyBase, logger, rateMap);
                     var holidayRequestTranslator = new HolidayRequestTranslation(producer, applicationSettings.RsmRoutingKeyBase, logger);
+                    var assignmentRateTranslator = new AssignmentRateTranslation(rateMap, producer, applicationSettings.RsmRoutingKeyBase, logger);
 
                     /*
                     var rateTranslator = new AssignmentRateTranslation(rateMap, producer, applicationSettings.StiRoutingKeyBase, applicationSettings.EmployeeCodePrefix, logger);
@@ -161,7 +162,8 @@ namespace Randstad.UfoRsm.BabelFish
                         assignmentTranslator,
                         placementTranslator,
                         timesheetTranslator,
-                        holidayRequestTranslator
+                        holidayRequestTranslator,
+                        assignmentRateTranslator
                     };
 
                     services.AddSingleton(translators);

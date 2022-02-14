@@ -28,13 +28,6 @@ namespace Randstad.UfoRsm.BabelFish.Translators
             {
                 client = JsonConvert.DeserializeObject<Dtos.Ufo.Client>(entity.Payload);
 
-                if (BlockExport(Mappers.MapOpCoFromName(client.OpCo.Name)))
-                {
-                    _logger.Warn($"Client OpCo not live in RSWM {client.ClientRef} {client.OpCo.Name}", entity.CorrelationId, entity, client.ClientRef, "Dtos.Ufo.ExportedEntity", null);
-                    entity.ExportSuccess = false;
-                    return;
-                }
-
                 if (string.IsNullOrEmpty(client.OpCo.FinanceCode))
                 {
                     _logger.Warn($"No Finance Code On {client.ClientRef} Opco", entity.CorrelationId, entity, client.ClientRef, "Dtos.Ufo.ExportedEntity", null);

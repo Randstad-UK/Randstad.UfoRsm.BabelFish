@@ -80,7 +80,6 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
             placement.contractedHoursSpecified = true;
             placement.contractedHours = 40;
-            placement.customText1 = ExternalRef;
 
             placement.endSpecified = true;
             placement.end = EndDate;
@@ -98,7 +97,8 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             if (EnhancedHolidayDays != null)
             {
                 placement.holidayAccrualRateSpecified = true;
-                placement.holidayAccrualRate = EnhancedHolidayDays;
+                var perc = Math.Round((decimal)EnhancedHolidayDays / (260 - (decimal)EnhancedHolidayDays), 4, MidpointRounding.AwayFromZero);
+                placement.holidayAccrualRate = perc;
             }
 
             placement.holidayAccrualRatePostAWRSpecified = false;
@@ -140,7 +140,9 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             }
 
             placement.invoiceContactOverride.address = InvoiceAddress.MapAddress();
-            placement.jobTitle = PositionRef;
+
+            placement.jobTitle = string.IsNullOrEmpty(PositionName) ? "Not Stated" : PositionName;
+
             placement.jobDescription = AssignmentJobTitle;
 
             placement.noCommunications = "WMCL";
@@ -148,7 +150,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             placement.perm = false;
 
             placement.purchaseBranch = Unit.Name;
-            placement.purchaseCostCentre = tomCodes[Unit.FinanceCode];
+            placement.purchaseCostCentre = Unit.FinanceCode;
             placement.purchaseDivision = OpCo.Name;
             placement.purchaseOrderNum = PoNumber;
 
@@ -156,7 +158,8 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             placement.roundToNearestMin = 1;
 
             placement.salesBranch = Unit.Name;
-            placement.salesCostCentre = tomCodes[Unit.FinanceCode];
+            placement.salesCostCentre = Unit.FinanceCode;
+            placement.salesDivision = OpCo.Name;
 
             placement.siteAddress = WorkAddress.GetAddress();
 
@@ -172,7 +175,39 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             placement.awrWeekSpecified = false;
             placement.excludeFromMissingTimeSpecified = true;
             placement.excludeFromMissingTime = true;
+
+            placement.customText1 = AssignmentRef;
             placement.customText2 = Client.ClientRef;
+
+            if (WorkAddress != null)
+            {
+                placement.customText3 = WorkAddress.Street + ", ";
+
+                if (!string.IsNullOrEmpty(WorkAddress.City))
+                {
+                    placement.customText3 = placement.customText3 + WorkAddress.City + ", ";
+                }
+
+                if (!string.IsNullOrEmpty(WorkAddress.County))
+                {
+                    placement.customText3 = placement.customText3 + WorkAddress.County + ", ";
+                }
+
+                if (!string.IsNullOrEmpty(WorkAddress.Country))
+                {
+                    placement.customText3 = placement.customText3 + WorkAddress.Country + ", ";
+                }
+
+                if (!string.IsNullOrEmpty(WorkAddress.PostCode))
+                {
+                    placement.customText3 = placement.customText3 + WorkAddress.PostCode;
+                }
+
+                if (placement.customText3.EndsWith(", "))
+                {
+                    placement.customText3.Remove(placement.customText3.LastIndexOf(", "));
+                }
+            }
             
             placement.clientSite = Client.ClientName + ", " + Client.WorkAddress.Street+", "+Client.WorkAddress.City+", "+Client.WorkAddress.County+", "+Client.WorkAddress.PostCode;
 
@@ -180,6 +215,10 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
             //TODO: (Done) Assignment manager needs set to default manager set up in RSM
             placement.manager = Mappers.GetDefaultManager();
+
+            placement.timesheetApprovalRoute = "Auto Approval Route";
+            MapLtdValues(placement);
+
             return placement;
         }
 
@@ -195,12 +234,13 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             if (ConsultantSplits == null || ConsultantSplits.Count <= 1) return;
 
             placement.splitCommissions = new SplitCommission[ConsultantSplits.Count];
+            
             for (int i = 0; i < ConsultantSplits.Count; i++)
             {
                 var split = new Dtos.RsmInherited.ConsultantSplit();
                 split.ExternalUserId = ConsultantSplits[i].Consultant.Id;
                 split.weight = ConsultantSplits[i].Split;
-                placement.consultantSplits[i] = split;
+                placement.splitCommissions[i] = split;
             }
 
         }
