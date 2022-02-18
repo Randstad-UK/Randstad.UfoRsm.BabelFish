@@ -6,14 +6,28 @@ namespace Randstad.UfoRsm.BabelFish.Template.Extensions
 {
     public static class GetDateMillisecondsExtension
     {
+
+        public static long GetDateTimeMilliseconds(this DateTime? date)
+        {
+            var centuryBegin = new DateTime(1970,1, 1);
+            var currentDate = (DateTime)date;
+
+            var elapsedTicks = (currentDate.Ticks - centuryBegin.Ticks) / TimeSpan.TicksPerMillisecond;
+
+            //DateTimeOffset now = DateTimeOffset.UtcNow;
+            //long unixTimeMilliseconds = now.ToUnixTimeMilliseconds();
+
+            return elapsedTicks;
+        }
+
         public static long GetDateMilliseconds(this DateTime? date)
         {
-            var d = (DateTime)date;
-            var b = DateTime.Parse(d.ToString("yyyy-MM-dd 00:00:00"));
-            var epochTicks = new DateTime(1970, 1, 1).Ticks;
+            var centuryBegin = new DateTime(1970, 1, 1);
+            DateTime currentDate = (DateTime)date;
 
-            var unixTime = (b.Date.Ticks - epochTicks) / TimeSpan.TicksPerMillisecond;
-            return unixTime;
+            var elapsedTicks = (currentDate.Date.Ticks - centuryBegin.Ticks) / TimeSpan.TicksPerMillisecond;
+
+            return elapsedTicks;
         }
     }
 }

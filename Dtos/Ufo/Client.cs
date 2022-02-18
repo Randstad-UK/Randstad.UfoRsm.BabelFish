@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -10,6 +9,7 @@ using Newtonsoft.Json.Linq;
 using Randstad.Logging;
 using Randstad.OperatingCompanies;
 using Randstad.UfoRsm.BabelFish.Helpers;
+using RSM;
 
 namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 {
@@ -40,19 +40,10 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
         {
             var client = new RSM.Client();
 
-            if (IsLegalHirer)
-            {
-                client.accountsRef = Unit.FinanceCode;
-            }
+            client.accountsRef = Unit.FinanceCode;
+            
 
-            if (HleClient != null)
-            {
-                client.customText1 = HleClient.ClientRef;
-            }
-            else
-            {
-                client.customText1 = ClientRef;
-            }
+            client.customText1 = HleClient != null ? HleClient.ClientRef : ClientRef;
 
             client.awrCanConfirmComparableSpecified = true;
             client.awrCanConfirmComparable = false;
@@ -125,6 +116,9 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
 
             client.defaultTimesheetDateCalculator = "weekly";
+
+            client.primaryContact = new Contact();
+            client.primaryContact.address = WorkAddress.GetAddress();
 
 
             return client;

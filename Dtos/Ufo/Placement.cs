@@ -37,6 +37,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
 
         public Client RsmClient { get; set; }
+        public Client Hle { get; set; }
 
         public List<ConsultantSplit> ConsultantSplits { get; set; }
 
@@ -44,19 +45,32 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
         {
 
             var placement = new Dtos.RsmInherited.Placement();
+            placement.holidayAccrualRateSpecified = false;
+            placement.invoiceRequiresPOSpecified = false;
+            placement.bulkEntrySpecified = false;
+            placement.holidayAccrualRatePostAWRSpecified = false;
+            placement.startSpecified = true;
+            placement.start = StartDate;
+
+            placement.awrWeekSpecified = false;
+            placement.excludeFromMissingTimeSpecified = true;
+            placement.excludeFromMissingTime = false;
+
             placement.PAYEDeductionsOnLtdSpecified = true;
+            placement.PAYEDeductionsOnLtd = false;
+
             placement.agencyOnlySpecified = true;
             placement.agencyOnly = true;
-            placement.bulkEntrySpecified = false;
 
             placement.cisApplicableSpecified = true;
             placement.cisApplicable = false;
 
-            placement.client = RsmClient.MapClient();
-            placement.consultant = Owner.MapConsultant();
+            placement.client = Hle.MapClient();
+            placement.clientSite = RsmClient.ClientName;
 
-            placement.contractedHoursSpecified = true;
-            placement.contractedHours = 0;
+            placement.consultant = Owner.MapConsultant();
+            placement.customText2 = RsmClient.ClientRef;
+            placement.customText3 = RsmClient.WorkAddress.GetConcatenatedAddress();
 
             placement.endSpecified = true;
             placement.end = StartDate;
@@ -69,13 +83,19 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             placement.faxbackEnabledSpecified = true;
             placement.faxbackEnabled = false;
 
-            placement.holidayAccrualRateSpecified = false;
+            placement.contractedHoursSpecified = true;
+            placement.contractedHours = 0;
+
+            var placementStartDate = (DateTime) StartDate;
+            placement.chargeTermsExtraTextOverride = $"For the permanent placement of {CandidateFirstName} {CandidateLastName}, {PlacementJobTitle}, {placementStartDate.ToString("dd/MM/yyyy")}, placement reference {PlacementRef}";
+
 
             placement.invoiceRequiresPOSpecified = false;
             if (PoRequired != null)
             {
                 placement.invoiceRequiresPOSpecified = true;
                 placement.invoiceRequiresPO = Mappers.MapBool(PoRequired);
+                placement.purchaseOrderNum = PoNumber;
             }
 
             placement.invoiceContactOverride = InvoicePerson.MapContact();
@@ -83,59 +103,54 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             placement.jobDescription = PlacementJobTitle;
             placement.jobTitle = PlacementJobTitle;
 
-            //todo: Assignment manager needs set to default manager set up in RSM
-            placement.manager = new Manager();
-
             placement.noCommunications = "WMCL";
             placement.permSpecified = true;
             placement.perm = true;
 
             placement.purchaseBranch = Unit.Name;
-            placement.purchaseCostCentre = tomCodes[Unit.FinanceCode];
+            placement.purchaseCostCentre = Unit.FinanceCode;
             placement.purchaseDivision = OpCo.Name;
             placement.purchaseOrderNum = PoNumber;
-
             placement.roundToNearestMinSpecified = true;
             placement.roundToNearestMin = 1;
-
+            placement.salesDivision = OpCo.Name;
+            placement.siteAddress = RsmClient.WorkAddress.GetAddress();
             placement.salesBranch = Unit.Name;
             placement.salesCostCentre = tomCodes[Unit.FinanceCode];
 
-            placement.siteAddress = RsmClient.WorkAddress.GetAddress();
-
             MapConsultantSplit(placement);
 
-            placement.startSpecified = true;
-            placement.start = StartDate;
-
+            placement.timesheetApprovalRoute = "Auto Approval Route";
             placement.timesheetEmailApprovalSpecified = true;
             placement.timesheetEmailApproval = false;
-            placement.worker = new Worker();
-            placement.worker.externalReference = CandidateRef;
-            placement.worker.externalId = CandidatePayrollRef;
-            placement.worker.workerType = CandidatePaymentType;
-            placement.worker.lastname = CandidateFirstName;
-            placement.worker.firstname = CandidateLastName;
-            placement.worker.email = CandidateEmail;
-
-            //TODO: Placement mapping set payment freqency when supplied by finance
-            placement.worker.paymentFrequency = "Weekly";
-
-            placement.awrWeekSpecified = false;
-            placement.excludeFromMissingTimeSpecified = true;
-            placement.excludeFromMissingTime = false;
-
-            var r = new RSM.Rate();
-            r.chargeSpecified = true;
-            r.charge = Fee;
-            r.paySpecified = true;
-            r.pay = 0;
-            r.name = "Perm Placement Fee";
-            r.payElementCode = "P280";
 
             placement.rates = new RSM.Rate[1];
-            placement.rates[0] = r;
-            placement.manager = Mappers.GetDefaultManager();
+
+            var rate = new Dtos.RsmInherited.Rate();
+            rate.awrSpecified = true;
+            rate.awrSpecified = false;
+            rate.backendRef = PlacementRef;
+            rate.chargeSpecified = true;
+            rate.charge = Fee;
+            rate.paySpecified = true;
+            rate.pay = 0;
+            rate.ExternalAssignmentRef = PlacementRef;
+            rate.effectiveFromSpecified = true;
+            rate.effectiveFrom = StartDate;
+            rate.frontendRef = PlacementRef;
+            rate.name = "Perm Placement Fee";
+            rate.payElementCode = "PERM";
+            rate.period = "FIXED";
+            rate.periodDurationSpecified = true;
+            rate.periodDuration = 480;
+            rate.priorityOrderSpecified = true;
+            rate.priorityOrder = 0;
+            rate.selectableByWorkersSpecified = true;
+            rate.selectableByWorkers = false;
+            rate.timePattern = "default";
+            rate.timesheetFields = "DAY";
+            placement.rates[0] = rate;
+
             return placement;
         }
 
@@ -154,6 +169,8 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             }
 
         }
+
+
 
     }
 }

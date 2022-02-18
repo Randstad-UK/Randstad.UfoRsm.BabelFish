@@ -54,6 +54,13 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                     return;
                 }
 
+                if (rate.RateType == "Expense Rate")
+                {
+                    _logger.Warn($"Assignment Rate {rate.FeeRef} attached assignment {rate.Assignment.AssignmentRef} is an Expense Type which does not get sent to RSM", entity.CorrelationId, entity, rate.FeeRef, "Dtos.Ufo.ExportedEntity", null);
+                    entity.ExportSuccess = false;
+                    return;
+                }
+
             }
             catch (Exception exp)
             {

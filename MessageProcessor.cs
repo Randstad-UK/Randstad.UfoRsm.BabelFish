@@ -33,7 +33,7 @@ namespace Randstad.UfoRsm.BabelFish
             await Task.CompletedTask;
 
             var entity = JsonConvert.DeserializeObject<ExportedEntity>(queueMessage.Body);
-            _logger.Debug($"Received {entity.ObjectType} to send to STI", entity.CorrelationId, entity, entity.ObjectId, "ExportEntity", null);
+            _logger.Debug($"Received {entity.ObjectType} to send to RSM", entity.CorrelationId, entity, entity.ObjectId, "ExportEntity", null);
 
             foreach (var t in _translators)
             {
@@ -43,11 +43,11 @@ namespace Randstad.UfoRsm.BabelFish
             //failed to export must log warning and acknowledge message
             if (!entity.ExportSuccess)
             {
-                _logger.Debug("Failed to translate message for STI", entity.CorrelationId, entity, entity.Id, "ExportEntity", null);
+                _logger.Debug("Failed to translate message for RSM", entity.CorrelationId, entity, entity.Id, "ExportEntity", null);
                 return QueueMessageAction.Acknowledge;
             }
 
-            _logger.Debug($"Successfully exported to STI - Body: {queueMessage.Body}, QueueCount:{queueMessage.QueueCount}", entity.CorrelationId, entity, entity.ObjectId, "ExportEntity", null);
+            _logger.Debug($"Successfully exported to RSM - Body: {queueMessage.Body}, QueueCount:{queueMessage.QueueCount}", entity.CorrelationId, entity, entity.ObjectId, "ExportEntity", null);
             return QueueMessageAction.Acknowledge;
         }
     }

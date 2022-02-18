@@ -22,8 +22,9 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
         public DateTime? EndTime { get; set; }
         public DateTime? EndDateTime { get; set; }
         public string HoursType { get; set; }
+        public DateTime? BreakStartTime { get; set; }
+        public DateTime? BreakEndTime { get; set; }
 
-        
 
         //public string WorkArea { get; set; }
         //public string SpecialWorkCondition { get; set; }

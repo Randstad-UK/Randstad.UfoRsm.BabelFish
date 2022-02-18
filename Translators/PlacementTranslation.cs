@@ -80,7 +80,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
             }
 
             SendToRsm(JsonConvert.SerializeObject(mappedPlacement), Mappers.MapOpCoFromName(placement.OpCo.Name).ToString(), "Placement", entity.CorrelationId, Mappers.MapCheckin(placement.CheckIn));
-            _logger.Success($"Successfully mapped Placement {placement.PlacementRef} and sent to Sti", entity.CorrelationId, placement, placement.PlacementRef, "Dtos.Ufo.Placement", null, mappedPlacement, "Dtos.Sti.Placement");
+            _logger.Success($"Successfully mapped Placement {placement.PlacementRef} and sent to RSM", entity.CorrelationId, placement, placement.PlacementRef, "Dtos.Ufo.Placement", null, mappedPlacement, "Dtos.Sti.Placement");
             entity.ExportSuccess = true;
         }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Serialization.Formatters;
 using System.Text;
 using Randstad.Logging;
@@ -110,7 +111,6 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                 placement.invoiceRequiresPO = PoRequired;
             }
 
-            placement.expenseTemplate = "Standard Expenses";
             placement.invoiceContactOverride = InvoicePerson.MapContact();
 
             var invoiceEmailList = new List<string>();
@@ -176,7 +176,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             placement.excludeFromMissingTimeSpecified = true;
             placement.excludeFromMissingTime = true;
 
-            placement.customText1 = AssignmentRef;
+            placement.customText1 = ExternalRef;
             placement.customText2 = Client.ClientRef;
 
             if (WorkAddress != null)
@@ -208,16 +208,18 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                     placement.customText3.Remove(placement.customText3.LastIndexOf(", "));
                 }
             }
-            
-            placement.clientSite = Client.ClientName + ", " + Client.WorkAddress.Street+", "+Client.WorkAddress.City+", "+Client.WorkAddress.County+", "+Client.WorkAddress.PostCode;
+
+            placement.clientSite = Client.ClientName;
 
             MapRates(rateCodes, placement);
 
-            //TODO: (Done) Assignment manager needs set to default manager set up in RSM
-            placement.manager = Mappers.GetDefaultManager();
-
             placement.timesheetApprovalRoute = "Auto Approval Route";
+            placement.expenseTemplate = "Standard Expenses";
+
+            placement.roundToNearestMinSpecified = true;
+            placement.roundToNearestMin = 1;
             MapLtdValues(placement);
+
 
             return placement;
         }
@@ -231,7 +233,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
         private void MapConsultantSplit(Dtos.RsmInherited.Placement placement)
         {
-            if (ConsultantSplits == null || ConsultantSplits.Count <= 1) return;
+            if (ConsultantSplits == null) return;
 
             placement.splitCommissions = new SplitCommission[ConsultantSplits.Count];
             
@@ -239,7 +241,8 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             {
                 var split = new Dtos.RsmInherited.ConsultantSplit();
                 split.ExternalUserId = ConsultantSplits[i].Consultant.Id;
-                split.weight = ConsultantSplits[i].Split;
+                split.weightSpecified = true;
+                split.weight = ConsultantSplits[i].Split/100;
                 placement.splitCommissions[i] = split;
             }
 
@@ -249,14 +252,25 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
         {
             if (Rates == null) return;
 
-            placement.rates = new RSM.Rate[Rates.Count];
 
+            var noExpenses = Rates.Where(x => x.RateType != "Expense Rate").ToList();
+
+            if (noExpenses == null || noExpenses.Count() == 0) return;
+
+            placement.rates = new RSM.Rate[noExpenses.Count];
+            
 
             var priorityOrder = 1;
             var rateIndex = 0;
 
-            foreach (var rate in Rates)
+            foreach (var rate in noExpenses)
             {
+                //RSM do not hold expense rates it goes through on the expense item
+                if (rate.RateType == "Expense Rate")
+                {
+                    continue;
+                }
+
                 var rsmRate = rate.MapRate(rateCodes, this);
 
                 rsmRate.priorityOrderSpecified = true;

@@ -38,7 +38,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
 
                 if (BlockExport(Mappers.MapOpCoFromName(timesheet.OpCo.Name)))
                 {
-                    _logger.Warn($"Timesheet OpCo not live in RSWM {timesheet.OpCo.Name} {timesheet.TimesheetRef}", entity.CorrelationId, entity, timesheet.TimesheetRef, "Dtos.Ufo.ExportedEntity", null);
+                    _logger.Warn($"Timesheet OpCo not live in RSM {timesheet.OpCo.Name} {timesheet.TimesheetRef}", entity.CorrelationId, entity, timesheet.TimesheetRef, "Dtos.Ufo.ExportedEntity", null);
                     entity.ExportSuccess = false;
                     return;
                 }

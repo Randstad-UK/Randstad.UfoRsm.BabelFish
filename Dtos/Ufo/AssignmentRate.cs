@@ -86,28 +86,29 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
                     rate.timesheetFields = "Hours";
 
-                        if (PayUnit == "Hourly")
+                    if (PayUnit == "Hourly")
                     {
                         mapName += "Hours";
                         rate.periodDuration = 60;
                         rate.periodDurationSpecified = true;
 
-                            //rate.timesheetFields = @"start = ""false"" finish = ""false"" break= ""false"" hours = ""true"" dayDecimal = ""false"" isDay = ""false"" comment = ""false""";
-                        rate.timesheetFields = "HOURS";
-
-                    }
+                        rate.timesheetFields = "START_FINISH_BREAK";
+                        rate.period = "Hourly";
+                     }
 
                     if (PayUnit == "Daily")
                     {
                         mapName += "Days";
                         rate.periodDuration = 480;
-                        rate.timesheetFields = "DAYS";
+                        rate.timesheetFields = "DAY";
+                        rate.period = "Fixed";
+                        
                     }
 
 
                     rate.payElementCode = rateCodes[mapName];
                     
-                    rate.period = PayUnit;
+                    
 
                     if (PayRateCurrency != null)
                     {
@@ -128,22 +129,35 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                 case "Other Rate":
                 {
                     rate.payElementCode = rateCodes[OvertimeType];
-                    rate.periodDuration = 60;
                     rate.periodDurationSpecified = true;
-                    rate.period = PayUnit;
 
                     rate.timesheetFields = "HOURS";
                     if (PayRateCurrency != null)
                     {
                         rate.pay = (decimal) PayRateCurrency;
                         rate.paySpecified = true;
-
                     }
 
                     if (ChargeRateCurrency != null)
                     {
                         rate.charge = (decimal) ChargeRateCurrency;
                         rate.chargeSpecified = true;
+                    }
+
+                    if (PayUnit == "Hourly")
+                    {
+                        rate.periodDuration = 60;
+                        rate.periodDurationSpecified = true;
+
+                        rate.timesheetFields = "START_FINISH_BREAK";
+                        rate.period = "Hourly";
+                    }
+
+                    if (PayUnit == "Daily")
+                    {
+                        rate.periodDuration = 480;
+                        rate.timesheetFields = "DAY";
+                        rate.period = "Fixed";
                     }
 
                     rate.name = FeeName;

@@ -12,6 +12,7 @@ using Randstad.Logging.Core;
 using Randstad.OperatingCompanies;
 using Randstad.UfoRsm.BabelFish.Helpers;
 using Randstad.UfoRsm.BabelFish.Template.Extensions;
+using Randstad.UfoRsm.BabelFish.Translators;
 using RSM;
 
 namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
@@ -362,24 +363,24 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             var timesheetList = new List<RSM.Timesheet>();
 
             _OriginalTimesheetRef = TimesheetRef;
-            TimesheetRef = TimesheetRef.Replace("TSM-", "UT");
+            TimesheetRef = TimesheetRef;
 
             var continueMapping = true;
 
             var timesheet = MapBasicTimesheet();
 
 
-            TimesheetLine consolidatedBasicHours = null;
-            var basicHours = GetBasicHours(out consolidatedBasicHours);
+            //TimesheetLine consolidatedBasicHours = null;
+            //var basicHours = GetBasicHours(out consolidatedBasicHours);
 
-            TimesheetLine consolidatedBasicDays = null;
-            var basicDays = GetBasicDays(out consolidatedBasicDays);
+            //TimesheetLine consolidatedBasicDays = null;
+            //var basicDays = GetBasicDays(out consolidatedBasicDays);
 
-            List<TimesheetLine> consolidatedOverTimeHours = null;
-            var overTimeHours = GetOverTimeHours(out consolidatedOverTimeHours);
+            //List<TimesheetLine> consolidatedOverTimeHours = null;
+            //var overTimeHours = GetOverTimeHours(out consolidatedOverTimeHours);
 
-            List<TimesheetLine> consolidatedOverTimeDays = null;
-            var overTimeDays = GetOverTimeDays(out consolidatedOverTimeDays);
+            //List<TimesheetLine> consolidatedOverTimeDays = null;
+            //var overTimeDays = GetOverTimeDays(out consolidatedOverTimeDays);
 
             List<Expense> consolidatedExpenseses = null;
             var expenseList = GetConsolidatedExpenses(out consolidatedExpenseses);
@@ -387,42 +388,43 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
 
 
-            //============================== Combine the consolidated lines and map to STI timesheet ============================
+            ////============================== Combine the consolidated lines and map to STI timesheet ============================
 
-            var combined = new List<TimesheetLine>();
+            //var combined = new List<TimesheetLine>();
 
-            if (consolidatedBasicHours != null)
+            //if (consolidatedBasicHours != null)
+            //{
+            //    combined.Add(consolidatedBasicHours);
+            //}
+
+            //if (consolidatedBasicDays != null)
+            //{
+            //    combined.Add(consolidatedBasicDays);
+            //}
+
+            //if (consolidatedOverTimeHours != null)
+            //{
+            //    combined.AddRange(consolidatedOverTimeHours);
+            //}
+
+            //if (consolidatedOverTimeDays != null)
+            //{
+            //    combined.AddRange(consolidatedOverTimeDays);
+            //}
+
+            //if (!combined.Any() && !consolidatedExpenseses.Any())
+            //{
+            //    throw new Exception($"{_OriginalTimesheetRef} - No timesheet lines could be mapped successfully, check rates, hours etc and re-push");
+            //}
+
+
+            if (TimesheetLines.Any())
             {
-                combined.Add(consolidatedBasicHours);
-            }
-
-            if (consolidatedBasicDays != null)
-            {
-                combined.Add(consolidatedBasicDays);
-            }
-
-            if (consolidatedOverTimeHours != null)
-            {
-                combined.AddRange(consolidatedOverTimeHours);
-            }
-
-            if (consolidatedOverTimeDays != null)
-            {
-                combined.AddRange(consolidatedOverTimeDays);
-            }
-
-            if (!combined.Any() && !consolidatedExpenseses.Any())
-            {
-                throw new Exception($"{_OriginalTimesheetRef} - No timesheet lines could be mapped successfully, check rates, hours etc and re-push");
-            }
-
-
-            if (combined.Any())
-            {
-                timesheet.shifts = new Shift[combined.Count];
+                timesheet.shifts = new Shift[TimesheetLines.Count];
                 var shiftIndex = 0;
+
                 //Map all the time values
-                foreach (var line in combined)
+                foreach (var line in TimesheetLines)
                 {
                     var shift = new RSM.Shift();
 
@@ -440,11 +442,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                     shift.payInvoiceRequiredSpecified = false;
                     shift.salesOnCostValueSpecified = false;
                     shift.rateIdSpecified = false;
-                    shift.startTimeSpecified = false;
-
                     
-
-
 
                     if (line.Rate.RateType.ToLower() == "basic rate")
                     {
@@ -456,25 +454,46 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
                     if (line.Rate.RateType.ToLower() == "other rate")
                     {
-                        rateName = line.Rate.OvertimeType;
+                        rateName = line.Rate.FeeName;
                     }
 
                     shift.rateName = rateName;
 
+                    shift.day = line.StartDateTime.GetDateMilliseconds();
+                    shift.daySpecified = true;
+
                     //Hourly rate
-                    if (line.TotalDays == null || line.TotalDays <= 0)
+                    if (line.DaysReported == null && line.TotalHours>0)
                     {
                         shift.hours = Convert.ToInt64(line.TotalHours * 60 * 60 * 1000);
                         shift.hoursSpecified = true;
 
-                        shift.daySpecified = true;
-                        shift.day = line.StartDateTime.GetDateMilliseconds();
+                        shift.startTimeSpecified = true;
+                        shift.startTime = line.StartDateTime.GetDateTimeMilliseconds();
+
+                        shift.finishTimeSpecified = true;
+                        shift.finishTime = line.EndDateTime.GetDateTimeMilliseconds();
+
+                        shift.mealBreakSpecified = true;
+
+                        if (line.BreakStartTime != null && line.BreakEndTime != null)
+                        {
+                            var breakStart = line.BreakStartTime.GetDateTimeMilliseconds();
+                            var breakEnd = line.BreakEndTime.GetDateTimeMilliseconds();
+                            shift.mealBreak = breakEnd - breakStart;
+                        }
+                        else
+                        {
+                            shift.mealBreak = 0;
+                        }
+
                     }
+
                     //Day rate
-                    else
+                    if (line.DaysReported != null && line.DaysReported > 0)
                     {
 
-                        shift.@decimal = (decimal)line.TotalDays;
+                        shift.@decimal = (decimal)line.DaysReported;
                         shift.decimalSpecified = true;
                     }
 
@@ -489,6 +508,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             {
                 claim = new RSM.ExpenseClaim();
                 claim.expenseItems = new ExpenseItem[expenseList.Count];
+                claim.description = TimesheetRef;
                 claim.placementExternalId = AssignmentRef;
                 claim.placementIdSpecified = true;
 
@@ -497,35 +517,38 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                 {
                     var expenseItem = new RSM.ExpenseItem();
                     expenseItem.description = expense.Rate.ExpenseType;
+
+                    expenseItem.placementExternalId = AssignmentRef;
                     expenseItem.type = "Expenses";
-
-                    if (expense.ExpenseType.ToLower() == "mileage")
-                    {
-                        expenseItem.unitNetSpecified = true;
-                        expenseItem.unitNet = expense.Rate.ChargeRateCurrency;
-                        expenseItem.unitSpecified = true;
-                        expenseItem.unit =  expense.Quantity;
-                        expenseItem.grossValueSpecified = true;
-                    }
-                    else
-                    {
-                        expenseItem.unitNetSpecified = true;
-                        expenseItem.unitNet = expense.Quantity;
-                        expenseItem.unitSpecified = true;
-                        expenseItem.unit = expense.Amount;
-                        expenseItem.grossValueSpecified = true;
-                        expenseItem.grossValue = expense.Amount;
-                    }
-
+                    expenseItem.grossValueSpecified = false;
                     expenseItem.exportedSpecified = false;
-
+                    expenseItem.netValueSpecified = false;
+                    
                     expenseItem.receiptDateSpecified = true;
                     expenseItem.receiptDate = expense.ExpenseDate;
 
-                    
-                    expenseItem.freehandRef = AssignmentRef;
-                    expenseItem.payrollRef = AssignmentRef;
-                   
+                    expenseItem.freehandRef = TimesheetRef;
+                    expenseItem.payrollRef = TimesheetRef;
+
+                    if (expense.ExpenseType.ToLower() == "mileage")
+                    {
+                        expenseItem.netValueSpecified = true;
+                        expenseItem.netValue = expense.Quantity * expense.Rate.PayRateCurrency;
+
+                        expenseItem.unitNetSpecified = true;
+                        expenseItem.unitNet = expense.Rate.PayRateCurrency;
+
+                        expenseItem.unitSpecified = true;
+                        expenseItem.unit = expense.Quantity;
+                    }
+                    else
+                    {
+                        expenseItem.netValueSpecified = true;
+                        expenseItem.netValue = expense.Quantity * expense.Amount;
+
+                        expenseItem.unitNetSpecified = true;
+                        expenseItem.unitNet = expense.Amount;
+                    }
 
                     try
                     {
@@ -536,6 +559,12 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                         logger.Error($"Invalid expense type for timesheet {TimesheetRef} for type {expense.ExpenseType} ", correlationId, this, TimesheetRef, "Timesheet", null, exp, null, null);
                         throw exp;
                     }
+
+
+
+
+
+
                     
                     claim.expenseItems[index] = (expenseItem);
                     index++;
@@ -555,14 +584,18 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             if (PeriodEndDate != null)
             {
                 timesheet.periodEndDateSpecified = true;
-                timesheet.periodEndDate = PeriodEndDate;
+
+                var periodEnd = (DateTime) PeriodEndDate;
+                timesheet.periodEndDate = periodEnd.Date;
             }
 
             timesheet.periodStartDateSpecified = false;
             if (PeriodStartDate != null)
             {
                 timesheet.periodStartDateSpecified = true;
-                timesheet.periodStartDate = PeriodStartDate;
+
+                var periodStart = (DateTime) PeriodStartDate;
+                timesheet.periodStartDate = periodStart.Date;
             }
 
             timesheet.placementExternalRef = AssignmentRef;
@@ -581,8 +614,14 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                 timesheet.payrollRef = ExternalTimesheetId;
             }
 
+            timesheet.purchaseOrderNumOverride = PoNumber;
+
+            DateTime approvedOn = (DateTime) ApprovedDateTime;
+            timesheet.comment = "Approved by: " + ApprovedBy + " on " + approvedOn.ToString("dd/MM/yyyy hh:ss");
+            
             return timesheet;
         }
+
 
 
     }

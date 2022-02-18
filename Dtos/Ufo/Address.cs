@@ -25,6 +25,34 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             return addr;
         }
 
+        public string GetConcatenatedAddress()
+        {
+            var sb = new StringBuilder();
+            sb.Append(Street);
+
+            if (!string.IsNullOrEmpty(City))
+            {
+                sb.Append(", ").Append(City);
+            }
+
+            if (!string.IsNullOrEmpty(County))
+            {
+                sb.Append(", ").Append(County);
+            }
+
+            if (!string.IsNullOrEmpty(Country))
+            {
+                sb.Append(", ").Append(Country);
+            }
+
+            if (!string.IsNullOrEmpty(PostCode))
+            {
+                sb.Append(", ").Append(PostCode);
+            }
+
+            return sb.ToString();
+        }
+
         private void TruncateAddressStreet(RSM.Address address)
         {
 

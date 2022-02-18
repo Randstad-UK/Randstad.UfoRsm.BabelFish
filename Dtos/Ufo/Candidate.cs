@@ -154,7 +154,6 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
             worker.paymentMethod = PaymentMethod;
 
-            worker.niTableLetter = Paye.StartDec.ToString();
 
             if (!string.IsNullOrEmpty(Paye.Account.BuildingSocietyRef) && string.IsNullOrEmpty(Paye.Account.BuildingSocietyRef) && !string.IsNullOrEmpty(Paye.Account.BuildingSocietyRef))
                 worker.bankAccount.buildingSocRollNum = Paye.Account.AccountName;
@@ -274,6 +273,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             worker.paymentFrequency = "Weekly";
 
             worker.paymentMethod = "BACS";
+            worker.email = "outsourcedworker@randstad.co.uk";
         }
 
 
