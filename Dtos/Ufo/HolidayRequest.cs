@@ -13,14 +13,14 @@ namespace Randstad.UfRsm.BabelFish.Dtos.Ufo
         public string HolidayRequestRef { get; set; }
         public Decimal Hours { get; set; }
 
-        public UfoRsm.BabelFish.Dtos.RsmInherited.HolidayRequest MapHolidayRequest()
+        public UfoRsm.BabelFish.Dtos.RsmInherited.Absence MapHolidayRequest()
         {
-            var hr = new UfoRsm.BabelFish.Dtos.RsmInherited.HolidayRequest();
+            var hr = new UfoRsm.BabelFish.Dtos.RsmInherited.Absence();
 
             hr.StartDate = StartDate;
-            hr.EndDate = StartDate;
-            hr.EmployeeNumber = Candidate.PayrollRefNumber;
-            hr.Hours = Hours;
+            hr.EndDate = EndDate;
+            hr.EmployeeNo = Candidate.PayrollRefNumber;
+            hr.NoOfUnits = Hours;
             hr.AbsenceType = 1;
             return hr;
         }

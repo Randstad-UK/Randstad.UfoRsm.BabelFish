@@ -58,6 +58,7 @@ namespace Randstad.UfoRsm.BabelFish.Helpers
             {
                 case "Yes":
                     return true;
+                case null:
                 case "No":
                     return false;
                 default:

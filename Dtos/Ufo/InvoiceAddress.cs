@@ -36,7 +36,13 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
         private void TruncateAddressStreet(RSM.Address address)
         {
 
-            var streetTemp = Street;
+            var streetTemp = "";
+            if (!string.IsNullOrEmpty(Fao))
+            {
+                streetTemp = Fao + ", ";
+            }
+
+            streetTemp = streetTemp + Street;
 
             if (string.IsNullOrEmpty(streetTemp)) return;
 
@@ -46,7 +52,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                 temp = streetTemp.Substring(0, 35);
             else
             {
-                address.line1 = Street;
+                address.line1 = streetTemp;
                 return;
             }
 

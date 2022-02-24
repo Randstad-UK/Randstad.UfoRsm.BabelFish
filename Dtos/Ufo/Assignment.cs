@@ -94,15 +94,18 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             placement.faxbackEnabled = false;
 
             placement.holidayAccrualRateSpecified = false;
-            
+            placement.holidayAccrualRatePostAWRSpecified = false;
             if (EnhancedHolidayDays != null)
             {
                 placement.holidayAccrualRateSpecified = true;
                 var perc = Math.Round((decimal)EnhancedHolidayDays / (260 - (decimal)EnhancedHolidayDays), 4, MidpointRounding.AwayFromZero);
                 placement.holidayAccrualRate = perc;
+
+                placement.holidayAccrualRatePostAWRSpecified = true;
+                placement.holidayAccrualRatePostAWR = perc;
             }
 
-            placement.holidayAccrualRatePostAWRSpecified = false;
+            
 
             placement.invoiceRequiresPOSpecified = false;
             if (PoRequired != null)
@@ -214,6 +217,8 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             MapRates(rateCodes, placement);
 
             placement.timesheetApprovalRoute = "Auto Approval Route";
+            placement.chargeableExpenseApprovalRoute = "Auto Approval Route";
+            placement.nonChargeableExpenseApprovalRoute = "Auto Approval Route";
             placement.expenseTemplate = "Standard Expenses";
 
             placement.roundToNearestMinSpecified = true;

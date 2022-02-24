@@ -194,6 +194,8 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                 worker.cisTradingName = LtdCompany.Name;
             }
 
+            //TODO: not required until CPE
+            //worker.customText5 = LtdCompany.PLIOptOut;
 
             worker.limitedCompany = new RSM.Company();
  
@@ -244,8 +246,16 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                 worker.selfBilling = true;
             }
 
+            var tenDigits = new Regex(@"^\d{10}$");
 
-            worker.utr = LtdCompany.UtrNumber;
+            if (tenDigits.IsMatch(LtdCompany.UtrNumber))
+            {
+                worker.utr = LtdCompany.UtrNumber;
+            }
+            else
+            {
+                worker.utr = "0000000000";
+            }
 
         }
 

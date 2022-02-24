@@ -118,15 +118,16 @@ namespace Randstad.UfoRsm.BabelFish.Template.Application
                       }
                       catch (Exception ex)
                       {
-                          if (_nextMessage != null)
-                          {
-                              _consumerService.RejectMessage(true);
-                          }
-
                           if (_errorHandler.Handle(ex, _correlationId))
                           {
                               _logger.Debug($"Handle known error {ex.Message}.", _correlationId, null, null, null, null);
+                              _consumerService.AcknowledgeMessage();
                               continue;
+                          }
+
+                          if (_nextMessage != null)
+                          {
+                              _consumerService.RejectMessage(true);
                           }
 
                           _removeFromSd = false;

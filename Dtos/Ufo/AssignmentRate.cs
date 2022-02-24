@@ -52,7 +52,6 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             rate.effectiveFromSpecified = true;
             rate.effectiveFrom = StartDate;
             rate.name = FeeName;
-            rate.pay = PayRateCurrency;
             rate.payableSpecified = false;
             rate.ExternalAssignmentRef = Assignment.AssignmentRef;
             rate.frontendRef = FeeRef;
@@ -75,8 +74,13 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             rate.selectableByWorkers = false;
             rate.taxableSpecified = false;
             rate.timePattern = "default";
-            
-            
+
+            if (PayRateCurrency == null)
+                PayRateCurrency = 0;
+
+            if (ChargeRateCurrency == null)
+                ChargeRateCurrency = 0;
+
             switch (RateType)
             {
                 case "Basic Rate":
@@ -100,15 +104,13 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                     {
                         mapName += "Days";
                         rate.periodDuration = 480;
-                        rate.timesheetFields = "DAY";
+                        //rate.timesheetFields = "DAY";
+                        rate.timesheetFields = "DECIMAL";
                         rate.period = "Fixed";
                         
                     }
 
-
                     rate.payElementCode = rateCodes[mapName];
-                    
-                    
 
                     if (PayRateCurrency != null)
                     {
@@ -156,7 +158,8 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                     if (PayUnit == "Daily")
                     {
                         rate.periodDuration = 480;
-                        rate.timesheetFields = "DAY";
+                        //rate.timesheetFields = "DAY";
+                        rate.timesheetFields = "DECIMAL";
                         rate.period = "Fixed";
                     }
 

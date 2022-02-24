@@ -48,7 +48,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                 holidayRequest, holidayRequest.HolidayRequestRef, "Dtos.Ufo.HolidayRequest", null);
 
 
-            HolidayRequest rsmHolidayRequest = null;
+            Absence rsmHolidayRequest = null;
             try
             {
                 rsmHolidayRequest = holidayRequest.MapHolidayRequest();
@@ -65,9 +65,9 @@ namespace Randstad.UfoRsm.BabelFish.Translators
             }
 
 
-            SendToRsm(JsonConvert.SerializeObject(rsmHolidayRequest), Mappers.MapOpCoFromName(holidayRequest.Candidate.OperatingCo.FinanceCode).ToString(), "holidayrequest", entity.CorrelationId, true);
+            SendToRsm(JsonConvert.SerializeObject(rsmHolidayRequest), Mappers.MapOpCoFromName(holidayRequest.Candidate.OperatingCo.Name).ToString(), "absence", entity.CorrelationId, true);
 
-            _logger.Success($"Successfully sent holidayrequest {holidayRequest.Candidate.CandidateRef} to {holidayRequest.Candidate.OperatingCo.FinanceCode} on {_updatedRoutingKey}", entity.CorrelationId,
+            _logger.Success($"Successfully sent holidayrequest {holidayRequest.Candidate.CandidateRef} to {holidayRequest.Candidate.OperatingCo.Name} on {_updatedRoutingKey}", entity.CorrelationId,
                 holidayRequest, holidayRequest.HolidayRequestRef, "Dtos.Ufo.HolidayRequest", null, rsmHolidayRequest, "Ufo.HolidayRequest");
 
 

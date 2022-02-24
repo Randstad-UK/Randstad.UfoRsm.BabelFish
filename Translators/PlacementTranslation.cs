@@ -55,7 +55,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                     entity.ValidationErrors = new List<string>();
 
                 var message = $"Placement {placement.PlacementRef} is not checked in";
-                _logger.Warn(message, entity.CorrelationId, message, placement.PlacementRef, "Dtos.Ufo.Placement", null);
+                _logger.Debug(message, entity.CorrelationId, message, placement.PlacementRef, "Dtos.Ufo.Placement", null);
                 entity.ValidationErrors.Add(message);
 
                 entity.ExportSuccess = false;

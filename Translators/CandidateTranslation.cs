@@ -43,13 +43,6 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                     return;
                 }
 
-                if (candidate.LiveInPayroll == null || candidate.LiveInPayroll==false)
-                {
-                    _logger.Warn($"Candidate is not live in payroll {candidate.CandidateRef}", entity.CorrelationId, entity, candidate.CandidateRef, "Dtos.Ufo.ExportedEntity", null);
-                    entity.ExportSuccess = false;
-                    return;
-                }
-
             }
             catch (Exception exp)
             {
@@ -105,6 +98,13 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                 entity.ExportSuccess = false;
                 return;
                 
+            }
+
+            if (!liveInPayroll)
+            {
+                _logger.Debug($"Candidate{candidate.CandidateRef} is not live in payroll", entity.CorrelationId, entity, candidate.CandidateRef, "Dtos.Ufo.Candidate", null);
+                entity.ExportSuccess = true;
+                return;
             }
 
             SendToRsm(JsonConvert.SerializeObject(rmsWorker), Mappers.MapOpCoFromName(candidate.OperatingCo.Name.ToLower()).ToString(), "Worker", entity.CorrelationId, liveInPayroll);

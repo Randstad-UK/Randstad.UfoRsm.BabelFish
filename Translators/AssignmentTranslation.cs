@@ -79,7 +79,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                 var message = $"Assignment {assign.AssignmentRef} is not checked in";
                 entity.ValidationErrors.Add(message);
 
-                _logger.Warn(message, entity.CorrelationId, assign, assign.AssignmentRef, "Dtos.Ufo.Assignment", null);
+                _logger.Debug(message, entity.CorrelationId, assign, assign.AssignmentRef, "Dtos.Ufo.Assignment", null);
                 entity.ExportSuccess = false;
                 return;
                 

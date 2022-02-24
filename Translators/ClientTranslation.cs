@@ -60,7 +60,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                     entity.ValidationErrors = new List<string>();
 
                 var message = $"Client {client.ClientRef} is not checked in";
-                _logger.Warn(message, entity.CorrelationId, message, client.ClientRef, "Dtos.Ufo.Client", null);
+                _logger.Debug(message, entity.CorrelationId, message, client.ClientRef, "Dtos.Ufo.Client", null);
                 entity.ValidationErrors.Add(message);
                 return;
             }

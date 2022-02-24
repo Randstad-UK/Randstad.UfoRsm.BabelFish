@@ -73,7 +73,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             placement.customText3 = RsmClient.WorkAddress.GetConcatenatedAddress();
 
             placement.endSpecified = true;
-            placement.end = StartDate;
+            placement.end = DateTime.Now;
 
             placement.expenseEmailApprovalSpecified = true;
             placement.expenseEmailApproval = false;
@@ -116,11 +116,12 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             placement.salesDivision = OpCo.Name;
             placement.siteAddress = RsmClient.WorkAddress.GetAddress();
             placement.salesBranch = Unit.Name;
-            placement.salesCostCentre = tomCodes[Unit.FinanceCode];
+            placement.salesCostCentre = Unit.FinanceCode;
 
             MapConsultantSplit(placement);
 
             placement.timesheetApprovalRoute = "Auto Approval Route";
+
             placement.timesheetEmailApprovalSpecified = true;
             placement.timesheetEmailApproval = false;
 
@@ -157,15 +158,16 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
         private void MapConsultantSplit(Dtos.RsmInherited.Placement placement)
         {
-            if (ConsultantSplits == null || ConsultantSplits.Count <= 1) return;
+            if (ConsultantSplits == null || ConsultantSplits.Count < 1) return;
 
             placement.splitCommissions = new SplitCommission[ConsultantSplits.Count];
             for (int i = 0; i < ConsultantSplits.Count; i++)
             {
                 var split = new Dtos.RsmInherited.ConsultantSplit();
                 split.ExternalUserId = ConsultantSplits[i].Consultant.Id;
-                split.weight = ConsultantSplits[i].Split;
-                placement.consultantSplits[i] = split;
+                split.weightSpecified = true;
+                split.weight = ConsultantSplits[i].Split / 100; 
+                placement.splitCommissions[i] = split;
             }
 
         }

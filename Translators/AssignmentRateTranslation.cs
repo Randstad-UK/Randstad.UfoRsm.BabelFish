@@ -78,7 +78,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
 
                 var message = $"Rate Assignment {rate.Assignment.AssignmentRef} for Rate {rate.FeeRef} Not Checked In Do not send";
                 entity.ValidationErrors.Add(message);
-                _logger.Warn(message, entity.CorrelationId, rate, rate.FeeRef, "Dtos.Ufo.AssignmentRate", null);
+                _logger.Debug(message, entity.CorrelationId, rate, rate.FeeRef, "Dtos.Ufo.AssignmentRate", null);
 
                 entity.ExportSuccess = false;
                 return;

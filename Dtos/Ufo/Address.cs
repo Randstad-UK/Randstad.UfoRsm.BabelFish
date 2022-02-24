@@ -16,6 +16,8 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
         {
             var addr = new RSM.Address();
 
+            if (string.IsNullOrEmpty(Street)) return null;
+
             TruncateAddressStreet(addr);
             addr.town = City;
             addr.county = County;
