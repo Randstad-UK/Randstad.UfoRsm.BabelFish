@@ -170,6 +170,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
             worker.vatCode = "T0";
 
+            worker.customText5 = "";
             if (Paye.PAI == "Opt In")
             {
                 worker.customText5 = "PAI";
