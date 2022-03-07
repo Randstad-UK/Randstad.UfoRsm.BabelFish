@@ -13,7 +13,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
     public class ClientContactTranslation : TranslatorBase, ITranslator
     {
 
-        public ClientContactTranslation(IProducerService producer, string routingKeyBase, ILogger logger) : base(producer, routingKeyBase, logger)
+        public ClientContactTranslation(IProducerService producer, string routingKeyBase, ILogger logger, bool systemUnderTest) : base(producer, routingKeyBase, logger, systemUnderTest)
         {
 
         }
@@ -52,7 +52,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
             }
 
             SendToRsm(JsonConvert.SerializeObject(mappedContact), Mappers.MapOpCoFromName(contact.OpCo.Name.ToLower()).ToString(), "Client", entity.CorrelationId, (bool)contact.IsCheckedIn);
-            _logger.Success($"Successfully mapped ClientContact {contact.Forename} {contact.Surname} and Sent To RSM", entity.CorrelationId, mappedContact, contact.ContactId, "Dtos.Ufo.Client", null, contact, "RSM.Client");
+            _logger.Success($"Successfully mapped ClientContact {contact.Forename} {contact.Surname} and Sent To RSM", entity.CorrelationId, contact, contact.ContactId, "Dtos.Ufo.Client", null, null, "RSM.Client");
             entity.ExportSuccess = true;
 
         }

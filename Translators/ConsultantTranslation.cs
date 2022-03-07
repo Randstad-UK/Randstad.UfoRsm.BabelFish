@@ -14,7 +14,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
     public class ConsultantTranslation : TranslatorBase, ITranslator
     {
 
-        public ConsultantTranslation(IProducerService producer, string routingKeyBase, ILogger logger) : base(producer, routingKeyBase, logger)
+        public ConsultantTranslation(IProducerService producer, string routingKeyBase, ILogger logger, bool systemUnderTest) : base(producer, routingKeyBase, logger, systemUnderTest)
         {
 
         }
@@ -72,7 +72,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
 
             //send the consultant
             SendToRsm(JsonConvert.SerializeObject(rsmConsultant), opco, "consultant", entity.CorrelationId, true);
-            _logger.Success($"Successfully sent consultant {consultant.EmployeeRef} to RSM", entity.CorrelationId, consultant, consultant.EmployeeRef, "Dtos.Ufo.Consultant", null, rsmConsultant, "RSM.Consultant");
+            _logger.Success($"Successfully sent consultant {consultant.EmployeeRef} to RSM", entity.CorrelationId, rsmConsultant, consultant.EmployeeRef, "Dtos.Ufo.Consultant", null, null, "RSM.Consultant");
 
         
             entity.ExportSuccess = true;

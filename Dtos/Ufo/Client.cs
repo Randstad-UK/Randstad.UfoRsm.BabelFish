@@ -19,6 +19,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
         public string ClientRef { get; set; }
         public string ClientName { get; set; }
         public bool IsLegalHirer { get; set; }
+        public bool? NoVat { get; set; }
 
         public string VatNo { get; set; }
         public string InvoiceDeliveryMethod { get; set; }
@@ -98,18 +99,12 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             //TODO: (Done) set terms template on client when set up in RSM
             client.termsTemplateName = "Default Charge Terms";
 
+            client.vatCode = "T1";
+
             client.termsType = "Days From Invoice Date";
             
             client.timesheetsOnInvoicesSpecified = true;
             client.timesheetsOnInvoices = 0;
-
-            //TODO: (Done) set vat code on client when set up in RSM
-            client.vatCode = "T0";
-            if (!string.IsNullOrEmpty(VatNo))
-            {
-                client.vatCode = "T1";
-            }
- 
 
             client.defaultContractedHoursSpecified = true;
             client.defaultContractedHours = 40;

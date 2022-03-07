@@ -127,7 +127,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
             placement.rates = new RSM.Rate[1];
 
-            var rate = new Dtos.RsmInherited.Rate();
+            var rate = new RSM.Rate();
             rate.awrSpecified = true;
             rate.awrSpecified = false;
             rate.backendRef = PlacementRef;

@@ -13,29 +13,37 @@ namespace Randstad.UfoRsm.BabelFish.Translators
         private readonly string _routingKeyBase;
         protected readonly ILogger _logger;
         protected string _updatedRoutingKey;
+        private readonly bool _systemUnderTest;
 
-        protected TranslatorBase(IProducerService producer, string routingKeyBase, ILogger logger)
+        protected TranslatorBase(IProducerService producer, string routingKeyBase, ILogger logger, bool systemUnderTest)
         {
             _producer = producer;
             _routingKeyBase = routingKeyBase;
             _logger = logger;
+            _systemUnderTest = systemUnderTest;
         }
 
-        protected void SendToRsm(string body, string opCo, string obj, Guid correlationId, bool isCheckedIn)
+        protected void SendToRsm(string body, string opCo, string obj, Guid correlationId, bool isCheckedIn, bool? processAdjustment = null)
         {
             try
             {
                 var routingKey = _routingKeyBase.Replace("{opco}", opCo.ToLower());
-                routingKey = routingKey.Replace("{object}", obj);
 
-                if (isCheckedIn)
+                if (isCheckedIn && processAdjustment==null)
                 {
                     routingKey = routingKey.Replace("{rule}", ".startchecked");
+                }
+                
+                if(processAdjustment!=null)
+                {
+                    routingKey = routingKey.Replace("{rule}", ".adjustment");
                 }
                 else
                 {
                     routingKey = routingKey.Replace("{rule}", string.Empty);
                 }
+
+                routingKey = routingKey.Replace("{object}", obj);
 
                 routingKey = routingKey.ToLower();
 
@@ -89,6 +97,20 @@ namespace Randstad.UfoRsm.BabelFish.Translators
 
         protected bool BlockExport(OperatingCompanies.OperatingCompany opco)
         {
+            //Added as a config setting to allow different OpCos to be tested differently from production
+            if (_systemUnderTest)
+            {
+                switch (opco)
+                {
+                    case OperatingCompany.CARE:
+                    case OperatingCompany.BS:
+                        return false;
+                    default:
+                        return true;
+                }
+            }
+
+
             switch (opco)
             {
                 case OperatingCompany.BS:

@@ -47,7 +47,7 @@ namespace Randstad.UfoRsm.BabelFish
                 return QueueMessageAction.Acknowledge;
             }
 
-            _logger.Debug($"Successfully processed message - Body: {queueMessage.Body}, QueueCount:{queueMessage.QueueCount}", entity.CorrelationId, entity, entity.ObjectId, "ExportEntity", null);
+            _logger.Debug($"Successfully processed message, QueueCount:{queueMessage.QueueCount}", entity.CorrelationId, entity, entity.ObjectId, "ExportEntity", null);
             return QueueMessageAction.Acknowledge;
         }
     }

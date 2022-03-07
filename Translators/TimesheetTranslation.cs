@@ -19,7 +19,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
         private readonly string _baseRoutingKey;
         private readonly Dictionary<string, string> _rateCodes;
 
-        public TimesheetTranslation(IProducerService producer, string baseRoutingKey, ILogger logger, Dictionary<string, string> rateCodes) : base(producer, baseRoutingKey, logger)
+        public TimesheetTranslation(IProducerService producer, string baseRoutingKey, ILogger logger, Dictionary<string, string> rateCodes, bool systemUnderTest) : base(producer, baseRoutingKey, logger, systemUnderTest)
         {
             _baseRoutingKey = baseRoutingKey;
             _rateCodes = rateCodes;
@@ -94,14 +94,15 @@ namespace Randstad.UfoRsm.BabelFish.Translators
 
             foreach (var ts in mappedTimesheetList)
             {
-                SendToRsm(JsonConvert.SerializeObject(ts), Mappers.MapOpCoFromName(timesheet.OpCo.Name.ToLower()).ToString(), "Timesheet", entity.CorrelationId, true);
-                _logger.Success($"Successfully mapped Timesheet {timesheet.TimesheetRef} and sent to RSM", entity.CorrelationId, timesheet, timesheet.TimesheetRef, "Dtos.Ufo.Timesheet", null, ts, "RSM.Timesheet");
+
+                SendToRsm(JsonConvert.SerializeObject(ts), Mappers.MapOpCoFromName(timesheet.OpCo.Name.ToLower()).ToString(), "Timesheet", entity.CorrelationId, true, timesheet.ProcessAdjustments);
+                _logger.Success($"Successfully mapped Timesheet {timesheet.TimesheetRef} and sent to RSM", entity.CorrelationId, ts, timesheet.TimesheetRef, "Dtos.Ufo.Timesheet", null, null, "RSM.Timesheet");
             }
 
             if (claim != null)
             {
                 SendToRsm(JsonConvert.SerializeObject(claim), Mappers.MapOpCoFromName(timesheet.OpCo.Name.ToLower()).ToString(), "ExpenseClaim", entity.CorrelationId, true);
-                _logger.Success($"Successfully mapped expenses for {timesheet.TimesheetRef} and sent to RSM", entity.CorrelationId, claim, timesheet.TimesheetRef, "Dtos.Ufo.Timesheet", null, claim, "RSM.ExpenseClaim");
+                _logger.Success($"Successfully mapped expenses for {timesheet.TimesheetRef} and sent to RSM", entity.CorrelationId, claim, timesheet.TimesheetRef, "Dtos.Ufo.Timesheet", null, null, "RSM.ExpenseClaim");
             }
 
             entity.ExportSuccess = true;

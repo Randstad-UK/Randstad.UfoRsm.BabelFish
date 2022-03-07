@@ -132,28 +132,15 @@ namespace Randstad.UfoRsm.BabelFish
                     var tomCodes = JsonConvert.DeserializeObject<Dictionary<string, string>>(sdClient.GetConfigurationGroup(applicationSettings.ConfigGroup)["TomCodes"]);
                     var employerRefs = JsonConvert.DeserializeObject<Dictionary<string, string>>(sdClient.GetConfigurationGroup(applicationSettings.ConfigGroup)["EmpRefs"]);
 
-                    var candidateTranslator = new CandidateTranslation(producer, applicationSettings.RsmRoutingKeyBase, employerRefs, tomCodes, logger);
-                    var clientTranslator = new ClientTranslation(producer, applicationSettings.RsmRoutingKeyBase, logger);
-                    var consultantTranslator = new ConsultantTranslation(producer, applicationSettings.RsmRoutingKeyBase, logger);
-                    var assignmentTranslator = new AssignmentTranslation(producer, applicationSettings.RsmRoutingKeyBase, tomCodes, rateMap, logger);
-                    var placementTranslator = new PlacementTranslation(producer, applicationSettings.RsmRoutingKeyBase, tomCodes, logger);
-                    var timesheetTranslator = new TimesheetTranslation(producer, applicationSettings.RsmRoutingKeyBase, logger, rateMap);
-                    var holidayRequestTranslator = new HolidayRequestTranslation(producer, applicationSettings.RsmRoutingKeyBase, logger);
-                    var assignmentRateTranslator = new AssignmentRateTranslation(rateMap, producer, applicationSettings.RsmRoutingKeyBase, logger);
-                    var ltdCompanyTranslator = new LtdCompanyTranslation(producer, applicationSettings.RsmRoutingKeyBase, logger);
-
-                    /*
-                    var rateTranslator = new AssignmentRateTranslation(rateMap, producer, applicationSettings.StiRoutingKeyBase, applicationSettings.EmployeeCodePrefix, logger);
-                    
-                    var contactTranslator = new ClientContactTranslation(producer, applicationSettings.StiRoutingKeyBase, applicationSettings.EmployeeCodePrefix, logger);
-
-                    
-                    var timesheetTranslator = new TimesheetTranslation(rateMap, producer, applicationSettings.StiRoutingKeyBase, applicationSettings.EmployeeCodePrefix, tomCodes, logger, employerRefs);
-                    
-                    
-                    var invoiceAddressTranslator = new InvoiceAddressTranslation(producer, applicationSettings.StiRoutingKeyBase, employerRefs, logger);
-                    var ltdTranslator = new LtdCompanyTranslation(producer, applicationSettings.StiRoutingKeyBase, applicationSettings.EmployeeCodePrefix, applicationSettings.RemoveFromCandidateRef, employerRefs, tomCodes, logger); 
-                    */
+                    var candidateTranslator = new CandidateTranslation(producer, applicationSettings.RsmRoutingKeyBase, employerRefs, tomCodes, logger, applicationSettings.SystemUnderTest);
+                    var clientTranslator = new ClientTranslation(producer, applicationSettings.RsmRoutingKeyBase, logger, applicationSettings.SystemUnderTest);
+                    var consultantTranslator = new ConsultantTranslation(producer, applicationSettings.RsmRoutingKeyBase, logger, applicationSettings.SystemUnderTest);
+                    var assignmentTranslator = new AssignmentTranslation(producer, applicationSettings.RsmRoutingKeyBase, tomCodes, rateMap, logger, applicationSettings.SystemUnderTest);
+                    var placementTranslator = new PlacementTranslation(producer, applicationSettings.RsmRoutingKeyBase, tomCodes, logger, applicationSettings.SystemUnderTest);
+                    var timesheetTranslator = new TimesheetTranslation(producer, applicationSettings.RsmRoutingKeyBase, logger, rateMap, applicationSettings.SystemUnderTest);
+                    var holidayRequestTranslator = new HolidayRequestTranslation(producer, applicationSettings.RsmRoutingKeyBase, logger, applicationSettings.SystemUnderTest);
+                    var assignmentRateTranslator = new AssignmentRateTranslation(rateMap, producer, applicationSettings.RsmRoutingKeyBase, logger, applicationSettings.SystemUnderTest);
+                    var ltdCompanyTranslator = new LtdCompanyTranslation(producer, applicationSettings.RsmRoutingKeyBase, logger, applicationSettings.SystemUnderTest);
 
                     var translators = new List<ITranslator>()
                     {

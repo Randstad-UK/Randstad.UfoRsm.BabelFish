@@ -4,8 +4,8 @@ using System.Text;
 
 namespace RSM
 {
-    public partial class Rate
+    public partial class Timesheet
     {
-        public string ExternalAssignmentRef { get; set; }
+        public string externalTimesheetId { get; set; }
     }
 }

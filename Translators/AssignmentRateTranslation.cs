@@ -19,7 +19,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
     {
         private readonly Dictionary<string, string> _rateCodes;
 
-        public AssignmentRateTranslation(Dictionary<string, string> rateCodes, IProducerService producer, string routingKeyBase, ILogger logger) : base(producer, routingKeyBase, logger)
+        public AssignmentRateTranslation(Dictionary<string, string> rateCodes, IProducerService producer, string routingKeyBase, ILogger logger, bool systemUnderTest) : base(producer, routingKeyBase, logger, systemUnderTest)
         {
             _rateCodes = rateCodes;
         }
@@ -84,10 +84,11 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                 return;
             }
             
-            Rate mappedRate = null;
+            RSM.Rate mappedRate = null;
+            RSM.Rate mappedPostRate = null;
             try
             {
-                mappedRate = rate.MapRate(_rateCodes);
+                mappedRate = rate.MapRate(_rateCodes, out mappedPostRate);
             }
             catch (Exception exp)
             {
@@ -102,7 +103,14 @@ namespace Randstad.UfoRsm.BabelFish.Translators
 
             SendToRsm(JsonConvert.SerializeObject(mappedRate), Mappers.MapOpCoFromName(rate.Assignment.OpCo.Name).ToString(), "Rate", entity.CorrelationId, entity.IsCheckedIn);
 
-            _logger.Success($"Successfully sent mapped Assignment Rate {rate.FeeRef} to RSM", entity.CorrelationId, rate, rate.FeeRef, "Dtos.Ufo.AssignmentRate", null, mappedRate, "Dtos.Sti.AssignmentRate");
+            _logger.Success($"Successfully sent mapped Assignment Rate {rate.FeeRef} to RSM", entity.CorrelationId, mappedRate, rate.FeeRef, "Dtos.Ufo.AssignmentRate", null, null, "Dtos.Sti.AssignmentRate");
+
+            if (mappedPostRate != null)
+            {
+                SendToRsm(JsonConvert.SerializeObject(mappedPostRate), Mappers.MapOpCoFromName(rate.Assignment.OpCo.Name).ToString(), "Rate", entity.CorrelationId,entity.IsCheckedIn);
+                _logger.Success($"Successfully sent mapped post parity Assignment Rate {rate.FeeRef} to RSM", entity.CorrelationId, mappedPostRate, rate.FeeRef, "Dtos.Ufo.AssignmentRate", null, null, "Dtos.Sti.AssignmentRate");
+            }
+
             entity.ExportSuccess = true;
         }
     }

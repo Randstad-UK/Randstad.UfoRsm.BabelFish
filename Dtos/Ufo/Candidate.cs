@@ -119,7 +119,6 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             worker.starterStatementDSpecified = false;
             worker.week1Month1Specified = false;
             
-
             worker.emailPayslipSpecified = false;
             worker.selfBillingSpecified = false;
 
@@ -171,6 +170,11 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
             worker.vatCode = "T0";
 
+            if (Paye.PAI == "Opt In")
+            {
+                worker.customText5 = "PAI";
+            }
+
             GetStarterDec(worker);
             GetStudentLoan(worker);
             GetPostgradLoan(worker);
@@ -181,6 +185,8 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             if (PayType != PaymentTypes.LTD) return;
 
             worker.workerType = "LTD";
+            worker.payAsPAYESpecified = true;
+            worker.payAsPAYE = true;
             worker.isCISSpecified = true;
             worker.isCIS = false;
             if (LtdCompany.Cis == "Yes")
@@ -196,6 +202,10 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
             //TODO: not required until CPE
             //worker.customText5 = LtdCompany.PLIOptOut;
+            if (LtdCompany.PLIOptOut == "Yes")
+            {
+                worker.customText5 = "PLI";
+            }
 
             worker.limitedCompany = new RSM.Company();
  
@@ -214,10 +224,15 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             worker.limitedCompany.invoicePeriodSpecified = true;
             worker.limitedCompany.invoicePeriod = 1;
             worker.limitedCompany.name = LtdCompany.Name;
-            
+
+
             //TODO: (Done) Update limitedCompany VAT Code once set up in RMS
-            worker.limitedCompany.vatCode = "T1";
-            
+            worker.limitedCompany.vatCode = "T0";
+            if (!string.IsNullOrEmpty(LtdCompany.VatNumber))
+            {
+                worker.limitedCompany.vatCode = "T1";
+            }
+
             worker.limitedCompany.invoicingContact =new Contact();
             worker.limitedCompany.invoicingContact.address = LtdCompany.InvoiceAddress.GetAddress();
             
@@ -232,7 +247,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             worker.limitedCompany.invoicingContact.phone = Phone;
 
             //TODO: Update once LTD Payment frequency set up in RMS
-            worker.paymentFrequency = "Weekly";
+            worker.paymentFrequency = "IR35 Weekly";
 
 
             worker.paymentMethod = PaymentMethod;

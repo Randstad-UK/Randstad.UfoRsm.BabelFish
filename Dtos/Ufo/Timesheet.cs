@@ -38,7 +38,8 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
         public List<Expense> Expenses { get; set; }
         public string ApprovedBy { get; set; }
         public DateTime? ApprovedDateTime { get; set; }
-        public bool? ProcessAdjustments { get; set; }
+        public bool ProcessAdjustments { get; set; }
+
 
         private List<IGrouping<string, Expense>> GetConsolidatedExpenses(out List<Expense> consolidatedExpenses)
         {
@@ -97,9 +98,10 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
             if (TimesheetLines!=null && TimesheetLines.Any())
             {
-                timesheet.shifts = new Shift[TimesheetLines.Count];
+                //timesheet.shifts = new Shift[TimesheetLines.Count];
+                timesheet.shifts = new Shift[0];
                 var shiftIndex = 0;
-
+                var shiftList = new List<Shift>();
                 //Map all the time values
                 foreach (var line in TimesheetLines)
                 {
@@ -163,7 +165,9 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                         {
                             shift.mealBreak = 0;
                         }
-                        timesheet.shifts[shiftIndex] = shift;
+
+                        shiftList.Add(shift);
+                        shiftIndex++;
                     }
 
                     //Day rate
@@ -172,13 +176,18 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
                         shift.@decimal = (decimal)line.DaysReported;
                         shift.decimalSpecified = true;
-                        timesheet.shifts[shiftIndex] = shift;
+                        shiftList.Add(shift);
+                        shiftIndex++;
                     }
 
                     
-                    shiftIndex++;
+                    
                 }
 
+                if (shiftList.Any())
+                {
+                    timesheet.shifts = shiftList.ToArray();
+                }
                 timesheetList.Add(timesheet);
             }
 
@@ -284,12 +293,8 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
             timesheet.freehandRef = TimesheetRef;
             timesheet.payrollRef = TimesheetRef;
+            timesheet.externalTimesheetId = ExternalTimesheetId;
 
-            if (!string.IsNullOrEmpty(ExternalTimesheetId))
-            {
-                timesheet.payrollRef = ExternalTimesheetId;
-            }
-            
             timesheet.purchaseOrderNumOverride = PoNumber;
 
             DateTime approvedOn = (DateTime) ApprovedDateTime;

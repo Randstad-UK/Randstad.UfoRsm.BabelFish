@@ -11,40 +11,37 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 {
     public class AssignmentRate
     {
-        public string Label { get; set; }
         public string FeeRef { get; set; }
         public string FeeName { get; set; }
-        public bool? Active { get; set; }
-        public double? ActiveHourlyRate { get; set; }
-        public double? AdditionalLabourCost { get; set; }
+ 
         public DateTime? StartDate { get; set; }
-        public DateTime? EndDate { get; set; }
+
         public string ExpenseType { get; set; }
-        public bool? IsModifiedOnAssignment { get; set; }
-        public double? Margin { get; set; }
+
         public string OvertimeType { get; set; }
-        public bool? IsPayRise { get; set; }
+
         public string PayUnit { get; set; }
         public string SequenceNumber { get; set; }
-
         public decimal? PayRateCurrency { get; set; }
         public decimal? ChargeRateCurrency { get; set; }
+        public Decimal? PostParityPayRateCurrency { get; set; }
+        public Decimal? PostParityChargeRateCurrency { get; set; }
 
-        public bool? ReceiptRequired { get; set; }
         public string RateType { get; set; }
-        public double? StandbyFee { get; set; }
-        public string Status { get; set; }
+
         public Assignment Assignment { get; set; }
 
-        public Dtos.RsmInherited.Rate MapRate(Dictionary<string, string> rateCodes, Assignment assignment)
+        public RSM.Rate MapRate(Dictionary<string, string> rateCodes, Assignment assignment, out RSM.Rate postRate)
         {
             Assignment = assignment;
-            return MapRate(rateCodes);
+            return MapRate(rateCodes, out postRate);
         }
 
-        public Dtos.RsmInherited.Rate MapRate(Dictionary<string, string> rateCodes)
+        public RSM.Rate MapRate(Dictionary<string, string> rateCodes, out RSM.Rate postRate)
         {
-            var rate = new Dtos.RsmInherited.Rate();;
+            postRate = null;
+
+            var rate = new RSM.Rate();
             rate.awrSpecified = true;
             rate.awrSpecified = false;
             rate.chargeSpecified = false;
@@ -56,15 +53,29 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             rate.ExternalAssignmentRef = Assignment.AssignmentRef;
             rate.frontendRef = FeeRef;
             rate.backendRef = Assignment.AssignmentRef;
-            SetRateType(rate, rateCodes);
+            SetRateType(rate, rateCodes,false);
+
+
+            postRate = new RSM.Rate();
+            postRate.awrSpecified = true;
+            postRate.awr = true;
+            postRate.chargeSpecified = false;
+            postRate.commentsEnabledSpecified = false;
+            postRate.effectiveFromSpecified = true;
+            postRate.effectiveFrom = StartDate;
+            postRate.name = FeeName;
+            postRate.payableSpecified = false;
+            postRate.ExternalAssignmentRef = Assignment.AssignmentRef;
+            postRate.frontendRef = FeeRef+"-AWR";
+            postRate.backendRef = Assignment.AssignmentRef;
+            SetRateType(postRate, rateCodes, true);
+
 
             return rate;
         }
-
-
         
         
-        private void SetRateType(RSM.Rate rate, Dictionary<string, string> rateCodes)
+        private void SetRateType(RSM.Rate rate, Dictionary<string, string> rateCodes, bool isPostParity)
         {
             rate.proRataSpecified = false;
             rate.periodDurationSpecified = false;
@@ -76,10 +87,14 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             rate.timePattern = "default";
 
             if (PayRateCurrency == null)
+            {
                 PayRateCurrency = 0;
+            }
 
             if (ChargeRateCurrency == null)
+            {
                 ChargeRateCurrency = 0;
+            }
 
             switch (RateType)
             {
@@ -104,7 +119,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                     {
                         mapName += "Days";
                         rate.periodDuration = 480;
-                        //rate.timesheetFields = "DAY";
+
                         rate.timesheetFields = "DECIMAL";
                         rate.period = "Fixed";
                         
@@ -112,15 +127,44 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
                     rate.payElementCode = rateCodes[mapName];
 
-                    if (PayRateCurrency != null)
+                    if (PayRateCurrency != null && !isPostParity)
                     {
                         rate.pay = (decimal) PayRateCurrency;
                         rate.paySpecified = true;
                     }
 
-                    if (ChargeRateCurrency != null)
+                    if (ChargeRateCurrency != null && !isPostParity)
                     {
                         rate.charge = (decimal) ChargeRateCurrency;
+                        rate.chargeSpecified = true;
+                    }
+
+                    if (PayRateCurrency != null && isPostParity)
+                    {
+                        if (PostParityPayRateCurrency != null)
+                        {
+                            rate.pay = (decimal) PostParityPayRateCurrency;
+                        }
+                        else
+                        {
+                            rate.pay = (decimal)PayRateCurrency;
+                        }
+
+                        rate.paySpecified = true;
+                    }
+
+                    if (ChargeRateCurrency != null && isPostParity)
+                    {
+
+                        if (PostParityChargeRateCurrency != null)
+                        {
+                            rate.charge = (decimal) PostParityChargeRateCurrency;
+                        }
+                        else
+                        {
+                            rate.charge = (decimal)ChargeRateCurrency;
+                            }
+
                         rate.chargeSpecified = true;
                     }
 
@@ -134,15 +178,45 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                     rate.periodDurationSpecified = true;
 
                     rate.timesheetFields = "HOURS";
-                    if (PayRateCurrency != null)
+
+                    if (PayRateCurrency != null && !isPostParity)
                     {
                         rate.pay = (decimal) PayRateCurrency;
                         rate.paySpecified = true;
                     }
 
-                    if (ChargeRateCurrency != null)
+                    if (ChargeRateCurrency != null && !isPostParity)
                     {
                         rate.charge = (decimal) ChargeRateCurrency;
+                        rate.chargeSpecified = true;
+                    }
+
+                    if (PayRateCurrency != null && isPostParity)
+                    {
+                        if (PostParityPayRateCurrency != null)
+                        {
+                            rate.pay = (decimal)PostParityPayRateCurrency;
+                        }
+                        else
+                        {
+                            rate.pay = (decimal)PayRateCurrency;
+                        }
+
+                        rate.paySpecified = true;
+                    }
+
+                    if (ChargeRateCurrency != null && isPostParity)
+                    {
+
+                        if (PostParityChargeRateCurrency != null)
+                        {
+                            rate.charge = (decimal)PostParityChargeRateCurrency;
+                        }
+                        else
+                        {
+                            rate.charge = (decimal)ChargeRateCurrency;
+                        }
+
                         rate.chargeSpecified = true;
                     }
 
@@ -158,7 +232,6 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                     if (PayUnit == "Daily")
                     {
                         rate.periodDuration = 480;
-                        //rate.timesheetFields = "DAY";
                         rate.timesheetFields = "DECIMAL";
                         rate.period = "Fixed";
                     }

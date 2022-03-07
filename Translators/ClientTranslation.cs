@@ -14,7 +14,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
     public class ClientTranslation : TranslatorBase, ITranslator
     {
 
-        public ClientTranslation(IProducerService producer, string routingKeyBase, ILogger logger) : base(producer, routingKeyBase, logger)
+        public ClientTranslation(IProducerService producer, string routingKeyBase, ILogger logger, bool systemUnderTest) : base(producer, routingKeyBase, logger, systemUnderTest)
         {
 
         }
@@ -85,7 +85,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
 
 
             SendToRsm(JsonConvert.SerializeObject(rmsClient), Mappers.MapOpCoFromName(client.OpCo.Name.ToLower()).ToString(), "Client", entity.CorrelationId, (bool)client.IsCheckedIn);
-            _logger.Success($"Successfully mapped Client {client.ClientRef} and Sent To RSM", entity.CorrelationId, client, client.ClientRef, "Dtos.Ufo.Client", null, rmsClient, "RSM.Client");
+            _logger.Success($"Successfully mapped Client {client.ClientRef} and Sent To RSM", entity.CorrelationId, rmsClient, client.ClientRef, "Dtos.Ufo.Client", null, null, "RSM.Client");
             entity.ExportSuccess = true;
 
         }

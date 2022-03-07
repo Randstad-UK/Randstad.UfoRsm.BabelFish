@@ -15,7 +15,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
     {
         private readonly Dictionary<string, string> _tomCodes;
 
-        public CandidateTranslation(IProducerService producer, string baseRoutingKey, Dictionary<string, string> employerRefs, Dictionary<string, string> tomCodes, ILogger logger) : base(producer, baseRoutingKey, logger)
+        public CandidateTranslation(IProducerService producer, string baseRoutingKey, Dictionary<string, string> employerRefs, Dictionary<string, string> tomCodes, ILogger logger, bool systemUnderTest) : base(producer, baseRoutingKey, logger, systemUnderTest)
         {
             _tomCodes = tomCodes;
         }
@@ -108,7 +108,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
             }
 
             SendToRsm(JsonConvert.SerializeObject(rmsWorker), Mappers.MapOpCoFromName(candidate.OperatingCo.Name.ToLower()).ToString(), "Worker", entity.CorrelationId, liveInPayroll);
-            _logger.Success($"Successfully mapped Candidate {candidate.CandidateRef} and sent to RSM", entity.CorrelationId, candidate, candidate.CandidateRef, "Dtos.Ufo.Candidate", null, rmsWorker, "RSM.Worker");
+            _logger.Success($"Successfully mapped Candidate {candidate.CandidateRef} and sent to RSM", entity.CorrelationId, rmsWorker, candidate.CandidateRef, "Dtos.Ufo.Candidate", null, null, "RSM.Worker");
             entity.ExportSuccess = true;
         }
     }

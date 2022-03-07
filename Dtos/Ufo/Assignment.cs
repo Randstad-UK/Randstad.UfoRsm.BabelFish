@@ -16,20 +16,8 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
     {
         public Team OpCo { get; set; }
 
-        //required Ids
-        public string AssignmentId { get; set; }
-        public string MigratedAssignmentId { get; set; }
-
         //required refs
         public string AssignmentRef { get; set; }
-        public string ClientName { get; set; }
-        public string PayrollRef { get; set; }
-        public string CandidateRef { get; set; }
-        public string HleRef { get; set; }
-        public string ClientRef { get; set; }
-        public string ClientId { get; set; }
-        public string JobRef { get; set; }
-        public string PositionRef { get; set; }
         public string PositionName { get; set; }
         public string ExternalRef { get; set; }
 
@@ -41,22 +29,18 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
         public string AssignmentJobTitle { get; set; }
-        public string Description { get; set; }
-        public string CostCentre { get; set; }
-        public string HolidayPay { get; set; }
         public Consultant Owner { get; set; }
-        public string InvoiceAddressId { get; set; }
         public InvoiceAddress InvoiceAddress { get; set; }
         public Address WorkAddress { get; set; }
         public ClientContact InvoicePerson { get; set; }
-        public string Contact { get; set; }
-        public string RecordType { get; set; }
         public List<AssignmentRate> Rates { get; set; }
         public List<ConsultantSplit> ConsultantSplits { get; set; }
-        public string PaymentType { get; set; }
-        public decimal? AwrPreviousWeeks { get; set; }
         public string PreferredPeriod { get; set; }
         public decimal? EnhancedHolidayDays { get; set; }
+        public string HolidayPay { get; set; }
+        public decimal? PreAwrHolidayPercentage { get; set; }
+        public decimal? PostAwrHolidayPercentage { get; set; }
+        public bool AwrParityHolidaysDay1 { get; set; }
         public Client Client { get; set; }
         public Client Hle { get; set; }
         public Candidate Candidate { get; set; }
@@ -67,6 +51,8 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             var placement = new Dtos.RsmInherited.Placement();
             placement.PAYEDeductionsOnLtdSpecified = true;
             placement.PAYEDeductionsOnLtd = IR35;
+            placement.holidayAccrualRatePostAWRSpecified = false;
+            placement.holidayAccrualRateSpecified = false;
 
             placement.agencyOnlySpecified = true;
             placement.agencyOnly = true;
@@ -92,20 +78,6 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
             placement.faxbackEnabledSpecified = true;
             placement.faxbackEnabled = false;
-
-            placement.holidayAccrualRateSpecified = false;
-            placement.holidayAccrualRatePostAWRSpecified = false;
-            if (EnhancedHolidayDays != null)
-            {
-                placement.holidayAccrualRateSpecified = true;
-                var perc = Math.Round((decimal)EnhancedHolidayDays / (260 - (decimal)EnhancedHolidayDays), 4, MidpointRounding.AwayFromZero);
-                placement.holidayAccrualRate = perc;
-
-                placement.holidayAccrualRatePostAWRSpecified = true;
-                placement.holidayAccrualRatePostAWR = perc;
-            }
-
-            
 
             placement.invoiceRequiresPOSpecified = false;
             if (PoRequired != null)
@@ -225,11 +197,76 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             placement.roundToNearestMin = 1;
             MapLtdValues(placement);
 
+            MapPayeValues(placement);
+
 
             return placement;
         }
 
-        private void MapLtdValues(RSM.Placement placement)
+        private void MapPayeValues(Dtos.RsmInherited.Placement placement)
+        {
+            if (Candidate.PayType != PaymentTypes.PAYE) return;
+
+            if (HolidayPay.ToLower() == "rolled up holiday pay")
+            {
+                placement.holidayAccrualRateSpecified = true;
+                placement.holidayAccrualRate = 0;
+
+                placement.holidayAccrualRatePostAWRSpecified = true;
+                placement.holidayAccrualRatePostAWR = 0;
+            }
+
+            if (HolidayPay.ToLower() == "accrue holiday pay" && (PreAwrHolidayPercentage!=null || PostAwrHolidayPercentage!=null))
+            {
+                if (PreAwrHolidayPercentage != null)
+                {
+                    placement.holidayAccrualRateSpecified = true;
+                    placement.holidayAccrualRate = PreAwrHolidayPercentage;
+                }
+
+                if (PostAwrHolidayPercentage != null)
+                {
+                    placement.holidayAccrualRatePostAWRSpecified = true;
+                    placement.holidayAccrualRatePostAWR = PostAwrHolidayPercentage;
+                }
+            }
+
+            if (HolidayPay.ToLower() == "accrue holiday pay" && (PreAwrHolidayPercentage != null || PostAwrHolidayPercentage != null))
+            {
+
+                if (EnhancedHolidayDays != null)
+                {
+                    placement.holidayAccrualRateSpecified = true;
+                    var perc = Math.Round((decimal)EnhancedHolidayDays / (260 - (decimal)EnhancedHolidayDays), 4, MidpointRounding.AwayFromZero);
+                    placement.holidayAccrualRate = perc;
+                }
+            }
+
+            if (AwrParityHolidaysDay1)
+            {
+                if (EnhancedHolidayDays != null && PostAwrHolidayPercentage==null)
+                {
+                    placement.holidayAccrualRateSpecified = true;
+                    var perc = Math.Round((decimal)EnhancedHolidayDays / (260 - (decimal)EnhancedHolidayDays), 4, MidpointRounding.AwayFromZero);
+                    placement.holidayAccrualRate = perc;
+
+                    placement.holidayAccrualRatePostAWRSpecified = true;
+                    placement.holidayAccrualRatePostAWR = perc;
+                }
+
+                if (EnhancedHolidayDays == null && PostAwrHolidayPercentage == null)
+                {
+                    placement.holidayAccrualRateSpecified = true;
+                    placement.holidayAccrualRate = PostAwrHolidayPercentage;
+
+                    placement.holidayAccrualRatePostAWRSpecified = true;
+                    placement.holidayAccrualRatePostAWR = PostAwrHolidayPercentage;
+
+                }
+            }
+        }
+
+        private void MapLtdValues(Dtos.RsmInherited.Placement placement)
         {
             if (Candidate.PayType != PaymentTypes.LTD) return;
 
@@ -257,16 +294,13 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
         {
             if (Rates == null) return;
 
-
             var noExpenses = Rates.Where(x => x.RateType != "Expense Rate").ToList();
 
             if (noExpenses == null || noExpenses.Count() == 0) return;
 
-            placement.rates = new RSM.Rate[noExpenses.Count];
-            
+            var rateList = new List<RSM.Rate>();
 
             var priorityOrder = 1;
-            var rateIndex = 0;
 
             foreach (var rate in noExpenses)
             {
@@ -276,7 +310,8 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                     continue;
                 }
 
-                var rsmRate = rate.MapRate(rateCodes, this);
+                RSM.Rate postRate = null;
+                var rsmRate = rate.MapRate(rateCodes, this, out postRate);
 
                 rsmRate.priorityOrderSpecified = true;
                 rsmRate.priorityOrder = priorityOrder;
@@ -288,10 +323,14 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                 }
                 
                 priorityOrder++;
-                placement.rates[rateIndex]=rsmRate;
-                rateIndex++;
+                rateList.Add(rsmRate);
+                if (postRate != null)
+                {
+                    rateList.Add(postRate);
+                }
             }
 
+            placement.rates = rateList.ToArray();
         }
     }
 }
