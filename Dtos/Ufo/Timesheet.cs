@@ -6,6 +6,7 @@ using System.Linq.Expressions;
 using System.Net;
 using System.Text;
 using System.Transactions;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Randstad.Logging;
 using Randstad.Logging.Core;
@@ -82,7 +83,6 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
         }
 
 
-
         public List<RSM.Timesheet> MapTimesheet(ILogger logger, Dictionary<string, string> rateCodes, Guid correlationId, out RSM.ExpenseClaim claim)
         {
             claim = null;
@@ -123,7 +123,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                     shift.rateIdSpecified = false;
                     
 
-                    if (line.Rate.RateType.ToLower() == "basic rate")
+                    if (line.Rate!=null && line.Rate.RateType.ToLower() == "basic rate")
                     {
                         if (line.Rate.PayUnit.ToLower() == "daily")
                         {
@@ -136,10 +136,23 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                         rateName = line.Rate.FeeName;
                     }
 
-                    shift.rateName = rateName;
 
-                    shift.day = line.StartDateTime.GetDateMilliseconds();
+                    Rate pRate = null;
+                    if (line.Rate != null)
+                    {
+                        if (line.Rate.Assignment == null)
+                        {
+                            line.Rate.Assignment = new Assignment();
+                            line.Rate.Assignment.AssignmentRef = AssignmentRef;
+                        }
+                        shift.rate = line.Rate.MapRate(rateCodes, out pRate);
+                    }
+
+
+                    var date = (DateTime) line.StartDateTime;
+                    shift.day = date.Date.GetDateTimeMilliseconds();
                     shift.daySpecified = true;
+                    shift.rateName = rateName;
 
                     //Hourly rate
                     if (line.DaysReported == null && line.TotalHours>0)
@@ -148,17 +161,27 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                         shift.hoursSpecified = true;
 
                         shift.startTimeSpecified = true;
-                        shift.startTime = line.StartDateTime.GetDateTimeMilliseconds();
+                        var startDate = line.StartDateTime.ConvertToBST();
+                        logger.Debug("Local Start Date/Time: "+ startDate, correlationId, this, TimesheetRef, null, null, null, null);
+                        shift.startTime = startDate.GetDateTimeMilliseconds();
 
                         shift.finishTimeSpecified = true;
-                        shift.finishTime = line.EndDateTime.GetDateTimeMilliseconds();
+
+                        var endDate = line.EndDateTime.ConvertToBST();
+                        logger.Debug("Local End Date/Time: " + endDate, correlationId, this, TimesheetRef, null, null, null, null);
+                        shift.finishTime = endDate.GetDateTimeMilliseconds();
 
                         shift.mealBreakSpecified = true;
 
                         if (line.BreakStartTime != null && line.BreakEndTime != null)
                         {
-                            var breakStart = line.BreakStartTime.GetDateTimeMilliseconds();
-                            var breakEnd = line.BreakEndTime.GetDateTimeMilliseconds();
+                            var breakStartBST = line.BreakStartTime.ConvertToBST();
+                            logger.Debug("Local Start Break Date/Time: " + breakStartBST, correlationId, this, TimesheetRef, null, null, null, null);
+                            var breakStart = breakStartBST.GetDateTimeMilliseconds();
+
+                            var breakEndBST = line.BreakEndTime.ConvertToBST();
+                            logger.Debug("Local End Break Date/Time: " + breakEndBST, correlationId, this, TimesheetRef, null, null, null, null);
+                            var breakEnd = breakEndBST.GetDateTimeMilliseconds();
                             shift.mealBreak = breakEnd - breakStart;
                         }
                         else
@@ -179,9 +202,6 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                         shiftList.Add(shift);
                         shiftIndex++;
                     }
-
-                    
-                    
                 }
 
                 if (shiftList.Any())
@@ -214,7 +234,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                     expenseItem.netValueSpecified = false;
                     
                     expenseItem.receiptDateSpecified = true;
-                    expenseItem.receiptDate = PeriodEndDate;
+                    expenseItem.receiptDate = PeriodEndDate.ConvertToBST().Date;
 
                     expenseItem.freehandRef = TimesheetRef;
                     expenseItem.payrollRef = TimesheetRef;
@@ -238,6 +258,9 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
                         expenseItem.unitNetSpecified = true;
                         expenseItem.unitNet = expense.Amount;
+
+                        expenseItem.unitSpecified = true;
+                        expenseItem.unit = expense.Quantity;
                     }
 
                     try
@@ -270,17 +293,14 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             {
                 timesheet.periodEndDateSpecified = true;
 
-                var periodEnd = (DateTime) PeriodEndDate;
-                timesheet.periodEndDate = periodEnd.Date;
+                timesheet.periodEndDate = PeriodEndDate.ConvertToBST().Date;
             }
 
             timesheet.periodStartDateSpecified = false;
             if (PeriodStartDate != null)
             {
                 timesheet.periodStartDateSpecified = true;
-
-                var periodStart = (DateTime) PeriodStartDate;
-                timesheet.periodStartDate = periodStart.Date;
+                timesheet.periodStartDate = PeriodStartDate.ConvertToBST().Date;
             }
 
             timesheet.placementExternalRef = AssignmentRef;
@@ -297,7 +317,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
             timesheet.purchaseOrderNumOverride = PoNumber;
 
-            DateTime approvedOn = (DateTime) ApprovedDateTime;
+            DateTime approvedOn = (DateTime) ApprovedDateTime.ConvertToBST();
             timesheet.comment = "Approved by: " + ApprovedBy + " on " + approvedOn.ToString("dd/MM/yyyy hh:ss");
             
             return timesheet;

@@ -14,8 +14,15 @@ namespace Randstad.UfoRsm.BabelFish.Template.Extensions
 
             var elapsedTicks = (currentDate.Ticks - centuryBegin.Ticks) / TimeSpan.TicksPerMillisecond;
 
-            //DateTimeOffset now = DateTimeOffset.UtcNow;
-            //long unixTimeMilliseconds = now.ToUnixTimeMilliseconds();
+            return elapsedTicks;
+        }
+
+        public static long GetDateTimeMilliseconds(this DateTime date)
+        {
+            var centuryBegin = new DateTime(1970, 1, 1);
+            var currentDate = (DateTime)date;
+
+            var elapsedTicks = (currentDate.Ticks - centuryBegin.Ticks) / TimeSpan.TicksPerMillisecond;
 
             return elapsedTicks;
         }

@@ -8,6 +8,7 @@ using Randstad.Logging.Core;
 using Randstad.OperatingCompanies;
 using Randstad.UfoRsm.BabelFish.Dtos.RsmInherited;
 using Randstad.UfoRsm.BabelFish.Helpers;
+using Randstad.UfoRsm.BabelFish.Template.Extensions;
 using RSM;
 
 namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
@@ -41,6 +42,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
         public decimal? PreAwrHolidayPercentage { get; set; }
         public decimal? PostAwrHolidayPercentage { get; set; }
         public bool AwrParityHolidaysDay1 { get; set; }
+        public string CostCentre { get; set; }
         public Client Client { get; set; }
         public Client Hle { get; set; }
         public Candidate Candidate { get; set; }
@@ -69,12 +71,18 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             placement.contractedHours = 40;
 
             placement.endSpecified = true;
-            placement.end = EndDate;
+            placement.end = EndDate.ConvertToBST();
 
             placement.expenseEmailApprovalSpecified = true;
             placement.expenseEmailApproval = false;
 
             placement.externalId = AssignmentRef;
+
+            if (CostCentre == null)
+            {
+                CostCentre = "";
+            }
+            placement.customText4 = CostCentre;
 
             placement.faxbackEnabledSpecified = true;
             placement.faxbackEnabled = false;
@@ -104,6 +112,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                 invoiceEmailList.Add(Client.InvoiceEmail3);
             }
 
+            placement.invoiceContactOverride.email = string.Empty;
             foreach (var email in invoiceEmailList)
             {
                 placement.invoiceContactOverride.email = placement.invoiceContactOverride.email + email + "; ";
@@ -141,7 +150,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             MapConsultantSplit(placement);
 
             placement.startSpecified = true;
-            placement.start = StartDate;
+            placement.start = StartDate.ConvertToBST();
 
             placement.timesheetEmailApprovalSpecified = true;
             placement.timesheetEmailApproval = false;

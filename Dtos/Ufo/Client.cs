@@ -101,6 +101,21 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
             client.vatCode = "T1";
 
+            if (HleClient != null)
+            {
+                if (HleClient.NoVat != null && HleClient.NoVat == true)
+                {
+                    client.vatCode = "T0";
+                }
+            }
+            else
+            {
+                if (NoVat != null && NoVat == true)
+                {
+                    client.vatCode = "T0";
+                }
+            }
+
             client.termsType = "Days From Invoice Date";
             
             client.timesheetsOnInvoicesSpecified = true;

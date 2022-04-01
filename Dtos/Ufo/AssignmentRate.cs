@@ -5,6 +5,7 @@ using System.Text;
 using Newtonsoft.Json;
 //using Randstad.UfoRsm.BabelFish.Dtos.Sti;
 using Randstad.UfoRsm.BabelFish.Helpers;
+using Randstad.UfoRsm.BabelFish.Template.Extensions;
 using RSM;
 
 namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
@@ -47,7 +48,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             rate.chargeSpecified = false;
             rate.commentsEnabledSpecified = false;
             rate.effectiveFromSpecified = true;
-            rate.effectiveFrom = StartDate;
+            rate.effectiveFrom = StartDate.ConvertToBST();
             rate.name = FeeName;
             rate.payableSpecified = false;
             rate.ExternalAssignmentRef = Assignment.AssignmentRef;
@@ -62,7 +63,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             postRate.chargeSpecified = false;
             postRate.commentsEnabledSpecified = false;
             postRate.effectiveFromSpecified = true;
-            postRate.effectiveFrom = StartDate;
+            postRate.effectiveFrom = StartDate.ConvertToBST();
             postRate.name = FeeName;
             postRate.payableSpecified = false;
             postRate.ExternalAssignmentRef = Assignment.AssignmentRef;
@@ -163,7 +164,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                         else
                         {
                             rate.charge = (decimal)ChargeRateCurrency;
-                            }
+                        }
 
                         rate.chargeSpecified = true;
                     }

@@ -225,7 +225,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             worker.limitedCompany.invoicePeriodSpecified = true;
             worker.limitedCompany.invoicePeriod = 1;
             worker.limitedCompany.name = LtdCompany.Name;
-
+            
 
             //TODO: (Done) Update limitedCompany VAT Code once set up in RMS
             worker.limitedCompany.vatCode = "T0";

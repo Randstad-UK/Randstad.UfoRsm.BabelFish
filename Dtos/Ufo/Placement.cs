@@ -21,15 +21,13 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
         public DateTime StartDate { get; set; }
         public string PlacementJobTitle { get; set; }
 
-        public string CandidateRef { get; set; }
-        public string CandidateEmail { get; set; }
         public string CandidateFirstName { get; set; }
         public string CandidateLastName { get; set; }
-        public string CandidatePayrollRef { get; set; }
-        public string CandidatePaymentType { get; set; }
-        public decimal Salary { get; set; }
+
         public decimal Fee { get; set; }
         public string CheckIn { get; set; }
+        public bool IR35 { get; set; }
+        public string CostCentre { get; set; }
 
         public Owner Owner { get; set; }
         public InvoiceAddress InvoiceAddress { get; set; }
@@ -50,7 +48,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             placement.bulkEntrySpecified = false;
             placement.holidayAccrualRatePostAWRSpecified = false;
             placement.startSpecified = true;
-            placement.start = StartDate;
+            placement.start = StartDate.ToLocalTime();
 
             placement.awrWeekSpecified = false;
             placement.excludeFromMissingTimeSpecified = true;
@@ -86,6 +84,12 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             placement.contractedHoursSpecified = true;
             placement.contractedHours = 0;
 
+            if (CostCentre == null)
+            {
+                CostCentre = "";
+            }
+            placement.customText4 = CostCentre;
+
             var placementStartDate = (DateTime) StartDate;
             placement.chargeTermsExtraTextOverride = $"For the permanent placement of {CandidateFirstName} {CandidateLastName}, {PlacementJobTitle}, {placementStartDate.ToString("dd/MM/yyyy")}, placement reference {PlacementRef}";
 
@@ -118,6 +122,9 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             placement.salesBranch = Unit.Name;
             placement.salesCostCentre = Unit.FinanceCode;
 
+            placement.PAYEDeductionsOnLtdSpecified = true;
+            placement.PAYEDeductionsOnLtd = IR35;
+
             MapConsultantSplit(placement);
 
             placement.timesheetApprovalRoute = "Auto Approval Route";
@@ -137,7 +144,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             rate.pay = 0;
             rate.ExternalAssignmentRef = PlacementRef;
             rate.effectiveFromSpecified = true;
-            rate.effectiveFrom = StartDate;
+            rate.effectiveFrom = StartDate.ToLocalTime();
             rate.frontendRef = PlacementRef;
             rate.name = "Perm Placement Fee";
             rate.payElementCode = "PERM";

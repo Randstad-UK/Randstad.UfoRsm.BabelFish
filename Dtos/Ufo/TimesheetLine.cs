@@ -26,34 +26,5 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
         public DateTime? BreakEndTime { get; set; }
 
 
-        //public string WorkArea { get; set; }
-        //public string SpecialWorkCondition { get; set; }
-        //public string Status { get; set; }
-        //public string Shift { get; set; }
-        //public string Scheduled { get; set; }
-        //
-        //public decimal? WageRate { get; set; }
-        //public decimal? HoursReported { get; set; }
-
-        //public decimal? UnscheduledHours { get; set; }
-        //public decimal? OvertimeHours { get; set; }
-        //public decimal? Milage { get; set; }
-
-        //public string Remarks { get; set; }
-
-
-        //public decimal? TotalSeconds { get; set; }
-        //public decimal? BreakHours { get; set; }
-        //public DateTime? TimesheetLineDate { get; set; }
-
-        //public DateTime?ScheduledBreakStartTime { get; set; }
-        //public DateTime? ScheduledBreakEndTime { get; set; }
-        //public DateTime? BreakStartTime { get; set; }
-        //public DateTime? BreakEndTime { get; set; }
-        //public bool? OutOfSchedule { get; set; }
-        //public bool? MultipleBreaks { get; set; }
-        //public bool? LateNotified { get; set; }
-        //public string TimesheetLineRef { get; set; }
-
     }
 }

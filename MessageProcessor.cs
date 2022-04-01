@@ -33,7 +33,7 @@ namespace Randstad.UfoRsm.BabelFish
             await Task.CompletedTask;
 
             var entity = JsonConvert.DeserializeObject<ExportedEntity>(queueMessage.Body);
-            _logger.Debug($"Received {entity.ObjectType} to send to RSM", entity.CorrelationId, entity, entity.ObjectId, "ExportEntity", null);
+            _logger.Debug($"Received {entity.ObjectType} to send to RSM event type {entity.EventType}", entity.CorrelationId, entity, entity.ObjectId, "ExportEntity", null);
 
             foreach (var t in _translators)
             {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.VisualBasic;
 using Newtonsoft.Json;
 using Randstad.Logging;
 using Randstad.OperatingCompanies;
@@ -55,7 +56,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
 
             if (candidate.Status.Status.ToLower() != "live" && candidate.Status.Status.ToLower() != "scheduledforwork" && candidate.Status.Status.ToLower() != "working" && candidate.Status.Status.ToLower() != "leaver" && candidate.Status.Status.ToLower() != "placed")
             {
-                _logger.Debug($"Candidate{candidate.CandidateRef} is at the status {candidate.Status}", entity.CorrelationId, entity, candidate.CandidateRef, "Dtos.Ufo.Candidate", null);
+                _logger.Debug($"Candidate{candidate.CandidateRef} is at the status {candidate.Status.Status}", entity.CorrelationId, entity, candidate.CandidateRef, "Dtos.Ufo.Candidate", null);
                 entity.ExportSuccess = false;
                 return;
             }
@@ -76,9 +77,20 @@ namespace Randstad.UfoRsm.BabelFish.Translators
 
 
             var liveInPayroll = (bool)candidate.LiveInPayroll;
-            if (candidate.Status.Status.ToLower() == "leaver")
+
+            //leaver must be sent through only once. The P45 action sets the candidate to leaver and sends out and eventtype of leaver however their liveInPayroll flag will no longer be true
+            //so it has to be set here to send to RSM
+            if (candidate.Status.Status.ToLower() == "leaver" && entity.EventType.ToLower()=="leaver")
             {
                 liveInPayroll = true;
+            }
+
+            //for debug purposes logging a message to show that the candidate is a leaver
+            if (candidate.Status.Status.ToLower() == "leaver" && entity.EventType.ToLower() != "leaver")
+            {
+                _logger.Debug($"Candidate{candidate.CandidateRef} is at the status {candidate.Status.Status}", entity.CorrelationId, entity, candidate.CandidateRef, "Dtos.Ufo.Candidate", null);
+                entity.ExportSuccess = true;
+                return;
             }
 
 

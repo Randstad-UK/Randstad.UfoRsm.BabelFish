@@ -146,7 +146,7 @@ namespace Randstad.UfoRsm.BabelFish.Template.Application
         /// </summary>
         private async Task ProcessMessages(CancellationToken cancellationToken)
         {
-            _logger.Debug($"Entering {nameof(ProcessMessages)}.", _correlationId, null, null, null, null);
+            //_logger.Debug($"Entering {nameof(ProcessMessages)}.", _correlationId, null, null, null, null);
 
             do
             {
@@ -154,7 +154,7 @@ namespace Randstad.UfoRsm.BabelFish.Template.Application
 
                 if (_nextMessage == null)
                 {
-                    _logger.Debug($"{_serviceName}: no message available.", _correlationId, null, null, null, null);
+                    //_logger.Debug($"{_serviceName}: no message available.", _correlationId, null, null, null, null);
                     continue;
                 }
 

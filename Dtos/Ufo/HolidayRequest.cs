@@ -17,8 +17,8 @@ namespace Randstad.UfRsm.BabelFish.Dtos.Ufo
         {
             var hr = new UfoRsm.BabelFish.Dtos.RsmInherited.Absence();
 
-            hr.StartDate = StartDate;
-            hr.EndDate = EndDate;
+            hr.StartDate = StartDate.ToLocalTime();
+            hr.EndDate = EndDate.ToLocalTime();
             hr.EmployeeNo = Candidate.PayrollRefNumber;
             hr.NoOfUnits = Hours;
             hr.AbsenceType = 1;
