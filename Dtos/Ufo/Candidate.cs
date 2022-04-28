@@ -234,6 +234,8 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                 worker.limitedCompany.vatCode = "T1";
             }
 
+            worker.vatCode = worker.limitedCompany.vatCode;
+
             worker.limitedCompany.invoicingContact =new Contact();
             worker.limitedCompany.invoicingContact.address = LtdCompany.InvoiceAddress.GetAddress();
             

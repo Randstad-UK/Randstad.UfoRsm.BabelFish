@@ -92,7 +92,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             client.name = ClientName;
             client.paperOnInvoicesSpecified = true;
             client.paperOnInvoices = 7;
-
+            
             client.termsDaysSpecified = true;
             client.termsDays = 14;
 

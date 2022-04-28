@@ -149,7 +149,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                     }
 
 
-                    var date = (DateTime) line.StartDateTime;
+                    var date = (DateTime) line.StartDateTime.ConvertToBST();
                     shift.day = date.Date.GetDateTimeMilliseconds();
                     shift.daySpecified = true;
                     shift.rateName = rateName;

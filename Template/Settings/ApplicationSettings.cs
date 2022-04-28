@@ -11,6 +11,6 @@ namespace Randstad.UfoRsm.BabelFish.Settings
         public int PollingIntervalInSeconds { get; set; }
         public int PollingIntervalIncrementInSeconds { get; set; }
         public int MaxKnownErrorsCount { get; set; }
-        public bool SystemUnderTest { get; set; }
+        public string OpCosToSend { get; set; }
     }
 }

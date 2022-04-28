@@ -19,7 +19,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
     {
         private readonly Dictionary<string, string> _rateCodes;
 
-        public AssignmentRateTranslation(Dictionary<string, string> rateCodes, IProducerService producer, string routingKeyBase, ILogger logger, bool systemUnderTest) : base(producer, routingKeyBase, logger, systemUnderTest)
+        public AssignmentRateTranslation(Dictionary<string, string> rateCodes, IProducerService producer, string routingKeyBase, ILogger logger, string opCosToSend) : base(producer, routingKeyBase, logger, opCosToSend)
         {
             _rateCodes = rateCodes;
         }

@@ -13,7 +13,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
     public class ClientContactTranslation : TranslatorBase, ITranslator
     {
 
-        public ClientContactTranslation(IProducerService producer, string routingKeyBase, ILogger logger, bool systemUnderTest) : base(producer, routingKeyBase, logger, systemUnderTest)
+        public ClientContactTranslation(IProducerService producer, string routingKeyBase, ILogger logger, string opCosToSend) : base(producer, routingKeyBase, logger, opCosToSend)
         {
 
         }

@@ -14,7 +14,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
     {
 
 
-        public LtdCompanyTranslation(IProducerService producer, string baseRoutingKey, ILogger logger, bool systemUnderTest) : base(producer, baseRoutingKey, logger, systemUnderTest)
+        public LtdCompanyTranslation(IProducerService producer, string baseRoutingKey, ILogger logger, string OpCosToSend) : base(producer, baseRoutingKey, logger, OpCosToSend)
         {
 
         }

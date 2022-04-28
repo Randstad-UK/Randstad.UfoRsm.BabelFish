@@ -18,7 +18,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
         private readonly string _consultantCodePrefix;
         private readonly Dictionary<string, string> _tomCodes;
 
-        public PlacementTranslation(IProducerService producer, string routingKeyBase, Dictionary<string, string> tomCodes, ILogger logger, bool systemUnderTest) : base(producer, routingKeyBase, logger, systemUnderTest)
+        public PlacementTranslation(IProducerService producer, string routingKeyBase, Dictionary<string, string> tomCodes, ILogger logger, string opCosToSend) : base(producer, routingKeyBase, logger, opCosToSend)
         {
 
             _tomCodes = tomCodes;

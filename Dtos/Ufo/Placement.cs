@@ -91,8 +91,11 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             placement.customText4 = CostCentre;
 
             var placementStartDate = (DateTime) StartDate;
-            placement.chargeTermsExtraTextOverride = $"For the permanent placement of {CandidateFirstName} {CandidateLastName}, {PlacementJobTitle}, {placementStartDate.ToString("dd/MM/yyyy")}, placement reference {PlacementRef}";
+            
+            //TODO: Remove this once fix confirmed
+            //placement.chargeTermsExtraTextOverride = $"For the permanent placement of {CandidateFirstName} {CandidateLastName}, {PlacementJobTitle}, {placementStartDate.ToString("dd/MM/yyyy")}, placement reference {PlacementRef}";
 
+            
 
             placement.invoiceRequiresPOSpecified = false;
             if (PoRequired != null)
@@ -103,6 +106,11 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             }
 
             placement.invoiceContactOverride = InvoicePerson.MapContact();
+
+            //Billing team do not want the name values
+            placement.invoiceContactOverride.firstname = string.Empty;
+            placement.invoiceContactOverride.lastname = string.Empty;
+
             placement.invoiceContactOverride.address = InvoiceAddress.MapAddress();
             placement.jobDescription = PlacementJobTitle;
             placement.jobTitle = PlacementJobTitle;
@@ -146,7 +154,11 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             rate.effectiveFromSpecified = true;
             rate.effectiveFrom = StartDate.ToLocalTime();
             rate.frontendRef = PlacementRef;
-            rate.name = "Perm Placement Fee";
+            
+            //TODO: remove once confirmed that fix is working.
+            //rate.name = "Perm Placement Fee";
+
+            rate.name = placement.chargeTermsExtraTextOverride = $"For the permanent placement of {CandidateFirstName} {CandidateLastName}, {PlacementJobTitle}, {placementStartDate.ToString("dd/MM/yyyy")}, placement reference {PlacementRef}";
             rate.payElementCode = "PERM";
             rate.period = "FIXED";
             rate.periodDurationSpecified = true;

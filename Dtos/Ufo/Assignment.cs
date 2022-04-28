@@ -96,6 +96,10 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
             placement.invoiceContactOverride = InvoicePerson.MapContact();
 
+            //billing requested no name
+            placement.invoiceContactOverride.firstname = string.Empty;
+            placement.invoiceContactOverride.lastname = string.Empty;
+
             var invoiceEmailList = new List<string>();
             if (!string.IsNullOrEmpty(Client.InvoiceEmail))
             {

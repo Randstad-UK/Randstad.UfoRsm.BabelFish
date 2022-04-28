@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Randstad.Logging;
 using Randstad.OperatingCompanies;
@@ -13,28 +14,29 @@ namespace Randstad.UfoRsm.BabelFish.Translators
         private readonly string _routingKeyBase;
         protected readonly ILogger _logger;
         protected string _updatedRoutingKey;
-        private readonly bool _systemUnderTest;
+        private readonly string _opCosToSend;
 
-        protected TranslatorBase(IProducerService producer, string routingKeyBase, ILogger logger, bool systemUnderTest)
+        protected TranslatorBase(IProducerService producer, string routingKeyBase, ILogger logger, string opCosToSend)
         {
             _producer = producer;
             _routingKeyBase = routingKeyBase;
             _logger = logger;
-            _systemUnderTest = systemUnderTest;
+            _opCosToSend = opCosToSend;
         }
 
-        protected void SendToRsm(string body, string opCo, string obj, Guid correlationId, bool isCheckedIn, bool? processAdjustment = null)
+        protected void SendToRsm(string body, string opCo, string obj, Guid correlationId, bool isCheckedIn,
+            bool? processAdjustment = null)
         {
             try
             {
                 var routingKey = _routingKeyBase.Replace("{opco}", opCo.ToLower());
 
-                if (isCheckedIn && processAdjustment==null)
+                if (isCheckedIn && processAdjustment == null)
                 {
                     routingKey = routingKey.Replace("{rule}", ".startchecked");
                 }
-                
-                if(processAdjustment!=null)
+
+                if (processAdjustment != null)
                 {
                     routingKey = routingKey.Replace("{rule}", ".adjustment");
                 }
@@ -97,27 +99,19 @@ namespace Randstad.UfoRsm.BabelFish.Translators
 
         protected bool BlockExport(OperatingCompanies.OperatingCompany opco)
         {
-            //Added as a config setting to allow different OpCos to be tested differently from production
-            if (_systemUnderTest)
+            var opCos = _opCosToSend.Split(",").ToList();
+
+            var block = true;
+            foreach (var s in opCos)
             {
-                switch (opco)
+                if (s.Trim().ToUpper() == opco.ToString().ToUpper())
                 {
-                    case OperatingCompany.CARE:
-                    case OperatingCompany.BS:
-                        return false;
-                    default:
-                        return true;
+                    block = false;
+                    break;
                 }
             }
 
-
-            switch (opco)
-            {
-                case OperatingCompany.BS:
-                    return false;
-                default:
-                    return true;
-            }
+            return block;
         }
     }
 }
