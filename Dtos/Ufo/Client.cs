@@ -41,8 +41,8 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
         {
             var client = new RSM.Client();
 
-            client.accountsRef = Unit.FinanceCode;
-            
+            //ToDo: Remove once fix confirmed
+            //client.accountsRef = Unit.FinanceCode;
 
             client.customText1 = HleClient != null ? HleClient.ClientRef : ClientRef;
 

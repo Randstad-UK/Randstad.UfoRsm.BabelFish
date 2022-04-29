@@ -121,14 +121,20 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
             placement.purchaseBranch = Unit.Name;
             placement.purchaseCostCentre = Unit.FinanceCode;
-            placement.purchaseDivision = OpCo.Name;
+            
+            //ToDo: Remove this when confirmed fix is right
+            //placement.purchaseDivision = OpCo.Name;
+
+            placement.purchaseDivision = tomCodes[Unit.FinanceCode];
+
             placement.purchaseOrderNum = PoNumber;
             placement.roundToNearestMinSpecified = true;
             placement.roundToNearestMin = 1;
-            placement.salesDivision = OpCo.Name;
             placement.siteAddress = RsmClient.WorkAddress.GetAddress();
-            placement.salesBranch = Unit.Name;
-            placement.salesCostCentre = Unit.FinanceCode;
+
+            placement.salesDivision = placement.purchaseDivision;
+            placement.salesBranch = placement.purchaseBranch;
+            placement.salesCostCentre = placement.purchaseCostCentre;
 
             placement.PAYEDeductionsOnLtdSpecified = true;
             placement.PAYEDeductionsOnLtd = IR35;
@@ -158,7 +164,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             //TODO: remove once confirmed that fix is working.
             //rate.name = "Perm Placement Fee";
 
-            rate.name = placement.chargeTermsExtraTextOverride = $"For the permanent placement of {CandidateFirstName} {CandidateLastName}, {PlacementJobTitle}, {placementStartDate.ToString("dd/MM/yyyy")}, placement reference {PlacementRef}";
+            rate.name = $"Placement Fee For the permanent placement of {CandidateFirstName} {CandidateLastName}, {PlacementJobTitle}, Start Date: {placementStartDate.ToString("dd/MM/yyyy")}, placement reference {PlacementRef}";
             rate.payElementCode = "PERM";
             rate.period = "FIXED";
             rate.periodDurationSpecified = true;

@@ -97,6 +97,7 @@ namespace Randstad.UfoRsm.BabelFish.Helpers
             }
         }
 
+
         public static int MapInvoiceDeliveryMethod(string value)
         {
             var defaultValue = 3;

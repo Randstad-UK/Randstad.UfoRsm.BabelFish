@@ -139,15 +139,19 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
             placement.purchaseBranch = Unit.Name;
             placement.purchaseCostCentre = Unit.FinanceCode;
-            placement.purchaseDivision = OpCo.Name;
+
+            //ToDo: remove once fix confirmed
+            //placement.purchaseDivision = OpCo.Name;
+
+            placement.purchaseDivision = tomCodes[Unit.FinanceCode];
             placement.purchaseOrderNum = PoNumber;
 
             placement.roundToNearestMinSpecified = true;
             placement.roundToNearestMin = 1;
 
-            placement.salesBranch = Unit.Name;
-            placement.salesCostCentre = Unit.FinanceCode;
-            placement.salesDivision = OpCo.Name;
+            placement.salesBranch = placement.purchaseBranch;
+            placement.salesCostCentre = placement.purchaseCostCentre;
+            placement.salesDivision = placement.purchaseDivision;
 
             placement.siteAddress = WorkAddress.GetAddress();
 
