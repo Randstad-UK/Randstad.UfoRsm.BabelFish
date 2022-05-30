@@ -50,7 +50,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                 return;
             }
 
-            _logger.Success($"Recieved Consultant {consultant.EmployeeRef}", entity.CorrelationId, consultant, consultant.EmployeeRef, "Dtos.Ufo.Consultant", null);
+            _logger.Success($"Received Consultant {consultant.EmployeeRef}", entity.CorrelationId, consultant, consultant.EmployeeRef, "Dtos.Ufo.Consultant", null);
 
             RSM.Consultant rsmConsultant = null;
             try

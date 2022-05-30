@@ -140,8 +140,6 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             //TODO: (DONE) update inputHOlidayScheme and PaymentFrequency when RMS is set up
             worker.inpayHolidayScheme = "HS1";
 
-            //TODO: update payment frequency when set up in RSM
-            worker.paymentFrequency = "Weekly";
             worker.workerType = "PAYE";
             
             worker.bankAccount = new RSM.BankAccount();
@@ -158,14 +156,18 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                 worker.bankAccount.buildingSocRollNum = Paye.Account.AccountName;
 
             worker.emailPayslipSpecified = true;
-            switch (Paye.EmailPayslips.ToLower())
+
+            if (!string.IsNullOrEmpty(Paye.EmailPayslips))
             {
-                case "post":
-                    worker.emailPayslip = false;
-                    break;
-                case "email":
-                    worker.emailPayslip = true;
-                    break;
+                switch (Paye.EmailPayslips.ToLower())
+                {
+                    case "post":
+                        worker.emailPayslip = false;
+                        break;
+                    case "email":
+                        worker.emailPayslip = true;
+                        break;
+                }
             }
 
             worker.vatCode = "T0";
@@ -190,6 +192,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             worker.payAsPAYE = true;
             worker.isCISSpecified = true;
             worker.isCIS = false;
+
             if (LtdCompany.Cis == "Yes")
             {
                 worker.workerType = "CIS";
@@ -249,9 +252,6 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             worker.limitedCompany.invoicingContact.mobile = Mobile;
             worker.limitedCompany.invoicingContact.phone = Phone;
 
-            //TODO: Update once LTD Payment frequency set up in RMS
-            worker.paymentFrequency = "IR35 Weekly";
-
 
             worker.paymentMethod = PaymentMethod;
 
@@ -283,10 +283,6 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
             worker.workerType = "UMB";
             worker.limitedCompanyProviderExternalId = UmbrellaAgency.AslRef;
-
-            //TODO: Set payment frequency for umbrella candidate once updated in RMS
-            worker.paymentFrequency = "Weekly";
-
             worker.paymentMethod = "BACS";
         }
 
@@ -296,10 +292,6 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
             worker.workerType = "UMB";
             worker.limitedCompanyProviderExternalId = OutsourcedAgency.AslRef;
-
-            //TODO: Set payment frequency for outsourced candidate once updated in RMS
-            worker.paymentFrequency = "Weekly";
-
             worker.paymentMethod = "BACS";
             worker.email = "outsourcedworker@randstad.co.uk";
         }

@@ -52,7 +52,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
 
 
 
-            _logger.Success($"Recieved Client {client.ClientRef}", entity.CorrelationId, client, client.ClientRef, "Dtos.Ufo.Client", null);
+            _logger.Success($"Received Client {client.ClientRef}", entity.CorrelationId, client, client.ClientRef, "Dtos.Ufo.Client", null);
 
             if (client.IsCheckedIn == null || client.IsCheckedIn == false)
             {

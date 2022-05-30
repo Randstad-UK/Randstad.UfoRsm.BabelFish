@@ -26,10 +26,13 @@ namespace Randstad.UfoRsm.BabelFish.Translators
             if (entity.ObjectType != "Candidate") return;
 
             Candidate candidate = null;
+
+            var liveInPayroll = false;
+
             try
             {
                 candidate = JsonConvert.DeserializeObject<Candidate>(entity.Payload);
-
+                liveInPayroll  = (bool)candidate.LiveInPayroll;
                 if (BlockExport(Mappers.MapOpCoFromName(candidate.OperatingCo.Name)))
                 {
                     _logger.Warn($"Candidate OpCo not live in RSM {candidate.CandidateRef} {candidate.OperatingCo.Name}", entity.CorrelationId, entity, candidate.CandidateRef, "Dtos.Ufo.ExportedEntity", null);
@@ -44,6 +47,21 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                     return;
                 }
 
+                //leaver must be sent through only once. The P45 action sets the candidate to leaver and sends out and eventtype of leaver however their liveInPayroll flag will no longer be true
+                //so it has to be set here to send to RSM
+                if (candidate.Status.Status.ToLower() == "leaver" && entity.EventType.ToLower() == "leaver")
+                {
+                    liveInPayroll = true;
+                }
+
+                //for debug purposes logging a message to show that the candidate is a leaver
+                if (candidate.Status.Status.ToLower() == "leaver" && entity.EventType.ToLower() != "leaver")
+                {
+                    _logger.Debug($"Candidate{candidate.CandidateRef} is at the status {candidate.Status.Status}", entity.CorrelationId, entity, candidate.CandidateRef, "Dtos.Ufo.Candidate", null);
+                    entity.ExportSuccess = true;
+                    return;
+                }
+
             }
             catch (Exception exp)
             {
@@ -52,7 +70,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                 return;
             }
 
-            _logger.Success($"Recieved Candidate {candidate.CandidateRef}", entity.CorrelationId, candidate, candidate.CandidateRef, "Dtos.Ufo.Candidate", null);
+            _logger.Success($"Received Candidate {candidate.CandidateRef}", entity.CorrelationId, candidate, candidate.CandidateRef, "Dtos.Ufo.Candidate", null);
 
             if (candidate.Status.Status.ToLower() != "live" && candidate.Status.Status.ToLower() != "scheduledforwork" && candidate.Status.Status.ToLower() != "working" && candidate.Status.Status.ToLower() != "leaver" && candidate.Status.Status.ToLower() != "placed")
             {
@@ -73,26 +91,6 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                 entity.ExportSuccess = false;
                 return;
             }
-
-
-
-            var liveInPayroll = (bool)candidate.LiveInPayroll;
-
-            //leaver must be sent through only once. The P45 action sets the candidate to leaver and sends out and eventtype of leaver however their liveInPayroll flag will no longer be true
-            //so it has to be set here to send to RSM
-            if (candidate.Status.Status.ToLower() == "leaver" && entity.EventType.ToLower()=="leaver")
-            {
-                liveInPayroll = true;
-            }
-
-            //for debug purposes logging a message to show that the candidate is a leaver
-            if (candidate.Status.Status.ToLower() == "leaver" && entity.EventType.ToLower() != "leaver")
-            {
-                _logger.Debug($"Candidate{candidate.CandidateRef} is at the status {candidate.Status.Status}", entity.CorrelationId, entity, candidate.CandidateRef, "Dtos.Ufo.Candidate", null);
-                entity.ExportSuccess = true;
-                return;
-            }
-
 
             RSM.Worker rmsWorker = null;
 

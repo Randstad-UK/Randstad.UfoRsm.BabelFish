@@ -36,7 +36,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                     routingKey = routingKey.Replace("{rule}", ".startchecked");
                 }
 
-                if (processAdjustment != null)
+                if (processAdjustment==true)
                 {
                     routingKey = routingKey.Replace("{rule}", ".adjustment");
                 }
@@ -48,6 +48,8 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                 routingKey = routingKey.Replace("{object}", obj);
 
                 routingKey = routingKey.ToLower();
+
+                _logger.Debug("Routing Key: "+routingKey, correlationId, null,null,null,null);
 
                 var headers = new Dictionary<string, object>
                 {

@@ -47,7 +47,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                 return;
             }
 
-            _logger.Success($"Recieved Placement {placement.PlacementRef}", entity.CorrelationId, placement, placement.PlacementRef, "Dtos.Ufo.Placement", null);
+            _logger.Success($"Received Placement {placement.PlacementRef}", entity.CorrelationId, placement, placement.PlacementRef, "Dtos.Ufo.Placement", null);
 
             if (string.IsNullOrEmpty(placement.CheckIn) || placement.CheckIn=="No Show")
             {

@@ -21,7 +21,6 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             TruncateAddressStreet(addr);
             addr.town = City;
             addr.county = County;
-            addr.country = Country;
             addr.postcode = PostCode;
 
             return addr;

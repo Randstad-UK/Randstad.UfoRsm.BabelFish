@@ -40,7 +40,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                     return;
                 }
 
-                _logger.Success($"Recieved ClientContact {contact.Forename} {contact.Surname}", entity.CorrelationId, contact, entity.ObjectId, "Dtos.Ufo.Candidate", null);
+                _logger.Success($"Received ClientContact {contact.Forename} {contact.Surname}", entity.CorrelationId, contact, entity.ObjectId, "Dtos.Ufo.Candidate", null);
 
                 mappedContact = contact.MapContact();
             }

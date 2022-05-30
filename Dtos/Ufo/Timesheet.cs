@@ -39,7 +39,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
         public List<Expense> Expenses { get; set; }
         public string ApprovedBy { get; set; }
         public DateTime? ApprovedDateTime { get; set; }
-        public bool ProcessAdjustments { get; set; }
+        public bool? ProcessAdjustments { get; set; }
 
 
         private List<IGrouping<string, Expense>> GetConsolidatedExpenses(out List<Expense> consolidatedExpenses)
@@ -239,9 +239,9 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                     expenseItem.freehandRef = TimesheetRef;
                     expenseItem.payrollRef = TimesheetRef;
 
-                    if (expense.ExpenseType.ToLower() == "mileage")
+                    if (expense.ExpenseType.ToLower() == "mileage" || expense.ExpenseType.ToLower() == "bonus" || expense.ExpenseType.ToLower().Contains("back pay"))
                     {
-                        expenseItem.type = "Mileage";
+                        expenseItem.type = expense.ExpenseType;
                         expenseItem.netValueSpecified = true;
                         expenseItem.netValue = expense.Quantity * expense.Rate.PayRateCurrency;
 
