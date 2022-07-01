@@ -45,7 +45,9 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
         public string CostCentre { get; set; }
         public Client Client { get; set; }
         public Client Hle { get; set; }
+        public Client FundingBody { get; set; }
         public Candidate Candidate { get; set; }
+        public ClientContact ClientContact { get; set; }
 
         public Dtos.RsmInherited.Placement MapAssignment(Dictionary<string, string> tomCodes, ILogger logger, Dictionary<string, string> rateCodes, Guid correlationId)
         {
@@ -170,6 +172,11 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
             placement.customText1 = ExternalRef;
             placement.customText2 = Client.ClientRef;
+
+            if (ClientContact != null)
+            {
+                placement.manager = ClientContact.MapContactManager(Client);
+            }
 
             if (WorkAddress != null)
             {
@@ -300,7 +307,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             for (int i = 0; i < ConsultantSplits.Count; i++)
             {
                 var split = new Dtos.RsmInherited.ConsultantSplit();
-                split.ExternalUserId = ConsultantSplits[i].Consultant.Id;
+                split.ExternalUserId = "UFO"+ConsultantSplits[i].Consultant.EmployeeRef;
                 split.weightSpecified = true;
                 split.weight = ConsultantSplits[i].Split/100;
                 placement.splitCommissions[i] = split;
@@ -312,7 +319,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
         {
             if (Rates == null) return;
 
-            var noExpenses = Rates.Where(x => x.RateType != "Expense Rate").ToList();
+            var noExpenses = Rates.Where(x => x.RateType != "Expense Rate" || x.FeeName=="Bonus" || x.FeeName== "Back Pay - Non WTR" || x.FeeName== "Back Pay - WTR").ToList();
 
             if (noExpenses == null || noExpenses.Count() == 0) return;
 
@@ -322,12 +329,6 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
             foreach (var rate in noExpenses)
             {
-                //RSM do not hold expense rates it goes through on the expense item
-                if (rate.RateType == "Expense Rate")
-                {
-                    continue;
-                }
-
                 RSM.Rate postRate = null;
                 var rsmRate = rate.MapRate(rateCodes, this, out postRate);
 

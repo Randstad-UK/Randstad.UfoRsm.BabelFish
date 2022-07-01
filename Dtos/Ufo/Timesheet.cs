@@ -4,6 +4,8 @@ using System.Data;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Net;
+using System.Reflection.Metadata.Ecma335;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Transactions;
 using Microsoft.Extensions.Configuration;
@@ -41,13 +43,51 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
         public DateTime? ApprovedDateTime { get; set; }
         public bool? ProcessAdjustments { get; set; }
 
+        private void AddExpenseTypeLines(List<RSM.Shift> shifts)
+        {
+
+            if (Expenses == null) return;
+
+            //var shiftExpenses = Expenses.Where(y => !y.FeeName.ToLower().Contains("back pay") || y.FeeName.ToLower().Contains("bonus")).ToList();
+
+            //if (!shiftExpenses.Any()) return;
+
+            foreach (var exp in Expenses)
+            {
+                if (exp.ExpenseType == "Bonus" || exp.ExpenseType == "Back Pay - Non WTR" || exp.ExpenseType == "Back Pay - WTR")
+                {
+                    var shift = new RSM.Shift();
+
+                    shift.hoursSpecified = false;
+                    shift.daySpecified = false;
+                    shift.billInvoiceRequiredSpecified = false;
+                    shift.decimalSpecified = false;
+                    shift.mealBreakSpecified = false;
+                    shift.finishTimeSpecified = false;
+                    shift.idSpecified = false;
+                    shift.payInvoiceRequiredSpecified = false;
+                    shift.salesOnCostValueSpecified = false;
+                    shift.rateIdSpecified = false;
+
+                    shift.rateName = exp.ExpenseType;
+                    shift.daySpecified = true;
+                    shift.day = PeriodEndDate.GetDateTimeMilliseconds();
+                    shift.rateName = exp.Rate.FeeName;
+                    shift.@decimal = (decimal) exp.Quantity;
+                    shift.decimalSpecified = true;
+                    shifts.Add(shift);
+                }
+            }
+  
+        }
+
 
         private List<IGrouping<string, Expense>> GetConsolidatedExpenses(out List<Expense> consolidatedExpenses)
         {
             consolidatedExpenses = null;
 
             if (Expenses == null) return null;
-
+            
             var expenses = Expenses.GroupBy(x => x.ExpenseType).ToList();
 
             if (!expenses.Any())
@@ -61,21 +101,26 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             {
                 var expenseLines = a.AsEnumerable().ToList();
                 var expenseConsolidated = JsonConvert.DeserializeObject<Expense>(JsonConvert.SerializeObject(expenseLines.FirstOrDefault()));
-
-                for (var i = 1; i < expenseLines.Count(); i++)
+                
+                if (expenseConsolidated.ExpenseType=="Bonus") continue;
+                if (expenseConsolidated != null && expenseConsolidated.ExpenseType == "Mileage" || !expenseConsolidated.ExpenseType.Contains("Back Pay"))
                 {
-                    if (expenseLines[i].ExpenseType.ToLower() == "mileage")
-                    {
-                        expenseConsolidated.Quantity = expenseConsolidated.Quantity + expenseLines[i].Quantity;
-                    }
-                    else
-                    {
-                        expenseConsolidated.Quantity = 1;
-                        expenseConsolidated.Amount = expenseConsolidated.Amount + expenseLines[i].Amount;
-                    }
-                }
 
-                consolidatedExpenses.Add(expenseConsolidated);
+                    for (var i = 0; i < expenseLines.Count(); i++)
+                    {
+                        if (expenseLines[i].ExpenseType.ToLower() == "mileage")
+                        {
+                            expenseConsolidated.Quantity = expenseConsolidated.Quantity + expenseLines[i].Quantity;
+                        }
+                        else
+                        {
+                            expenseConsolidated.Quantity = 1;
+                            expenseConsolidated.Amount = expenseConsolidated.Amount + expenseLines[i].Amount;
+                        }
+                    }
+
+                    consolidatedExpenses.Add(expenseConsolidated);
+                }
             }
 
             return expenses;
@@ -94,14 +139,19 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             var timesheet = MapBasicTimesheet();
             
             List<Expense> consolidatedExpenseses = null;
-            var expenseList = GetConsolidatedExpenses(out consolidatedExpenseses);
+            //var expenseList = GetConsolidatedExpenses(out consolidatedExpenseses);
 
-            if (TimesheetLines!=null && TimesheetLines.Any())
+
+            var shiftList = new List<Shift>();
+
+            //add the expense type lines
+            AddExpenseTypeLines(shiftList);
+            if (TimesheetLines != null && TimesheetLines.Any())
             {
                 //timesheet.shifts = new Shift[TimesheetLines.Count];
                 timesheet.shifts = new Shift[0];
                 var shiftIndex = 0;
-                var shiftList = new List<Shift>();
+                
                 //Map all the time values
                 foreach (var line in TimesheetLines)
                 {
@@ -121,9 +171,9 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                     shift.payInvoiceRequiredSpecified = false;
                     shift.salesOnCostValueSpecified = false;
                     shift.rateIdSpecified = false;
-                    
 
-                    if (line.Rate!=null && line.Rate.RateType.ToLower() == "basic rate")
+
+                    if (line.Rate != null && line.Rate.RateType.ToLower() == "basic rate")
                     {
                         if (line.Rate.PayUnit.ToLower() == "daily")
                         {
@@ -145,6 +195,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                             line.Rate.Assignment = new Assignment();
                             line.Rate.Assignment.AssignmentRef = AssignmentRef;
                         }
+
                         shift.rate = line.Rate.MapRate(rateCodes, out pRate);
                     }
 
@@ -155,20 +206,20 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                     shift.rateName = rateName;
 
                     //Hourly rate
-                    if (line.DaysReported == null && line.TotalHours>0)
+                    if (line.DaysReported == null && line.TotalHours > 0)
                     {
                         shift.hours = Convert.ToInt64(line.TotalHours * 60 * 60 * 1000);
                         shift.hoursSpecified = true;
 
                         shift.startTimeSpecified = true;
                         var startDate = line.StartDateTime.ConvertToBST();
-                        logger.Debug("Local Start Date/Time: "+ startDate, correlationId, this, TimesheetRef, null, null, null, null);
+                        //logger.Debug("Local Start Date/Time: "+ startDate, correlationId, this, TimesheetRef, null, null, null, null);
                         shift.startTime = startDate.GetDateTimeMilliseconds();
 
                         shift.finishTimeSpecified = true;
 
                         var endDate = line.EndDateTime.ConvertToBST();
-                        logger.Debug("Local End Date/Time: " + endDate, correlationId, this, TimesheetRef, null, null, null, null);
+                        //logger.Debug("Local End Date/Time: " + endDate, correlationId, this, TimesheetRef, null, null, null, null);
                         shift.finishTime = endDate.GetDateTimeMilliseconds();
 
                         shift.mealBreakSpecified = true;
@@ -176,11 +227,11 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                         if (line.BreakStartTime != null && line.BreakEndTime != null)
                         {
                             var breakStartBST = line.BreakStartTime.ConvertToBST();
-                            logger.Debug("Local Start Break Date/Time: " + breakStartBST, correlationId, this, TimesheetRef, null, null, null, null);
+                            //logger.Debug("Local Start Break Date/Time: " + breakStartBST, correlationId, this, TimesheetRef, null, null, null, null);
                             var breakStart = breakStartBST.GetDateTimeMilliseconds();
 
                             var breakEndBST = line.BreakEndTime.ConvertToBST();
-                            logger.Debug("Local End Break Date/Time: " + breakEndBST, correlationId, this, TimesheetRef, null, null, null, null);
+                            //logger.Debug("Local End Break Date/Time: " + breakEndBST, correlationId, this, TimesheetRef, null, null, null, null);
                             var breakEnd = breakEndBST.GetDateTimeMilliseconds();
                             shift.mealBreak = breakEnd - breakStart;
                         }
@@ -197,33 +248,35 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                     if (line.DaysReported != null && line.DaysReported > 0)
                     {
 
-                        shift.@decimal = (decimal)line.DaysReported;
+                        shift.@decimal = (decimal) line.DaysReported;
                         shift.decimalSpecified = true;
                         shiftList.Add(shift);
                         shiftIndex++;
                     }
                 }
+            }
 
-                if (shiftList.Any())
-                {
-                    timesheet.shifts = shiftList.ToArray();
-                }
+            if (shiftList != null && shiftList.Any())
+            {
+                timesheet.shifts = shiftList.ToArray();
                 timesheetList.Add(timesheet);
             }
 
-            
             //map all the expenses
-            if (consolidatedExpenseses != null && consolidatedExpenseses.Any())
+            if (Expenses != null && Expenses.Any())
             {
                 claim = new RSM.ExpenseClaim();
-                claim.expenseItems = new ExpenseItem[expenseList.Count];
+                
                 claim.description = TimesheetRef;
                 claim.placementExternalId = AssignmentRef;
                 claim.placementIdSpecified = true;
 
-                var index = 0;
-                foreach (var expense in consolidatedExpenseses)
+                List<ExpenseItem> items = new List<ExpenseItem>();
+
+                foreach (var expense in Expenses)
                 {
+                    if (expense.ExpenseType == "Bonus" || expense.ExpenseType == "Back Pay - Non WTR" || expense.ExpenseType == "Back Pay - WTR") continue;
+                    
                     var expenseItem = new RSM.ExpenseItem();
                     expenseItem.description = expense.Rate.ExpenseType;
 
@@ -239,7 +292,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                     expenseItem.freehandRef = TimesheetRef;
                     expenseItem.payrollRef = TimesheetRef;
 
-                    if (expense.ExpenseType.ToLower() == "mileage" || expense.ExpenseType.ToLower() == "bonus" || expense.ExpenseType.ToLower().Contains("back pay"))
+                    if (expense.ExpenseType.ToLower() == "mileage")
                     {
                         expenseItem.type = expense.ExpenseType;
                         expenseItem.netValueSpecified = true;
@@ -274,9 +327,10 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                     }
 
 
-                    claim.expenseItems[index] = (expenseItem);
-                    index++;
+                    items.Add(expenseItem);
                 }
+
+                claim.expenseItems = items.ToArray();
             }
 
             

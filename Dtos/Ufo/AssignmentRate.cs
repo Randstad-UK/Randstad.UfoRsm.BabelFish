@@ -243,9 +243,9 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                 case "Expense Rate":
                     {
                         rate.payElementCode = rateCodes[ExpenseType];
-                        rate.period = PayUnit;
+                        rate.period = "FIXED";
 
-                        rate.timesheetFields = "DAYDECIMAL";
+                        rate.timesheetFields = "DECIMAL";
                         if (PayRateCurrency != null)
                         {
                             rate.pay = (decimal)PayRateCurrency;

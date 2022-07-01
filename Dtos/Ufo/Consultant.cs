@@ -31,7 +31,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
             consultant.department = Unit.FinanceCode;
             consultant.email = Email;
-            consultant.externalId = Id;
+            consultant.externalId = "UFO"+EmployeeRef;
             consultant.firstname = Firstname;
             consultant.lastname = Lastname;
             consultant.team = Branch.Name;

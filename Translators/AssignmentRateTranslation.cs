@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -54,7 +55,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                     return;
                 }
 
-                if (rate.RateType == "Expense Rate")
+                if (rate.RateType == "Expense Rate" && rate.FeeName!= "Bonus" && rate.FeeName!= "Back Pay - Non WTR" && rate.FeeName!= "Back Pay - WTR")
                 {
                     _logger.Warn($"Assignment Rate {rate.FeeRef} attached assignment {rate.Assignment.AssignmentRef} is an Expense Type which does not get sent to RSM", entity.CorrelationId, entity, rate.FeeRef, "Dtos.Ufo.ExportedEntity", null);
                     entity.ExportSuccess = false;

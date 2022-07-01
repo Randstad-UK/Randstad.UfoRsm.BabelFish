@@ -32,7 +32,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
         public Owner Owner { get; set; }
         public InvoiceAddress InvoiceAddress { get; set; }
         public ClientContact InvoicePerson { get; set; }
-
+        public ClientContact ClientContact { get; set; }
 
         public Client RsmClient { get; set; }
         public Client Hle { get; set; }
@@ -141,6 +141,11 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
             MapConsultantSplit(placement);
 
+            if (ClientContact != null)
+            {
+                placement.manager = ClientContact.MapContactManager(RsmClient);
+            }
+
             placement.timesheetApprovalRoute = "Auto Approval Route";
 
             placement.timesheetEmailApprovalSpecified = true;
@@ -189,7 +194,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             for (int i = 0; i < ConsultantSplits.Count; i++)
             {
                 var split = new Dtos.RsmInherited.ConsultantSplit();
-                split.ExternalUserId = ConsultantSplits[i].Consultant.Id;
+                split.ExternalUserId = "UFO"+ConsultantSplits[i].Consultant.EmployeeRef;
                 split.weightSpecified = true;
                 split.weight = ConsultantSplits[i].Split / 100; 
                 placement.splitCommissions[i] = split;

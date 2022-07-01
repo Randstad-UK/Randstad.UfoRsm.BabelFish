@@ -37,6 +37,19 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             return contact;
         }
 
+        public RSM.Manager MapContactManager(Client client)
+        {
+            var manager = new RSM.Manager();
+            manager.email = EmailAddress;
+            manager.username = EmailAddress;
+            manager.firstname = Forename;
+            manager.lastname = Surname;
+            manager.refCode = ContactId;
+            manager.clientExternalId = client.ClientId;
+            manager.externalId = ContactId;
+            return manager;
+        }
+
 
     }
 }
