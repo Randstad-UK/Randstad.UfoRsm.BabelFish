@@ -48,6 +48,10 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
         public Client FundingBody { get; set; }
         public Candidate Candidate { get; set; }
         public ClientContact ClientContact { get; set; }
+        public string StudentFirstname { get; set; }
+        public string StudentLastname { get; set; }
+        public DateTime StudentDob { get; set; }
+        public string StudentCrn { get; set; }
 
         public Dtos.RsmInherited.Placement MapAssignment(Dictionary<string, string> tomCodes, ILogger logger, Dictionary<string, string> rateCodes, Guid correlationId)
         {
@@ -65,8 +69,6 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
             //TODO: Assignment CIS needs to be pulled once UFO solution specced
             placement.cisApplicableSpecified = false;
-
-
 
             placement.client = Client.MapClient();
             placement.consultant = Owner.MapConsultant();
@@ -92,13 +94,6 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             placement.faxbackEnabled = false;
 
             placement.invoiceRequiresPOSpecified = false;
-            //ToDO: Removed per finance request
-            //if (PoRequired != null)
-            //{
-            //    placement.invoiceRequiresPOSpecified = true;
-            //    placement.invoiceRequiresPO = PoRequired;
-            //}
-
             
             placement.invoiceContactOverride = InvoicePerson.MapContact();
             
@@ -145,9 +140,6 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
             placement.purchaseBranch = Unit.Name;
             placement.purchaseCostCentre = Unit.FinanceCode;
-
-            //ToDo: remove once fix confirmed
-            //placement.purchaseDivision = OpCo.Name;
 
             placement.purchaseDivision = tomCodes[Unit.FinanceCode];
             placement.purchaseOrderNum = PoNumber;
@@ -233,6 +225,22 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             MapLtdValues(placement);
 
             MapPayeValues(placement);
+
+            //Most of the business uses client ref for both client ref and invoice to client
+            if (Division.Name == "Tuition Services" && Division.Name == "Student Support")
+            {
+                placement.customText4 = Client.ClientName;
+                placement.customText5 = StudentFirstname + " " + StudentLastname + " | " + StudentDob.ToString("dd/MM/yyyy")+" | "+ StudentCrn;
+
+                if (Unit.Name != "NTP Tuition Pillar")
+                {
+                    placement.client = FundingBody.MapClient();
+                    placement.clientSite = FundingBody.ClientName;
+                    placement.customText2 = FundingBody.ClientRef;
+
+                }
+
+            }
 
 
             return placement;

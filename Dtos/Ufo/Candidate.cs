@@ -48,8 +48,8 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
         public Paye Paye { get; set; }
         public PaymentTypes? PayType { get; set; }
 
-
         public Team OperatingCo { get; set; }
+        public Team Division { get; set; }
 
         private ILogger _logger = null;
         private Guid _correlationId;

@@ -18,7 +18,6 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
         public string ClientId { get; set; }
         public string ClientRef { get; set; }
         public string ClientName { get; set; }
-        public bool IsLegalHirer { get; set; }
         public bool? NoVat { get; set; }
 
         public string VatNo { get; set; }

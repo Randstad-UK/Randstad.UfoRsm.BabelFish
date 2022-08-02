@@ -34,22 +34,24 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
         public string ExternalTimesheetId { get; set; }
 
         public Team OpCo { get; set; }
+        public Team Division { get; set; }
 
-    
+
         public List<TimesheetLine> TimesheetLines { get; set; }
         public List<Expense> Expenses { get; set; }
         public string ApprovedBy { get; set; }
         public DateTime? ApprovedDateTime { get; set; }
         public bool? ProcessAdjustments { get; set; }
 
+        //Student Support
+        public string StudentFirstName { get; set; }
+        public string StudentSurname { get; set; }
+
+
         private void AddExpenseTypeLines(List<RSM.Shift> shifts)
         {
 
             if (Expenses == null) return;
-
-            //var shiftExpenses = Expenses.Where(y => !y.FeeName.ToLower().Contains("back pay") || y.FeeName.ToLower().Contains("bonus")).ToList();
-
-            //if (!shiftExpenses.Any()) return;
 
             foreach (var exp in Expenses)
             {
@@ -138,7 +140,6 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             var timesheet = MapBasicTimesheet();
             
             List<Expense> consolidatedExpenseses = null;
-            //var expenseList = GetConsolidatedExpenses(out consolidatedExpenseses);
 
 
             var shiftList = new List<Shift>();
@@ -147,7 +148,6 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             AddExpenseTypeLines(shiftList);
             if (TimesheetLines != null && TimesheetLines.Any())
             {
-                //timesheet.shifts = new Shift[TimesheetLines.Count];
                 timesheet.shifts = new Shift[0];
                 var shiftIndex = 0;
                 
@@ -212,13 +212,13 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
                         shift.startTimeSpecified = true;
                         var startDate = line.StartDateTime.ConvertToBST();
-                        //logger.Debug("Local Start Date/Time: "+ startDate, correlationId, this, TimesheetRef, null, null, null, null);
+
                         shift.startTime = startDate.GetDateTimeMilliseconds();
 
                         shift.finishTimeSpecified = true;
 
                         var endDate = line.EndDateTime.ConvertToBST();
-                        //logger.Debug("Local End Date/Time: " + endDate, correlationId, this, TimesheetRef, null, null, null, null);
+
                         shift.finishTime = endDate.GetDateTimeMilliseconds();
 
                         shift.mealBreakSpecified = true;
@@ -226,11 +226,11 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                         if (line.BreakStartTime != null && line.BreakEndTime != null)
                         {
                             var breakStartBST = line.BreakStartTime.ConvertToBST();
-                            //logger.Debug("Local Start Break Date/Time: " + breakStartBST, correlationId, this, TimesheetRef, null, null, null, null);
+
                             var breakStart = breakStartBST.GetDateTimeMilliseconds();
 
                             var breakEndBST = line.BreakEndTime.ConvertToBST();
-                            //logger.Debug("Local End Break Date/Time: " + breakEndBST, correlationId, this, TimesheetRef, null, null, null, null);
+
                             var breakEnd = breakEndBST.GetDateTimeMilliseconds();
                             shift.mealBreak = breakEnd - breakStart;
                         }
@@ -375,6 +375,11 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
             DateTime approvedOn = (DateTime) ApprovedDateTime.ConvertToBST();
             timesheet.comment = "Approved by: " + ApprovedBy + " on " + approvedOn.ToString("dd/MM/yyyy hh:ss");
+
+            if (Division.Name == "Tuition Services" || Division.Name == "Student Support")
+            {
+                timesheet.purchaseOrderNum = StudentFirstName + " " + StudentSurname;
+            }
             
             return timesheet;
         }
