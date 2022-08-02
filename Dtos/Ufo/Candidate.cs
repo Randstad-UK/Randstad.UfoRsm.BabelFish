@@ -266,7 +266,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
             var tenDigits = new Regex(@"^\d{10}$");
 
-            if (tenDigits.IsMatch(LtdCompany.UtrNumber))
+            if (!string.IsNullOrEmpty(LtdCompany.UtrNumber) && tenDigits.IsMatch(LtdCompany.UtrNumber))
             {
                 worker.utr = LtdCompany.UtrNumber;
             }
