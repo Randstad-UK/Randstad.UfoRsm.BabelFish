@@ -64,7 +64,12 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             placement.cisApplicable = false;
 
             placement.client = Hle.MapClient();
+
             placement.clientSite = RsmClient.ClientName;
+            if (placement.clientSite.Length > 80)
+            {
+                placement.clientSite = placement.clientSite.Substring(0, 79);
+            }
 
             placement.consultant = Owner.MapConsultant();
             placement.customText2 = RsmClient.ClientRef;
@@ -89,6 +94,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                 CostCentre = "";
             }
             placement.customText4 = CostCentre;
+            placement.customText5 = CandidateFirstName + " " + CandidateLastName;
 
             var placementStartDate = (DateTime) StartDate;
             

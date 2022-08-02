@@ -14,7 +14,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
     public class ClientTranslation : TranslatorBase, ITranslator
     {
 
-        public ClientTranslation(IProducerService producer, string routingKeyBase, ILogger logger, string opCosToSend) : base(producer, routingKeyBase, logger, opCosToSend)
+        public ClientTranslation(IProducerService producer, string routingKeyBase, ILogger logger, string opCosToSend, bool allowBlockByDivision) : base(producer, routingKeyBase, logger, opCosToSend, allowBlockByDivision)
         {
 
         }
@@ -45,9 +45,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
             }
             catch (Exception exp)
             {
-                _logger.Warn($"Problem deserialising Client from UFO {exp.Message}", entity.CorrelationId, entity, entity.ObjectId, "Dtos.Ufo.ExportedEntity", null);
-                entity.ExportSuccess = false;
-                return;
+                throw new Exception($"Problem deserialising Client from UFO {entity.ObjectId} - {exp.Message}");
             }
 
 
@@ -60,32 +58,36 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                     entity.ValidationErrors = new List<string>();
 
                 var message = $"Client {client.ClientRef} is not checked in";
-                _logger.Debug(message, entity.CorrelationId, message, client.ClientRef, "Dtos.Ufo.Client", null);
+                _logger.Warn(message, entity.CorrelationId, message, client.ClientRef, "Dtos.Ufo.Client", null);
                 entity.ValidationErrors.Add(message);
                 return;
             }
 
-            RSM.Client rmsClient = null;
+            RSM.Client rsmClient = null;
             try
             {
-                rmsClient = client.MapClient();
-               
+                rsmClient = client.MapClient();
             }
             catch (Exception exp)
             {
-                if (entity.ValidationErrors == null)
-                    entity.ValidationErrors = new List<string>();
-
-                _logger.Warn($"Failed to map client {client.ClientRef} {exp.Message}", entity.CorrelationId, client, client.ClientRef, "Dtos.Ufo.Client", null);
-                entity.ValidationErrors.Add(exp.Message);
-                entity.ExportSuccess = false;
-                return;
+                throw new Exception($"Problem mapping Client from UFO {entity.ObjectId} - {exp.Message}");
             }
 
+            RSM.Client hleClient = null;
+            if (client.HleClient != null)
+            {
+                hleClient = client.HleClient.MapClient();
+            }
 
+            //if HLE has been mapped then send to RSM
+            if (hleClient != null)
+            {
+                SendToRsm(JsonConvert.SerializeObject(hleClient), Mappers.MapOpCoFromName(client.OpCo.Name.ToLower()).ToString(), "Client", entity.CorrelationId, (bool)client.IsCheckedIn);
+                _logger.Success($"Successfully mapped HLE Client {client.ClientRef} and Sent To RSM", entity.CorrelationId, rsmClient, client.ClientRef, "Dtos.Ufo.Client", null, null, "RSM.Client");
+            }
 
-            SendToRsm(JsonConvert.SerializeObject(rmsClient), Mappers.MapOpCoFromName(client.OpCo.Name.ToLower()).ToString(), "Client", entity.CorrelationId, (bool)client.IsCheckedIn);
-            _logger.Success($"Successfully mapped Client {client.ClientRef} and Sent To RSM", entity.CorrelationId, rmsClient, client.ClientRef, "Dtos.Ufo.Client", null, null, "RSM.Client");
+            SendToRsm(JsonConvert.SerializeObject(rsmClient), Mappers.MapOpCoFromName(client.OpCo.Name.ToLower()).ToString(), "Client", entity.CorrelationId, (bool)client.IsCheckedIn);
+            _logger.Success($"Successfully mapped Client {client.ClientRef} and Sent To RSM", entity.CorrelationId, rsmClient, client.ClientRef, "Dtos.Ufo.Client", null, null, "RSM.Client");
             entity.ExportSuccess = true;
 
         }

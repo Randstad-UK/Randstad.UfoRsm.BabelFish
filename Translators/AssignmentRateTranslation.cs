@@ -20,7 +20,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
     {
         private readonly Dictionary<string, string> _rateCodes;
 
-        public AssignmentRateTranslation(Dictionary<string, string> rateCodes, IProducerService producer, string routingKeyBase, ILogger logger, string opCosToSend) : base(producer, routingKeyBase, logger, opCosToSend)
+        public AssignmentRateTranslation(Dictionary<string, string> rateCodes, IProducerService producer, string routingKeyBase, ILogger logger, string opCosToSend, bool allowBlockByDivision) : base(producer, routingKeyBase, logger, opCosToSend, allowBlockByDivision)
         {
             _rateCodes = rateCodes;
         }
@@ -36,7 +36,14 @@ namespace Randstad.UfoRsm.BabelFish.Translators
 
                 if (BlockExport(Mappers.MapOpCoFromName(rate.Assignment.OpCo.Name)))
                 {
-                    _logger.Warn($"Assignment OpCo not live in RSWM for assignment {rate.Assignment.AssignmentRef} {rate.Assignment.OpCo.Name}", entity.CorrelationId, entity, rate.FeeRef, "Dtos.Ufo.ExportedEntity", null);
+                    _logger.Warn($"Assignment OpCo not live in RSM for assignment {rate.Assignment.AssignmentRef} {rate.Assignment.OpCo.Name}", entity.CorrelationId, entity, rate.FeeRef, "Dtos.Ufo.ExportedEntity", null);
+                    entity.ExportSuccess = false;
+                    return;
+                }
+
+                if (BlockExportByDivision(rate.Assignment.Division.Name))
+                {
+                    _logger.Warn($"Assignment Division not live in RSM for assignment {rate.Assignment.AssignmentRef} {rate.Assignment.Division.Name}", entity.CorrelationId, entity, rate.FeeRef, "Dtos.Ufo.ExportedEntity", null);
                     entity.ExportSuccess = false;
                     return;
                 }
@@ -65,9 +72,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
             }
             catch (Exception exp)
             {
-                _logger.Warn($"Problem deserialising Assignment Rate {rate.FeeRef}  from UFO {exp.Message}", entity.CorrelationId, entity, entity.ObjectId, "Dtos.Ufo.ExportedEntity", null);
-                entity.ExportSuccess = false;
-                return;
+                throw new Exception($"Problem deserialising AssignmentRate from UFO {entity.ObjectId} - {exp.Message}");
             }
 
             _logger.Success($"Received Assignment Rate {rate.FeeRef} for Assignment {rate.Assignment.AssignmentRef}", entity.CorrelationId, rate, rate.FeeRef, "Dtos.Ufo.AssignmentRate", null);

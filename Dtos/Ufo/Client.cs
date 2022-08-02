@@ -36,6 +36,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
         public Team Unit { get; set; }
 
         public Client HleClient { get; set; }
+        public string PoRequired { get; set; }
 
         public RSM.Client MapClient()
         {
@@ -89,6 +90,19 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             client.invoicePeriod = 0;
 
             client.name = ClientName;
+
+            if (PoRequired != null)
+            {
+                client.invoiceRequiresPOSpecified = true;
+                client.invoiceRequiresPO = Mappers.MapBool(PoRequired);
+            }
+
+            //client name in RSM has a max length of 90 characters so truncate it
+            if (client.name.Length > 80)
+            {
+                client.name = client.name.Substring(0, 79);
+            }
+
             client.paperOnInvoicesSpecified = true;
             client.paperOnInvoices = 7;
             
@@ -127,8 +141,11 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             client.defaultTimesheetDateCalculator = "weekly";
 
             client.primaryContact = new Contact();
-            client.primaryContact.address = WorkAddress.GetAddress();
 
+            if (WorkAddress != null)
+            {
+                client.primaryContact.address = WorkAddress.GetAddress();
+            }
 
             return client;
         }

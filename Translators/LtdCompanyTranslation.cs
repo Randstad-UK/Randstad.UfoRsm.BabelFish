@@ -14,7 +14,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
     {
 
 
-        public LtdCompanyTranslation(IProducerService producer, string baseRoutingKey, ILogger logger, string OpCosToSend) : base(producer, baseRoutingKey, logger, OpCosToSend)
+        public LtdCompanyTranslation(IProducerService producer, string baseRoutingKey, ILogger logger, string OpCosToSend, bool allowBlockByDivision) : base(producer, baseRoutingKey, logger, OpCosToSend, allowBlockByDivision)
         {
 
         }
@@ -30,9 +30,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
             }
             catch (Exception exp)
             {
-                _logger.Warn($"Problem deserialising Ltd Company from UFO {exp.Message}", entity.CorrelationId, entity, ltd.Name, "Dtos.Ufo.ExportedEntity", null);
-                entity.ExportSuccess = false;
-                return;
+                throw new Exception($"Problem deserialising Ltd Company from UFO {entity.ObjectId} - {exp.Message}");
             }
 
             _logger.Success($"Recieved Ltd Company {ltd.Name}", entity.CorrelationId, ltd, ltd.Name, "Dtos.Ufo.LtdCompany", null);

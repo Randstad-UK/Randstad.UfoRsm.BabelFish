@@ -14,7 +14,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
     public class ConsultantTranslation : TranslatorBase, ITranslator
     {
 
-        public ConsultantTranslation(IProducerService producer, string routingKeyBase, ILogger logger, string opCosToSend) : base(producer, routingKeyBase, logger, opCosToSend)
+        public ConsultantTranslation(IProducerService producer, string routingKeyBase, ILogger logger, string opCosToSend, bool allowBlockByDivision) : base(producer, routingKeyBase, logger, opCosToSend, allowBlockByDivision)
         {
 
         }
@@ -45,9 +45,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
             }
             catch (Exception exp)
             {
-                _logger.Warn($"Problem deserialising Consultant from UFO {exp.Message}", entity.CorrelationId, entity, entity.ObjectId, "Dtos.Ufo.ExportEntity", null);
-                entity.ExportSuccess = false;
-                return;
+                throw new Exception($"Problem deserialising Consultant from UFO {entity.ObjectId} - {exp.Message}");
             }
 
             _logger.Success($"Received Consultant {consultant.EmployeeRef}", entity.CorrelationId, consultant, consultant.EmployeeRef, "Dtos.Ufo.Consultant", null);

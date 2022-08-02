@@ -18,7 +18,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
         private readonly Dictionary<string, string> _rateCodes;
         private readonly Dictionary<string, string> _tomCodes;
 
-        public AssignmentTranslation(IProducerService producer, string routingKeyBase, Dictionary<string, string> tomCodes, Dictionary<string, string> rateCodes, ILogger logger, string opCosToSend) : base(producer, routingKeyBase, logger, opCosToSend)
+        public AssignmentTranslation(IProducerService producer, string routingKeyBase, Dictionary<string, string> tomCodes, Dictionary<string, string> rateCodes, ILogger logger, string opCosToSend, bool allowBlockByDivision) : base(producer, routingKeyBase, logger, opCosToSend, allowBlockByDivision)
         {
             _tomCodes = tomCodes;
             _rateCodes = rateCodes;
@@ -36,6 +36,13 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                 if (BlockExport(Mappers.MapOpCoFromName(assign.OpCo.Name)))
                 {
                     _logger.Warn($"Assignment OpCo not live in RSM {assign.AssignmentRef} {assign.OpCo.Name}", entity.CorrelationId, entity, assign.AssignmentRef, "Dtos.Ufo.ExportedEntity", null);
+                    entity.ExportSuccess = false;
+                    return;
+                }
+
+                if (BlockExportByDivision(assign.Division.Name))
+                {
+                    _logger.Warn($"Assignment Division not live in RSM for assignment {assign.AssignmentRef} {assign.Division.Name}", entity.CorrelationId, entity, assign.AssignmentRef, "Dtos.Ufo.ExportedEntity", null);
                     entity.ExportSuccess = false;
                     return;
                 }
@@ -61,12 +68,17 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                     return;
                 }
 
+                if (assign.InvoicePerson == null)
+                {
+                    _logger.Warn($"Invoice Person for {assign.AssignmentRef} is missing", entity.CorrelationId, entity, assign.AssignmentRef, "Dtos.Ufo.ExportedEntity", null);
+                    entity.ExportSuccess = false;
+                    return;
+                }
+
             }
             catch (Exception exp)
             {
-                _logger.Warn($"Problem deserialising Assignment from UFO {exp.Message}", entity.CorrelationId, entity, entity.ObjectId, "Dtos.Ufo.ExportedEntity", null);
-                entity.ExportSuccess = false;
-                return;
+                throw new Exception($"Problem deserialising Assignment from UFO {entity.ObjectId} - {exp.Message}");
             }
 
             _logger.Success($"Received Assignment {assign.AssignmentRef}", entity.CorrelationId, assign, assign.AssignmentRef, "Dtos.Ufo.Assignment", null);
@@ -79,7 +91,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                 var message = $"Assignment {assign.AssignmentRef} is not checked in";
                 entity.ValidationErrors.Add(message);
 
-                _logger.Debug(message, entity.CorrelationId, assign, assign.AssignmentRef, "Dtos.Ufo.Assignment", null);
+                _logger.Warn(message, entity.CorrelationId, assign, assign.AssignmentRef, "Dtos.Ufo.Assignment", null);
                 entity.ExportSuccess = false;
                 return;
                 

@@ -28,7 +28,6 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
 
         public string PoNumber { get; set; }
-
         public string TimesheetRef { get; set; }
         public DateTime? PeriodStartDate { get; set; }
         public DateTime? PeriodEndDate { get; set; }
@@ -256,7 +255,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                 }
             }
 
-            if (shiftList != null && shiftList.Any())
+            if (shiftList.Any())
             {
                 timesheet.shifts = shiftList.ToArray();
                 timesheetList.Add(timesheet);
@@ -330,7 +329,10 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                     items.Add(expenseItem);
                 }
 
-                claim.expenseItems = items.ToArray();
+                if (items.Any())
+                {
+                    claim.expenseItems = items.ToArray();
+                }
             }
 
             

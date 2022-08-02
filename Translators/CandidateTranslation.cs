@@ -16,7 +16,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
     {
         private readonly Dictionary<string, string> _tomCodes;
 
-        public CandidateTranslation(IProducerService producer, string baseRoutingKey, Dictionary<string, string> employerRefs, Dictionary<string, string> tomCodes, ILogger logger, string opCosToSend) : base(producer, baseRoutingKey, logger, opCosToSend)
+        public CandidateTranslation(IProducerService producer, string baseRoutingKey, Dictionary<string, string> employerRefs, Dictionary<string, string> tomCodes, ILogger logger, string opCosToSend, bool allowBlockByDivision) : base(producer, baseRoutingKey, logger, opCosToSend, allowBlockByDivision)
         {
             _tomCodes = tomCodes;
         }
@@ -32,10 +32,26 @@ namespace Randstad.UfoRsm.BabelFish.Translators
             try
             {
                 candidate = JsonConvert.DeserializeObject<Candidate>(entity.Payload);
+
+                if (candidate.LiveInPayroll == null)
+                {
+                    _logger.Warn($"Candidate {candidate.CandidateRef} has no live in payroll set (probably because the candidate was created before employee file generated)", entity.CorrelationId, entity, candidate.CandidateRef, "Dtos.Ufo.Candidate", null);
+                    entity.ExportSuccess = true;
+                    return;
+                }
+
+
                 liveInPayroll  = (bool)candidate.LiveInPayroll;
                 if (BlockExport(Mappers.MapOpCoFromName(candidate.OperatingCo.Name)))
                 {
                     _logger.Warn($"Candidate OpCo not live in RSM {candidate.CandidateRef} {candidate.OperatingCo.Name}", entity.CorrelationId, entity, candidate.CandidateRef, "Dtos.Ufo.ExportedEntity", null);
+                    entity.ExportSuccess = false;
+                    return;
+                }
+
+                if (BlockExportByDivision(candidate.Division.Name))
+                {
+                    _logger.Warn($"Candidate Division not live in RSM {candidate.CandidateRef} {candidate.OperatingCo.Name}", entity.CorrelationId, entity, candidate.CandidateRef, "Dtos.Ufo.ExportedEntity", null);
                     entity.ExportSuccess = false;
                     return;
                 }
@@ -57,7 +73,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                 //for debug purposes logging a message to show that the candidate is a leaver
                 if (candidate.Status.Status.ToLower() == "leaver" && entity.EventType.ToLower() != "leaver")
                 {
-                    _logger.Debug($"Candidate{candidate.CandidateRef} is at the status {candidate.Status.Status}", entity.CorrelationId, entity, candidate.CandidateRef, "Dtos.Ufo.Candidate", null);
+                    _logger.Warn($"Candidate {candidate.CandidateRef} is at the status {candidate.Status.Status}", entity.CorrelationId, entity, candidate.CandidateRef, "Dtos.Ufo.Candidate", null);
                     entity.ExportSuccess = true;
                     return;
                 }
@@ -65,16 +81,14 @@ namespace Randstad.UfoRsm.BabelFish.Translators
             }
             catch (Exception exp)
             {
-                _logger.Warn($"Problem deserialising Candidate from UFO {exp.Message}", entity.CorrelationId, entity, entity.ObjectId, "Dtos.Ufo.ExportedEntity", null);
-                entity.ExportSuccess = false;
-                return;
+                throw new Exception($"Problem deserialising Candidate from UFO {entity.ObjectId} - {exp.Message}");
             }
 
             _logger.Success($"Received Candidate {candidate.CandidateRef}", entity.CorrelationId, candidate, candidate.CandidateRef, "Dtos.Ufo.Candidate", null);
 
             if (candidate.Status.Status.ToLower() != "live" && candidate.Status.Status.ToLower() != "scheduledforwork" && candidate.Status.Status.ToLower() != "working" && candidate.Status.Status.ToLower() != "leaver" && candidate.Status.Status.ToLower() != "placed")
             {
-                _logger.Debug($"Candidate{candidate.CandidateRef} is at the status {candidate.Status.Status}", entity.CorrelationId, entity, candidate.CandidateRef, "Dtos.Ufo.Candidate", null);
+                _logger.Warn($"Candidate {candidate.CandidateRef} is at the status {candidate.Status.Status}", entity.CorrelationId, entity, candidate.CandidateRef, "Dtos.Ufo.Candidate", null);
                 entity.ExportSuccess = false;
                 return;
             }
@@ -112,7 +126,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
 
             if (!liveInPayroll)
             {
-                _logger.Debug($"Candidate{candidate.CandidateRef} is not live in payroll", entity.CorrelationId, entity, candidate.CandidateRef, "Dtos.Ufo.Candidate", null);
+                _logger.Debug($"Candidate {candidate.CandidateRef} is not live in payroll", entity.CorrelationId, entity, candidate.CandidateRef, "Dtos.Ufo.Candidate", null);
                 entity.ExportSuccess = true;
                 return;
             }

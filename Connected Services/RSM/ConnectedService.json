@@ -1,7 +1,7 @@
 {
   "ExtendedData": {
     "inputs": [
-      "https://demo.in-time.co.uk/services/IntimeServiceV3_0?wsdl"
+      "https://demo.in-time.co.uk/services/IntimeServiceV3_3?wsdl"
     ],
     "collectionTypes": [
       "System.Array",

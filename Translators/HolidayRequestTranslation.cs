@@ -15,7 +15,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
     public class HolidayRequestTranslation : TranslatorBase, ITranslator
     {
 
-        public HolidayRequestTranslation(IProducerService producer, string routingKeyBase, ILogger logger, string opCosToSend) : base(producer, routingKeyBase, logger, opCosToSend)
+        public HolidayRequestTranslation(IProducerService producer, string routingKeyBase, ILogger logger, string opCosToSend, bool allowBlockByDivision) : base(producer, routingKeyBase, logger, opCosToSend, allowBlockByDivision)
         {
 
         }
@@ -36,12 +36,17 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                     entity.ExportSuccess = false;
                     return;
                 }
+
+                if (BlockExportByDivision(holidayRequest.Candidate.Division.Name))
+                {
+                    _logger.Warn($"Candidate Division not live in RSM {holidayRequest.Candidate.CandidateRef} {holidayRequest.Candidate.Division.Name}", entity.CorrelationId, entity, holidayRequest.Candidate.CandidateRef, "Dtos.Ufo.ExportedEntity", null);
+                    entity.ExportSuccess = false;
+                    return;
+                }
             }
             catch (Exception exp)
             {
-                _logger.Warn($"Problem deserialising Holiday Request from UFO {exp.Message}", entity.CorrelationId, entity, entity.Id, "Dtos.Ufo.ExportedEntity", null);
-                entity.ExportSuccess = false;
-                return;
+                throw new Exception($"Problem deserialising Holiday Request from UFO {entity.ObjectId} - {exp.Message}");
             }
 
             _logger.Success($"Received HolidayRequest {holidayRequest.HolidayRequestRef}", entity.CorrelationId,

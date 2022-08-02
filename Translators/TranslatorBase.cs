@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Text;
 using Randstad.Logging;
@@ -15,17 +16,18 @@ namespace Randstad.UfoRsm.BabelFish.Translators
         protected readonly ILogger _logger;
         protected string _updatedRoutingKey;
         private readonly string _opCosToSend;
+        private readonly bool _allowBlockByDivision;
 
-        protected TranslatorBase(IProducerService producer, string routingKeyBase, ILogger logger, string opCosToSend)
+        protected TranslatorBase(IProducerService producer, string routingKeyBase, ILogger logger, string opCosToSend, bool allowBlockByDivision)
         {
             _producer = producer;
             _routingKeyBase = routingKeyBase;
             _logger = logger;
             _opCosToSend = opCosToSend;
+            _allowBlockByDivision = allowBlockByDivision;
         }
 
-        protected void SendToRsm(string body, string opCo, string obj, Guid correlationId, bool isCheckedIn,
-            bool? processAdjustment = null)
+        protected void SendToRsm(string body, string opCo, string obj, Guid correlationId, bool isCheckedIn, bool? processAdjustment = null)
         {
             try
             {
@@ -38,7 +40,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
 
                 if (processAdjustment==true)
                 {
-                    routingKey = routingKey.Replace("{rule}", ".adjustment");
+                    routingKey = routingKey.Replace("{rule}", ".startchecked.adjustment");
                 }
                 else
                 {
@@ -67,38 +69,6 @@ namespace Randstad.UfoRsm.BabelFish.Translators
             }
         }
 
-        protected bool ShouldExportFromExport(string tomCode)
-        {
-
-            var validList = new List<string>()
-            {
-                "C1304",
-                "C1326",
-                "C1323",
-                "C1324",
-                "E1264",
-                "E1261",
-                "E1265",
-                "E1262",
-                "E1263",
-                "B5504",
-                "B5505",
-                "B5501",
-                "B5502",
-                "B1384",
-                "B1386",
-                "P0034",
-                "P0035"
-            };
-
-            var valid = validList.Contains(tomCode);
-
-
-
-            return valid;
-
-        }
-
         protected bool BlockExport(OperatingCompanies.OperatingCompany opco)
         {
             var opCos = _opCosToSend.Split(",").ToList();
@@ -114,6 +84,18 @@ namespace Randstad.UfoRsm.BabelFish.Translators
             }
 
             return block;
+        }
+
+        protected bool BlockExportByDivision(string divisionName)
+        {
+            if (!_allowBlockByDivision) return false;
+
+            if (divisionName == "Tuition Services" || divisionName == "Student Support")
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

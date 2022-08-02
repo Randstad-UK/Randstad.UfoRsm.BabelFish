@@ -66,7 +66,9 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             //TODO: Assignment CIS needs to be pulled once UFO solution specced
             placement.cisApplicableSpecified = false;
 
-            placement.client = Hle.MapClient();
+
+
+            placement.client = Client.MapClient();
             placement.consultant = Owner.MapConsultant();
 
             placement.contractedHoursSpecified = true;
@@ -90,14 +92,16 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             placement.faxbackEnabled = false;
 
             placement.invoiceRequiresPOSpecified = false;
-            if (PoRequired != null)
-            {
-                placement.invoiceRequiresPOSpecified = true;
-                placement.invoiceRequiresPO = PoRequired;
-            }
+            //ToDO: Removed per finance request
+            //if (PoRequired != null)
+            //{
+            //    placement.invoiceRequiresPOSpecified = true;
+            //    placement.invoiceRequiresPO = PoRequired;
+            //}
 
+            
             placement.invoiceContactOverride = InvoicePerson.MapContact();
-
+            
             //billing requested no name
             placement.invoiceContactOverride.firstname = string.Empty;
             placement.invoiceContactOverride.lastname = string.Empty;
@@ -171,7 +175,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             placement.excludeFromMissingTime = true;
 
             placement.customText1 = ExternalRef;
-            placement.customText2 = Client.ClientRef;
+            placement.customText2 = Hle.ClientRef;
 
             if (ClientContact != null)
             {
@@ -208,7 +212,14 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                 }
             }
 
+            placement.customText5 = Candidate.Name + " " + Candidate.Surname;
+
             placement.clientSite = Client.ClientName;
+            //max length in RSM is 90 characters
+            if (placement.clientSite.Length > 80)
+            {
+                placement.clientSite = placement.clientSite.Substring(0, 79);
+            }
 
             MapRates(rateCodes, placement);
 

@@ -140,6 +140,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                         rate.chargeSpecified = true;
                     }
 
+                    //for post parity if the postparity payrate is set use it, otherwise use payrate
                     if (PayRateCurrency != null && isPostParity)
                     {
                         if (PostParityPayRateCurrency != null)
@@ -154,6 +155,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                         rate.paySpecified = true;
                     }
 
+                    //for post parity if the postparity chargerate is set use it, otherwise use chargerate
                     if (ChargeRateCurrency != null && isPostParity)
                     {
 
@@ -192,7 +194,8 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                         rate.chargeSpecified = true;
                     }
 
-                    if (PayRateCurrency != null && isPostParity)
+                    //for post parity if the postparity payrate is set use it, otherwise use payrate
+                        if (PayRateCurrency != null && isPostParity)
                     {
                         if (PostParityPayRateCurrency != null)
                         {
@@ -206,22 +209,23 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                         rate.paySpecified = true;
                     }
 
+                    //for post parity if the postparity chargerate is set use it, otherwise use charge rate
                     if (ChargeRateCurrency != null && isPostParity)
                     {
 
                         if (PostParityChargeRateCurrency != null)
                         {
-                            rate.charge = (decimal)PostParityChargeRateCurrency;
+                            rate.charge = (decimal) PostParityChargeRateCurrency;
                         }
                         else
                         {
-                            rate.charge = (decimal)ChargeRateCurrency;
+                            rate.charge = (decimal) ChargeRateCurrency;
                         }
 
                         rate.chargeSpecified = true;
                     }
 
-                    if (PayUnit == "Hourly")
+                        if (PayUnit == "Hourly")
                     {
                         rate.periodDuration = 60;
                         rate.periodDurationSpecified = true;

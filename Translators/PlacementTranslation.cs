@@ -18,7 +18,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
         private readonly string _consultantCodePrefix;
         private readonly Dictionary<string, string> _tomCodes;
 
-        public PlacementTranslation(IProducerService producer, string routingKeyBase, Dictionary<string, string> tomCodes, ILogger logger, string opCosToSend) : base(producer, routingKeyBase, logger, opCosToSend)
+        public PlacementTranslation(IProducerService producer, string routingKeyBase, Dictionary<string, string> tomCodes, ILogger logger, string opCosToSend, bool allowBlockByDivision) : base(producer, routingKeyBase, logger, opCosToSend, allowBlockByDivision)
         {
 
             _tomCodes = tomCodes;
@@ -35,16 +35,21 @@ namespace Randstad.UfoRsm.BabelFish.Translators
 
                 if (BlockExport(Mappers.MapOpCoFromName(placement.OpCo.Name)))
                 {
-                    _logger.Warn($"Placement OpCo not live in RSWM {placement.PlacementRef} {placement.OpCo.Name}", entity.CorrelationId, entity, placement.PlacementRef, "Dtos.Ufo.ExportedEntity", null);
+                    _logger.Warn($"Placement OpCo not live in RSM {placement.PlacementRef} {placement.OpCo.Name}", entity.CorrelationId, entity, placement.PlacementRef, "Dtos.Ufo.ExportedEntity", null);
+                    entity.ExportSuccess = false;
+                    return;
+                }
+
+                if (BlockExportByDivision(placement.Division.Name))
+                {
+                    _logger.Warn($"Candidate Division not live in RSM {placement.PlacementRef} {placement.Division.Name}", entity.CorrelationId, entity, placement.PlacementRef, "Dtos.Ufo.ExportedEntity", null);
                     entity.ExportSuccess = false;
                     return;
                 }
             }
             catch (Exception exp)
             {
-                _logger.Warn($"Problem deserialising Placement from UFO {exp.Message}", entity.CorrelationId, entity, entity.ObjectId, "Dtos.Ufo.ExportedEntity", null);
-                entity.ExportSuccess = false;
-                return;
+                throw new Exception($"Problem deserialising Placement from UFO {entity.ObjectId} - {exp.Message}");
             }
 
             _logger.Success($"Received Placement {placement.PlacementRef}", entity.CorrelationId, placement, placement.PlacementRef, "Dtos.Ufo.Placement", null);
@@ -55,7 +60,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                     entity.ValidationErrors = new List<string>();
 
                 var message = $"Placement {placement.PlacementRef} is not checked in";
-                _logger.Debug(message, entity.CorrelationId, message, placement.PlacementRef, "Dtos.Ufo.Placement", null);
+                _logger.Warn(message, entity.CorrelationId, message, placement.PlacementRef, "Dtos.Ufo.Placement", null);
                 entity.ValidationErrors.Add(message);
 
                 entity.ExportSuccess = false;
@@ -70,13 +75,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
             }
             catch (Exception exp)
             {
-                if (entity.ValidationErrors == null)
-                    entity.ValidationErrors = new List<string>();
-
-                _logger.Warn($"Failed to map placement {placement.PlacementRef}: {exp.Message}", entity.CorrelationId, placement, placement.PlacementRef, "Dtos.Ufo.Placement", null);
-                entity.ValidationErrors.Add(exp.Message);
-                entity.ExportSuccess = false;
-                return;
+                throw new Exception($"Problem mapping placement from UFO {entity.ObjectId} - {exp.Message}");
             }
 
             SendToRsm(JsonConvert.SerializeObject(mappedPlacement), Mappers.MapOpCoFromName(placement.OpCo.Name).ToString(), "Placement", entity.CorrelationId, Mappers.MapCheckin(placement.CheckIn));
