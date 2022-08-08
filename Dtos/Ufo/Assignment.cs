@@ -362,7 +362,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
         {
             if (Rates == null) return;
 
-            if (Unit.Name != "NTP Tuition Pillar")
+            if (Unit.Name == "NTP Tuition Pillar")
             {
                 var basic = Rates.FirstOrDefault(x => x.RateType == "Basic Rate");
 

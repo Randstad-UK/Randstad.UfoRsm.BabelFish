@@ -215,7 +215,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
 
                     //Hourly rate
-                    if (line.DaysReported == null && line.TotalHours > 0)
+                    if (line.DaysReported == null && (line.TotalHours > 0 || line.TotalHours < 0))
                     {
                         shift.hours = Convert.ToInt64(line.TotalHours * 60 * 60 * 1000);
                         shift.hoursSpecified = true;
