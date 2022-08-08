@@ -45,13 +45,13 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
         public string CostCentre { get; set; }
         public Client Client { get; set; }
         public Client Hle { get; set; }
-        public Client FundingBody { get; set; }
         public Candidate Candidate { get; set; }
         public ClientContact ClientContact { get; set; }
         public string StudentFirstname { get; set; }
         public string StudentLastname { get; set; }
         public DateTime StudentDob { get; set; }
         public string StudentCrn { get; set; }
+        public Client FundingBody { get; set; }
 
         public Dtos.RsmInherited.Placement MapAssignment(Dictionary<string, string> tomCodes, ILogger logger, Dictionary<string, string> rateCodes, Guid correlationId)
         {
@@ -94,12 +94,24 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             placement.faxbackEnabled = false;
 
             placement.invoiceRequiresPOSpecified = false;
-            
-            placement.invoiceContactOverride = InvoicePerson.MapContact();
-            
-            //billing requested no name
-            placement.invoiceContactOverride.firstname = string.Empty;
-            placement.invoiceContactOverride.lastname = string.Empty;
+
+            if (InvoicePerson != null)
+            {
+                placement.invoiceContactOverride = InvoicePerson.MapContact();
+
+                //billing requested no name
+                placement.invoiceContactOverride.firstname = string.Empty;
+                placement.invoiceContactOverride.lastname = string.Empty;
+            }
+            else
+            {
+                placement.invoiceContactOverride = new RSM.Contact();
+                placement.invoiceContactOverride.firstname = "dummy";
+                placement.invoiceContactOverride.lastname = "invoice-person";
+                placement.invoiceContactOverride.externalId = "DUMMY123";
+            }
+
+            placement.invoiceContactOverride.address = InvoiceAddress.MapAddress();
 
             var invoiceEmailList = new List<string>();
             if (!string.IsNullOrEmpty(Client.InvoiceEmail))
@@ -116,19 +128,24 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             {
                 invoiceEmailList.Add(Client.InvoiceEmail3);
             }
-
+            
             placement.invoiceContactOverride.email = string.Empty;
+
             foreach (var email in invoiceEmailList)
             {
+                if (placement.invoiceContactOverride == null)
+                {
+                    placement.invoiceContactOverride = new Contact();
+                }
+
                 placement.invoiceContactOverride.email = placement.invoiceContactOverride.email + email + "; ";
             }
 
-            if (!string.IsNullOrEmpty(placement.invoiceContactOverride.email) && placement.invoiceContactOverride.email.EndsWith(";"))
+            if (!string.IsNullOrEmpty(placement.invoiceContactOverride.email) &&
+                placement.invoiceContactOverride.email.EndsWith(";"))
             {
                 placement.invoiceContactOverride.email.Remove(placement.invoiceContactOverride.email.Length, 1);
             }
-
-            placement.invoiceContactOverride.address = InvoiceAddress.MapAddress();
 
             placement.jobTitle = string.IsNullOrEmpty(PositionName) ? "Not Stated" : PositionName;
 
@@ -172,6 +189,13 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             if (ClientContact != null)
             {
                 placement.manager = ClientContact.MapContactManager(Client);
+            }
+            else
+            {
+                placement.manager = new RSM.Manager();
+                placement.manager.firstname = "dummy";
+                placement.manager.lastname = "manager";
+                placement.manager.externalId = "MANAGER";
             }
 
             if (WorkAddress != null)
@@ -227,10 +251,10 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             MapPayeValues(placement);
 
             //Most of the business uses client ref for both client ref and invoice to client
-            if (Division.Name == "Tuition Services" && Division.Name == "Student Support")
+            if (Division.Name == "Tuition Services" || Division.Name == "Student Support")
             {
                 placement.customText4 = Client.ClientName;
-                placement.customText5 = StudentFirstname + " " + StudentLastname + " | " + StudentDob.ToString("dd/MM/yyyy")+" | "+ StudentCrn;
+                placement.customText5 = StudentFirstname + " | " + StudentLastname + " | " + StudentDob.ToString("dd/MM/yyyy")+" | "+ StudentCrn;
 
                 if (Unit.Name != "NTP Tuition Pillar")
                 {
@@ -338,6 +362,29 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
         {
             if (Rates == null) return;
 
+            if (Unit.Name != "NTP Tuition Pillar")
+            {
+                var basic = Rates.FirstOrDefault(x => x.RateType == "Basic Rate");
+
+                if (basic != null)
+                {
+                    var ntpRate = new AssignmentRate();
+                    ntpRate.FeeName = "DFE Subsidy - 70%";
+                    ntpRate.OvertimeType = ntpRate.FeeName;
+                    ntpRate.PayUnit = basic.PayUnit;
+                    ntpRate.RateType = "Other Rate";
+
+                    //set rate start date to start date of the assignment
+                    ntpRate.StartDate = StartDate;
+                    ntpRate.ChargeRateCurrency = basic.ChargeRateCurrency;
+                    ntpRate.PostParityChargeRateCurrency = basic.PostParityChargeRateCurrency;
+                    ntpRate.FeeRef = basic.FeeRef + "-DFE";
+                    ntpRate.PayRateCurrency = 0;
+                    ntpRate.PostParityPayRateCurrency = ntpRate.PayRateCurrency;
+                    Rates.Add(ntpRate);
+                }
+            }
+
             var noExpenses = Rates.Where(x => x.RateType != "Expense Rate" || x.FeeName=="Bonus" || x.FeeName== "Back Pay - Non WTR" || x.FeeName== "Back Pay - WTR").ToList();
 
             if (noExpenses == null || noExpenses.Count() == 0) return;
@@ -345,6 +392,8 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             var rateList = new List<RSM.Rate>();
 
             var priorityOrder = 1;
+
+
 
             foreach (var rate in noExpenses)
             {
@@ -367,6 +416,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                     rateList.Add(postRate);
                 }
             }
+
 
             placement.rates = rateList.ToArray();
         }

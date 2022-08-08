@@ -68,7 +68,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                     return;
                 }
 
-                if (assign.InvoicePerson == null)
+                if (assign.InvoicePerson == null && assign.Division.Name!="Tuition Services" && assign.Division.Name!="Student Support")
                 {
                     _logger.Warn($"Invoice Person for {assign.AssignmentRef} is missing", entity.CorrelationId, entity, assign.AssignmentRef, "Dtos.Ufo.ExportedEntity", null);
                     entity.ExportSuccess = false;

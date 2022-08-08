@@ -130,6 +130,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             MapLtd(worker);
             MapUmbrella(worker);
             MapOutsourced(worker);
+            MapSelfEmployed(worker);
             return worker;
         }
 
@@ -266,7 +267,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
             var tenDigits = new Regex(@"^\d{10}$");
 
-            if (tenDigits.IsMatch(LtdCompany.UtrNumber))
+            if (!string.IsNullOrEmpty(LtdCompany.UtrNumber) && tenDigits.IsMatch(LtdCompany.UtrNumber))
             {
                 worker.utr = LtdCompany.UtrNumber;
             }
@@ -294,6 +295,16 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             worker.limitedCompanyProviderExternalId = OutsourcedAgency.AslRef;
             worker.paymentMethod = "BACS";
             worker.email = "outsourcedworker@randstad.co.uk";
+        }
+
+        private void MapSelfEmployed(RSM.Worker worker)
+        {
+            if (PayType != PaymentTypes.SelfEmployed) return;
+
+            worker.workerType = "UMB";
+            worker.limitedCompanyProviderExternalId = OutsourcedAgency.AslRef;
+            worker.paymentMethod = "BACS";
+            worker.email = "selfemployed@randstad.co.uk";
         }
 
 

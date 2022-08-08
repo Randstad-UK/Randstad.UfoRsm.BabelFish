@@ -45,6 +45,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
             }
             catch (Exception exp)
             {
+                _logger.Debug($"Logging failed client export entity", entity.CorrelationId, entity, entity.ObjectId, "Dtos.Ufo.ExportedEntity", null);
                 throw new Exception($"Problem deserialising Client from UFO {entity.ObjectId} - {exp.Message}");
             }
 
@@ -58,7 +59,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                     entity.ValidationErrors = new List<string>();
 
                 var message = $"Client {client.ClientRef} is not checked in";
-                _logger.Warn(message, entity.CorrelationId, message, client.ClientRef, "Dtos.Ufo.Client", null);
+                _logger.Warn(message, entity.CorrelationId, entity, client.ClientRef, "Dtos.Ufo.Client", null);
                 entity.ValidationErrors.Add(message);
                 return;
             }
