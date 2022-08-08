@@ -45,6 +45,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
             }
             catch (Exception exp)
             {
+                _logger.Warn($"Problem deserialising Client from UFO", entity.CorrelationId, entity, entity.ObjectId, "Dtos.Ufo.ExportedEntity", null);
                 throw new Exception($"Problem deserialising Client from UFO {entity.ObjectId} - {exp.Message}");
             }
 
