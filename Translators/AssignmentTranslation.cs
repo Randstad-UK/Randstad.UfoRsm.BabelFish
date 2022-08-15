@@ -75,6 +75,13 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                     return;
                 }
 
+                //if (assign.Candidate.LiveInPayroll == null || assign.Candidate.LiveInPayroll == false) 
+                //{
+                //    _logger.Warn($"Candidate {assign.Candidate.CandidateRef} on Assignment {assign.AssignmentRef} is not live in Payroll or has no live in payroll set (probably because the candidate was created before employee file generated)", entity.CorrelationId, entity, candidate.CandidateRef, "Dtos.Ufo.Candidate", null);
+                //    entity.ExportSuccess = true;
+                //    return;
+                //}
+
             }
             catch (Exception exp)
             {

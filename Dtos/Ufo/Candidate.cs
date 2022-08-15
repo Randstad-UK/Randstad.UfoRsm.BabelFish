@@ -173,7 +173,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             worker.vatCode = "T0";
 
             worker.customText5 = "";
-            if (Paye.PAI == "Opt In")
+            if (Paye.PAI == "Opt In" && OperatingCo.Name=="Business Solutions")
             {
                 worker.customText5 = "PAI";
             }

@@ -25,7 +25,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
         public string TimesheetId { get; set; }
 
         public string AssignmentRef { get; set; }
-
+        
 
         public string PoNumber { get; set; }
         public string TimesheetRef { get; set; }
@@ -38,6 +38,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
     
         public List<TimesheetLine> TimesheetLines { get; set; }
         public List<Expense> Expenses { get; set; }
+        public string ApprovalStatus { get; set; }
         public string ApprovedBy { get; set; }
         public DateTime? ApprovedDateTime { get; set; }
         public bool? ProcessAdjustments { get; set; }
@@ -373,6 +374,11 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             timesheet.salesWrittenOff = false;
 
             timesheet.freehandRef = TimesheetRef;
+            if (TimesheetRef.StartsWith("NT"))
+            {
+                timesheet.freehandRef = ExternalTimesheetId;
+            }
+
             timesheet.payrollRef = TimesheetRef;
             timesheet.externalTimesheetId = ExternalTimesheetId;
 
