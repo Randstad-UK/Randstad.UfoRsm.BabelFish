@@ -142,7 +142,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             }
 
             if (!string.IsNullOrEmpty(placement.invoiceContactOverride.email) &&
-                placement.invoiceContactOverride.email.EndsWith(";"))
+                placement.invoiceContactOverride.email.EndsWith("; "))
             {
                 placement.invoiceContactOverride.email.Remove(placement.invoiceContactOverride.email.Length, 1);
             }

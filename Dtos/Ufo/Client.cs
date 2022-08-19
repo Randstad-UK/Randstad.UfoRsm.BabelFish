@@ -21,6 +21,8 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
         public bool? NoVat { get; set; }
 
         public string VatNo { get; set; }
+        public string CompanyRegNum { get; set; }
+        public decimal? CreditLimit { get; set; }
         public string InvoiceDeliveryMethod { get; set; }
         public string InvoiceEmail { get; set; }
         public string InvoiceEmail2 { get; set; }
@@ -78,8 +80,22 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             client.whtGrossUpSpecified = false;
             client.whtHideOnInvoicesSpecified = false;
 
-            client.companyNo = ClientRef;
-            client.companyVatNo = VatNo;
+
+            client.companyNo = HleClient != null ? HleClient.CompanyRegNum : CompanyRegNum;
+            
+            if (client.companyNo == null)
+                client.companyNo = "";
+
+            client.customText2 = HleClient != null ? "" : CreditLimit.ToString();
+            
+            if (client.customText2 == null)
+                client.customText2 = "";
+
+            client.companyVatNo = HleClient !=null ? HleClient.VatNo : VatNo;
+
+            if (client.companyVatNo == null)
+                client.companyVatNo = "";
+            
             client.externalId = ClientRef;
             
             client.invoiceDeliveryMethodSpecified = true;
