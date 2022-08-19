@@ -144,7 +144,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             if (!string.IsNullOrEmpty(placement.invoiceContactOverride.email) &&
                 placement.invoiceContactOverride.email.EndsWith("; "))
             {
-                placement.invoiceContactOverride.email.Remove(placement.invoiceContactOverride.email.Length, 1);
+                placement.invoiceContactOverride.email = placement.invoiceContactOverride.email.Remove(placement.invoiceContactOverride.email.LastIndexOf(";"));
             }
 
             placement.jobTitle = string.IsNullOrEmpty(PositionName) ? "Not Stated" : PositionName;
