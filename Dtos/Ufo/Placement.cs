@@ -108,7 +108,11 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             {
                 placement.invoiceRequiresPOSpecified = true;
                 placement.invoiceRequiresPO = Mappers.MapBool(PoRequired);
-                placement.purchaseOrderNum = PoNumber;
+
+                if (!string.IsNullOrEmpty(PoNumber))
+                {
+                    placement.purchaseOrderNum = PoNumber.Trim();
+                }
             }
 
             placement.invoiceContactOverride = InvoicePerson.MapContact();
@@ -133,7 +137,11 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
             placement.purchaseDivision = tomCodes[Unit.FinanceCode];
 
-            placement.purchaseOrderNum = PoNumber;
+            if (!string.IsNullOrEmpty(PoNumber))
+            {
+                placement.purchaseOrderNum = PoNumber.Trim();
+            }
+
             placement.roundToNearestMinSpecified = true;
             placement.roundToNearestMin = 1;
             placement.siteAddress = RsmClient.WorkAddress.GetAddress();

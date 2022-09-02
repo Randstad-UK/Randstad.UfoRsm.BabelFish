@@ -27,8 +27,8 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
         public bool IR35 { get; set; }
         public string PoNumber { get; set; }
         public bool? PoRequired { get; set; }
-        public DateTime? StartDate { get; set; }
-        public DateTime? EndDate { get; set; }
+        public string StartDate { get; set; }
+        public string EndDate { get; set; }
         public string AssignmentJobTitle { get; set; }
         public Consultant Owner { get; set; }
         public InvoiceAddress InvoiceAddress { get; set; }
@@ -45,7 +45,6 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
         public string CostCentre { get; set; }
         public Client Client { get; set; }
         public Client Hle { get; set; }
-        public Client FundingBody { get; set; }
         public Candidate Candidate { get; set; }
         public ClientContact ClientContact { get; set; }
 
@@ -74,8 +73,14 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             placement.contractedHoursSpecified = true;
             placement.contractedHours = 40;
 
-            placement.endSpecified = true;
-            placement.end = EndDate.ConvertToBST();
+            
+
+            if (!string.IsNullOrEmpty(EndDate))
+            {
+                placement.endSpecified = true;
+                placement.end = DateTime.Parse(EndDate);
+
+            }
 
             placement.expenseEmailApprovalSpecified = true;
             placement.expenseEmailApproval = false;
@@ -92,13 +97,6 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             placement.faxbackEnabled = false;
 
             placement.invoiceRequiresPOSpecified = false;
-            //ToDO: Removed per finance request
-            //if (PoRequired != null)
-            //{
-            //    placement.invoiceRequiresPOSpecified = true;
-            //    placement.invoiceRequiresPO = PoRequired;
-            //}
-
             
             placement.invoiceContactOverride = InvoicePerson.MapContact();
             
@@ -107,6 +105,9 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             placement.invoiceContactOverride.lastname = string.Empty;
 
             var invoiceEmailList = new List<string>();
+
+
+
             if (!string.IsNullOrEmpty(Client.InvoiceEmail))
             {
                 invoiceEmailList.Add(Client.InvoiceEmail);
@@ -120,6 +121,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             if (!string.IsNullOrEmpty(Client.InvoiceEmail3))
             {
                 invoiceEmailList.Add(Client.InvoiceEmail3);
+
             }
 
             placement.invoiceContactOverride.email = string.Empty;
@@ -128,10 +130,12 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                 placement.invoiceContactOverride.email = placement.invoiceContactOverride.email + email + "; ";
             }
 
-            if (!string.IsNullOrEmpty(placement.invoiceContactOverride.email) && placement.invoiceContactOverride.email.EndsWith(";"))
+            if (!string.IsNullOrEmpty(placement.invoiceContactOverride.email) && placement.invoiceContactOverride.email.EndsWith("; "))
             {
-                placement.invoiceContactOverride.email.Remove(placement.invoiceContactOverride.email.Length, 1);
+                placement.invoiceContactOverride.email = placement.invoiceContactOverride.email.Remove(placement.invoiceContactOverride.email.LastIndexOf(";"));
             }
+
+
 
             placement.invoiceContactOverride.address = InvoiceAddress.MapAddress();
 
@@ -150,7 +154,11 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             //placement.purchaseDivision = OpCo.Name;
 
             placement.purchaseDivision = tomCodes[Unit.FinanceCode];
-            placement.purchaseOrderNum = PoNumber;
+
+            if (!string.IsNullOrEmpty(PoNumber))
+            {
+                placement.purchaseOrderNum = PoNumber.Trim();
+            }
 
             placement.roundToNearestMinSpecified = true;
             placement.roundToNearestMin = 1;
@@ -163,8 +171,13 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
             MapConsultantSplit(placement);
 
-            placement.startSpecified = true;
-            placement.start = StartDate.ConvertToBST();
+            
+
+            if (!string.IsNullOrEmpty(StartDate))
+            {
+                placement.startSpecified = true;
+                placement.start = DateTime.Parse(StartDate);
+            }
 
             placement.timesheetEmailApprovalSpecified = true;
             placement.timesheetEmailApproval = false;
