@@ -26,7 +26,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
         public string AssignmentRef { get; set; }
         public DateTime AssignmentStart { get; set; }
-
+        public bool Cancelled { get; set; }
         public string PoNumber { get; set; }
         public string TimesheetRef { get; set; }
         public string PeriodStartDate { get; set; }
