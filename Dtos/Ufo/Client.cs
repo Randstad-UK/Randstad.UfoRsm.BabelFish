@@ -40,6 +40,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
         public Client HleClient { get; set; }
         public string PoRequired { get; set; }
+        public string SendRatesFormat { get; set; }
 
         public RSM.Client MapClient()
         {
@@ -97,10 +98,11 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                 client.companyVatNo = "";
 
             client.externalId = ClientRef;
+            client.invoiceDeliveryMethodSpecified = true;
+            client.invoiceDeliveryMethod = 0;
 
             if (!string.IsNullOrEmpty(InvoiceDeliveryMethod))
             {
-                client.invoiceDeliveryMethodSpecified = true;
                 client.invoiceDeliveryMethod = Mappers.MapInvoiceDeliveryMethod(InvoiceDeliveryMethod);
             }
 

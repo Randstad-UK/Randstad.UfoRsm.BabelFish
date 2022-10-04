@@ -278,6 +278,25 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                     }
 
             }
+
+            if (!string.IsNullOrEmpty(Assignment.SendRatesFormat))
+            {
+                switch (Assignment.SendRatesFormat)
+                {
+                    case "Send Hourly Rates as DECIMAL":
+                    {
+                        rate.timesheetFields = "DECIMAL";
+                        rate.period = "FIXED";
+                        break;
+                    }
+                    case "Send Hourly Rates as HOURS":
+                    {
+                        rate.timesheetFields = "HOURS";
+                        rate.period = "Hourly";
+                            break;
+                    }
+                }
+            }
         }
 
     }

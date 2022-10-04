@@ -47,6 +47,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
         public Client Hle { get; set; }
         public Candidate Candidate { get; set; }
         public ClientContact ClientContact { get; set; }
+        public string SendRatesFormat { get; set; }
 
         public Dtos.RsmInherited.Placement MapAssignment(Dictionary<string, string> tomCodes, ILogger logger, Dictionary<string, string> rateCodes, Guid correlationId)
         {
@@ -257,7 +258,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
 
 
-            if (HolidayPay.ToLower() == "rolled up holiday pay")
+            if (!string.IsNullOrEmpty(HolidayPay) && HolidayPay.ToLower() == "rolled up holiday pay")
             {
                 placement.holidayAccrualRateSpecified = true;
                 placement.holidayAccrualRate = 0;
