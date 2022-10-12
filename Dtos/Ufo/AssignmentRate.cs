@@ -286,7 +286,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                     case "Send Hourly Rates as DECIMAL":
                     {
                         rate.timesheetFields = "DECIMAL";
-                        rate.period = "FIXED";
+                        rate.period = "Fixed";
                         break;
                     }
                     case "Send Hourly Rates as HOURS":
