@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Randstad.Logging;
 using Randstad.OperatingCompanies;
+using Randstad.UfoRsm.BabelFish.Dtos;
 using Randstad.UfoRsm.BabelFish.Dtos.Ufo;
 using Randstad.UfoRsm.BabelFish.Helpers;
 using RandstadMessageExchange;
@@ -13,10 +14,11 @@ namespace Randstad.UfoRsm.BabelFish.Translators
 {
     public class ClientTranslation : TranslatorBase, ITranslator
     {
+        private List<DivisionCode> _divisionCodes;
 
-        public ClientTranslation(IProducerService producer, string routingKeyBase, ILogger logger, string opCosToSend, bool allowBlockByDivision) : base(producer, routingKeyBase, logger, opCosToSend, allowBlockByDivision)
+        public ClientTranslation(IProducerService producer, string routingKeyBase, ILogger logger, string opCosToSend, bool allowBlockByDivision, List<DivisionCode> divisionCodes) : base(producer, routingKeyBase, logger, opCosToSend, allowBlockByDivision)
         {
-
+            _divisionCodes = divisionCodes;
         }
 
         public async Task Translate(ExportedEntity entity)
@@ -67,25 +69,13 @@ namespace Randstad.UfoRsm.BabelFish.Translators
             RSM.Client rsmClient = null;
             try
             {
-                rsmClient = client.MapClient();
+                rsmClient = client.MapClient(_divisionCodes);
             }
             catch (Exception exp)
             {
                 throw new Exception($"Problem mapping Client from UFO {entity.ObjectId} - {exp.Message}");
             }
 
-            //RSM.Client hleClient = null;
-            //if (client.HleClient != null)
-            //{
-            //    hleClient = client.HleClient.MapClient();
-            //}
-
-            ////if HLE has been mapped then send to RSM
-            //if (hleClient != null)
-            //{
-            //    SendToRsm(JsonConvert.SerializeObject(hleClient), Mappers.MapOpCoFromName(client.OpCo.Name.ToLower()).ToString(), "Client", entity.CorrelationId, (bool)client.IsCheckedIn);
-            //    _logger.Success($"Successfully mapped HLE Client {client.ClientRef} and Sent To RSM", entity.CorrelationId, rsmClient, client.ClientRef, "Dtos.Ufo.Client", null, null, "RSM.Client");
-            //}
 
             SendToRsm(JsonConvert.SerializeObject(rsmClient), Mappers.MapOpCoFromName(client.OpCo.Name.ToLower()).ToString(), "Client", entity.CorrelationId, (bool)client.IsCheckedIn);
             _logger.Success($"Successfully mapped Client {client.ClientRef} and Sent To RSM", entity.CorrelationId, rsmClient, client.ClientRef, "Dtos.Ufo.Client", null, null, "RSM.Client");

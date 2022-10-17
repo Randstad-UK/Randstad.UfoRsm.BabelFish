@@ -49,7 +49,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
         public ClientContact ClientContact { get; set; }
         public string SendRatesFormat { get; set; }
 
-        public Dtos.RsmInherited.Placement MapAssignment(Dictionary<string, string> tomCodes, ILogger logger, Dictionary<string, string> rateCodes, Guid correlationId)
+        public Dtos.RsmInherited.Placement MapAssignment(ILogger logger, Dictionary<string, string> rateCodes, Guid correlationId, List<DivisionCode> divisionCodes)
         {
 
             var placement = new Dtos.RsmInherited.Placement();
@@ -68,7 +68,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
 
 
-            placement.client = Client.MapClient();
+            placement.client = Client.MapClient(divisionCodes);
             placement.consultant = Owner.MapConsultant();
 
             placement.contractedHoursSpecified = true;
@@ -154,7 +154,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             //ToDo: remove once fix confirmed
             //placement.purchaseDivision = OpCo.Name;
 
-            placement.purchaseDivision = tomCodes[Unit.FinanceCode];
+            placement.purchaseDivision = divisionCodes.SingleOrDefault(x=>x.Code==Unit.FinanceCode)?.Division;
 
             if (!string.IsNullOrEmpty(PoNumber))
             {
@@ -182,7 +182,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
             placement.timesheetEmailApprovalSpecified = true;
             placement.timesheetEmailApproval = false;
-            placement.worker = Candidate.MapWorker(tomCodes, logger, correlationId);
+            placement.worker = Candidate.MapWorker(divisionCodes, logger, correlationId);
 
             placement.awrWeekSpecified = false;
             placement.excludeFromMissingTimeSpecified = true;

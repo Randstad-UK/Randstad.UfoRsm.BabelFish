@@ -54,7 +54,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
         private ILogger _logger = null;
         private Guid _correlationId;
 
-        public RSM.Worker MapWorker(Dictionary<string, string> tomCodes, ILogger logger, Guid correlationId)
+        public RSM.Worker MapWorker(List<DivisionCode> divisionCodes, ILogger logger, Guid correlationId)
         {
             
             _logger = logger;
@@ -71,7 +71,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
             try
             {
-                worker.department = tomCodes[Unit.FinanceCode];
+                worker.department = divisionCodes.SingleOrDefault(x => x.Code == Unit.FinanceCode)?.Division;
             }
             catch (Exception exp)
             {

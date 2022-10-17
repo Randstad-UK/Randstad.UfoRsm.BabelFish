@@ -42,7 +42,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
         public string PoRequired { get; set; }
         public string SendRatesFormat { get; set; }
 
-        public RSM.Client MapClient()
+        public RSM.Client MapClient(List<DivisionCode> divisionCodes)
         {
             var client = new RSM.Client();
             
@@ -128,9 +128,13 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             
             client.termsDaysSpecified = true;
             client.termsDays = 14;
+            
+            client.termsTemplateName = divisionCodes.SingleOrDefault(x => x.Code == Unit.FinanceCode)?.InvoiceTemplate;
 
-            //TODO: (Done) set terms template on client when set up in RSM
-            client.termsTemplateName = "Default Charge Terms";
+            if (string.IsNullOrEmpty(client.termsTemplateName))
+            {
+                client.termsTemplateName = "Default Charge Terms";
+            }
 
             client.vatCode = "T1";
 
@@ -166,6 +170,8 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             {
                 client.primaryContact.address = WorkAddress.GetAddress();
             }
+
+
 
             return client;
         }
