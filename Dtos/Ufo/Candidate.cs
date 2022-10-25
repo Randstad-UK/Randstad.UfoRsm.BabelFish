@@ -104,7 +104,6 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             worker.externalReference = CandidateRef;
             worker.gender = Mappers.MapGender(Sex);
 
-            worker.isCISSpecified = false;
             worker.isInPayLinkedSpecified = false;
 
             worker.leaverDateSpecified = false;
@@ -170,8 +169,6 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                 }
             }
 
-            worker.vatCode = "T0";
-
             worker.customText5 = "";
             if (Paye.PAI == "Opt In" && OperatingCo.Name=="Business Solutions")
             {
@@ -190,22 +187,13 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             worker.workerType = "LTD";
             worker.payAsPAYESpecified = true;
             worker.payAsPAYE = true;
-            worker.isCISSpecified = true;
-            worker.isCIS = false;
 
-            if (LtdCompany.Cis == "Yes")
+            if (!string.IsNullOrEmpty(LtdCompany.Cis))
             {
-                worker.workerType = "CIS";
-                worker.isCIS = true;
-                worker.cisBusinessType = "Company";
-                worker.cisCompanyRegNo = LtdCompany.RegNo;
-                worker.cisPercentageSpecified = true;
-                worker.cisPercentage = 30;
-                worker.cisTradingName = LtdCompany.Name;
+                worker.isCIS = Mappers.MapBool(LtdCompany.Cis);
+                worker.isCISSpecified = true;
             }
 
-            //TODO: not required until CPE
-            //worker.customText5 = LtdCompany.PLIOptOut;
             if (LtdCompany.PLIOptOut == "Yes")
             {
                 worker.customText5 = "PLI";
@@ -229,16 +217,6 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             worker.limitedCompany.invoicePeriod = 1;
             worker.limitedCompany.name = LtdCompany.Name;
             
-
-            //TODO: (Done) Update limitedCompany VAT Code once set up in RMS
-            worker.limitedCompany.vatCode = "T0";
-            if (!string.IsNullOrEmpty(LtdCompany.VatNumber))
-            {
-                worker.limitedCompany.vatCode = "T1";
-            }
-
-            worker.vatCode = worker.limitedCompany.vatCode;
-
             worker.limitedCompany.invoicingContact =new Contact();
             worker.limitedCompany.invoicingContact.address = LtdCompany.InvoiceAddress.GetAddress();
             
@@ -252,15 +230,12 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             worker.limitedCompany.invoicingContact.mobile = Mobile;
             worker.limitedCompany.invoicingContact.phone = Phone;
 
-
             worker.paymentMethod = PaymentMethod;
-
 
             worker.selfBillingSpecified = true;
             worker.selfBilling = false;
             if (LtdCompany.SelfBill == "Yes")
             {
-
                 worker.selfBilling = true;
             }
 
@@ -284,6 +259,8 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             worker.workerType = "UMB";
             worker.limitedCompanyProviderExternalId = UmbrellaAgency.AslRef;
             worker.paymentMethod = "BACS";
+            worker.isCISSpecified = true;
+            worker.isCIS = UmbrellaAgency.IsCis;
         }
 
         private void MapOutsourced(RSM.Worker worker)

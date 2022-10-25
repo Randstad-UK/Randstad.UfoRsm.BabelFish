@@ -278,7 +278,6 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
                     expenseItem.receiptDate = DateTime.Parse(PeriodEndDate).Date;
 
-                    expenseItem.freehandRef = TimesheetRef;
                     if (TimesheetRef.StartsWith("NT"))
                     {
                         expenseItem.freehandRef = ExternalTimesheetId;

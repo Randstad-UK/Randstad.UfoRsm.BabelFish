@@ -64,7 +64,8 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             placement.bulkEntrySpecified = false;
 
             //TODO: Assignment CIS needs to be pulled once UFO solution specced
-            placement.cisApplicableSpecified = false;
+            placement.cisApplicableSpecified = true;
+            placement.cisApplicable = false;
 
 
 
@@ -244,8 +245,6 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
             placement.roundToNearestMinSpecified = true;
             placement.roundToNearestMin = 1;
-            MapLtdValues(placement);
-
             MapPayeValues(placement);
 
 
@@ -316,12 +315,6 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             }
         }
 
-        private void MapLtdValues(Dtos.RsmInherited.Placement placement)
-        {
-            if (Candidate.PayType != PaymentTypes.LTD) return;
-
-            placement.cisApplicable = Mappers.MapBool(Candidate.LtdCompany.Cis);
-        }
 
         private void MapConsultantSplit(Dtos.RsmInherited.Placement placement)
         {

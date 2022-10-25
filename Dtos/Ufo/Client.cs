@@ -128,13 +128,16 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             
             client.termsDaysSpecified = true;
             client.termsDays = 14;
-            
-            client.termsTemplateName = divisionCodes.SingleOrDefault(x => x.Code == Unit.FinanceCode)?.InvoiceTemplate;
+
+            //ToDo: Once this is specced
+            /*client.termsTemplateName = divisionCodes.SingleOrDefault(x => x.Code == Unit.FinanceCode)?.InvoiceTemplate;
 
             if (string.IsNullOrEmpty(client.termsTemplateName))
             {
                 client.termsTemplateName = "Default Charge Terms";
-            }
+            }*/
+
+            client.termsTemplateName = "Default Charge Terms";
 
             client.vatCode = "T1";
 
