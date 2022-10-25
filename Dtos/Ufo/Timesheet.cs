@@ -298,7 +298,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                     expenseItem.receiptDateSpecified = true;
                     expenseItem.receiptDate = PeriodEndDate.ConvertToBST().Date;
 
-                    expenseItem.freehandRef = TimesheetRef;
+                    expenseItem.freehandRef = StudentFirstName + " "+ StudentSurname;
                     expenseItem.payrollRef = TimesheetRef;
 
                     if (expense.ExpenseType.ToLower() == "mileage")
