@@ -15,7 +15,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
         public string FeeRef { get; set; }
         public string FeeName { get; set; }
  
-        public DateTime? StartDate { get; set; }
+        public string StartDate { get; set; }
 
         public string ExpenseType { get; set; }
 
@@ -48,7 +48,12 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             rate.chargeSpecified = false;
             rate.commentsEnabledSpecified = false;
             rate.effectiveFromSpecified = true;
-            rate.effectiveFrom = StartDate.ConvertToBST();
+
+            if (!string.IsNullOrEmpty(StartDate))
+            {
+                rate.effectiveFrom = DateTime.Parse(StartDate);
+            }
+
             rate.name = FeeName;
             rate.payableSpecified = false;
             rate.ExternalAssignmentRef = Assignment.AssignmentRef;
@@ -63,7 +68,12 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             postRate.chargeSpecified = false;
             postRate.commentsEnabledSpecified = false;
             postRate.effectiveFromSpecified = true;
-            postRate.effectiveFrom = StartDate.ConvertToBST();
+
+            if (!string.IsNullOrEmpty(StartDate))
+            {
+                postRate.effectiveFrom = DateTime.Parse(StartDate);
+            }
+
             postRate.name = FeeName;
             postRate.payableSpecified = false;
             postRate.ExternalAssignmentRef = Assignment.AssignmentRef;
@@ -267,6 +277,25 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                         break;
                     }
 
+            }
+
+            if (!string.IsNullOrEmpty(Assignment.SendRatesFormat))
+            {
+                switch (Assignment.SendRatesFormat)
+                {
+                    case "Send Hourly Rates as DECIMAL":
+                    {
+                        rate.timesheetFields = "DECIMAL";
+                        rate.period = "Fixed";
+                        break;
+                    }
+                    case "Send Hourly Rates as HOURS":
+                    {
+                        rate.timesheetFields = "HOURS";
+                        rate.period = "Hourly";
+                            break;
+                    }
+                }
             }
         }
 

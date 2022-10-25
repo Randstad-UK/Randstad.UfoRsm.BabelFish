@@ -93,6 +93,8 @@ namespace Randstad.UfoRsm.BabelFish.Helpers
                     return OperatingCompany.BS;
                 case "public services":
                     return OperatingCompany.CARE;
+                case "customer success":
+                    return OperatingCompany.RIS;
                 default: return OperatingCompany.Unknown;
             }
         }
@@ -100,7 +102,7 @@ namespace Randstad.UfoRsm.BabelFish.Helpers
 
         public static int MapInvoiceDeliveryMethod(string value)
         {
-            var defaultValue = 3;
+            var defaultValue = 0;
 
             if (string.IsNullOrEmpty(value))
                 return defaultValue;
@@ -114,6 +116,10 @@ namespace Randstad.UfoRsm.BabelFish.Helpers
                 case "paper":
                 {
                     return 0;
+                }
+                case "self bill":
+                {
+                    return 3;
                 }
                 default:
                 {
@@ -144,21 +150,6 @@ namespace Randstad.UfoRsm.BabelFish.Helpers
                 }
             }
         }
-
-        //public static RSM.Manager GetDefaultManager()
-        //{
-        //    var manager = new RSM.Manager();
-        //    manager = new Manager();
-        //    manager.externalId = "MAN001";
-        //    manager.clientExternalId = "CLI_001";
-        //    manager.email = "man01@randstad.co.uk";
-        //    manager.title = "Mr";
-        //    manager.firstname = "Dummy";
-        //    manager.lastname = "Manager";
-
-        //    return manager;
-
-        //}
 
 
         

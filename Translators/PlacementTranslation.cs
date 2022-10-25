@@ -16,12 +16,12 @@ namespace Randstad.UfoRsm.BabelFish.Translators
     public class PlacementTranslation : TranslatorBase, ITranslator
     {
         private readonly string _consultantCodePrefix;
-        private readonly Dictionary<string, string> _tomCodes;
+        private readonly List<DivisionCode> _divisionCodes;
 
-        public PlacementTranslation(IProducerService producer, string routingKeyBase, Dictionary<string, string> tomCodes, ILogger logger, string opCosToSend, bool allowBlockByDivision) : base(producer, routingKeyBase, logger, opCosToSend, allowBlockByDivision)
+        public PlacementTranslation(IProducerService producer, string routingKeyBase, List<DivisionCode> divisionCodes, ILogger logger, string opCosToSend, bool allowBlockByDivision) : base(producer, routingKeyBase, logger, opCosToSend, allowBlockByDivision)
         {
 
-            _tomCodes = tomCodes;
+            _divisionCodes = divisionCodes;
         }
 
         public async Task Translate(ExportedEntity entity)
@@ -71,7 +71,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
             RSM.Placement mappedPlacement = null;
             try
             {
-                mappedPlacement = placement.MapPlacement(_tomCodes, _logger, entity.CorrelationId);
+                mappedPlacement = placement.MapPlacement(_logger, entity.CorrelationId, _divisionCodes);
             }
             catch (Exception exp)
             {

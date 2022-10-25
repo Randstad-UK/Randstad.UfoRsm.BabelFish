@@ -26,11 +26,11 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
         public string AssignmentRef { get; set; }
         public DateTime AssignmentStart { get; set; }
-
+        public bool Cancelled { get; set; }
         public string PoNumber { get; set; }
         public string TimesheetRef { get; set; }
-        public DateTime? PeriodStartDate { get; set; }
-        public DateTime? PeriodEndDate { get; set; }
+        public string PeriodStartDate { get; set; }
+        public string PeriodEndDate { get; set; }
         public string ExternalTimesheetId { get; set; }
 
         public Team OpCo { get; set; }
@@ -39,8 +39,9 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
         public List<TimesheetLine> TimesheetLines { get; set; }
         public List<Expense> Expenses { get; set; }
+        public string ApprovalStatus { get; set; }
         public string ApprovedBy { get; set; }
-        public DateTime? ApprovedDateTime { get; set; }
+        public string ApprovedDateTime { get; set; }
         public bool? ProcessAdjustments { get; set; }
 
         //Student Support
@@ -52,6 +53,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
         {
 
             if (Expenses == null) return;
+
 
             foreach (var exp in Expenses)
             {
@@ -139,8 +141,6 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
             var timesheet = MapBasicTimesheet();
             
-            List<Expense> consolidatedExpenseses = null;
-
 
             var shiftList = new List<Shift>();
 
@@ -202,9 +202,10 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                         shift.rate = line.Rate.MapRate(rateCodes, out pRate);
                     }
 
+                    var day = DateTime.Parse(line.StartDateTime);
+                    var dayDate = day.Date;
+                    shift.day = dayDate.ToString().GetDateTimeMilliseconds();
 
-                    var date = (DateTime) line.StartDateTime.ConvertToBST();
-                    shift.day = date.Date.GetDateTimeMilliseconds();
                     shift.daySpecified = true;
                     shift.rateName = rateName;
 
@@ -221,27 +222,20 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                         shift.hoursSpecified = true;
 
                         shift.startTimeSpecified = true;
-                        var startDate = line.StartDateTime.ConvertToBST();
-
-                        shift.startTime = startDate.GetDateTimeMilliseconds();
+                        
+                        shift.startTime = line.StartDateTime.GetDateTimeMilliseconds();
 
                         shift.finishTimeSpecified = true;
 
-                        var endDate = line.EndDateTime.ConvertToBST();
-
-                        shift.finishTime = endDate.GetDateTimeMilliseconds();
+                        shift.finishTime = line.EndDateTime.GetDateTimeMilliseconds();
 
                         shift.mealBreakSpecified = true;
 
                         if (line.BreakStartTime != null && line.BreakEndTime != null)
                         {
-                            var breakStartBST = line.BreakStartTime.ConvertToBST();
+                            var breakStart = line.BreakStartTime.GetDateTimeMilliseconds();
+                            var breakEnd = line.BreakEndTime.GetDateTimeMilliseconds();
 
-                            var breakStart = breakStartBST.GetDateTimeMilliseconds();
-
-                            var breakEndBST = line.BreakEndTime.ConvertToBST();
-
-                            var breakEnd = breakEndBST.GetDateTimeMilliseconds();
                             shift.mealBreak = breakEnd - breakStart;
                         }
                         else
@@ -296,7 +290,13 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                     expenseItem.netValueSpecified = false;
                     
                     expenseItem.receiptDateSpecified = true;
-                    expenseItem.receiptDate = PeriodEndDate.ConvertToBST().Date;
+
+                    expenseItem.receiptDate = DateTime.Parse(PeriodEndDate).Date;
+
+                    if (TimesheetRef.StartsWith("NT"))
+                    {
+                        expenseItem.freehandRef = ExternalTimesheetId;
+                    }
 
                     expenseItem.freehandRef = StudentFirstName + " "+ StudentSurname;
                     expenseItem.payrollRef = TimesheetRef;
@@ -359,14 +359,17 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             {
                 timesheet.periodEndDateSpecified = true;
 
-                timesheet.periodEndDate = PeriodEndDate.ConvertToBST().Date;
+                DateTime periodEnd = DateTime.Parse(PeriodEndDate);
+                timesheet.periodEndDate = periodEnd.Date;
             }
 
             timesheet.periodStartDateSpecified = false;
             if (PeriodStartDate != null)
             {
                 timesheet.periodStartDateSpecified = true;
-                timesheet.periodStartDate = PeriodStartDate.ConvertToBST().Date;
+
+                DateTime periodStart = DateTime.Parse(PeriodStartDate);
+                timesheet.periodStartDate = periodStart.Date;
             }
 
             timesheet.placementExternalRef = AssignmentRef;
@@ -378,12 +381,20 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             timesheet.salesWrittenOff = false;
 
             timesheet.freehandRef = TimesheetRef;
+            if (TimesheetRef.StartsWith("NT"))
+            {
+                timesheet.freehandRef = ExternalTimesheetId;
+            }
+
             timesheet.payrollRef = TimesheetRef;
             timesheet.externalTimesheetId = ExternalTimesheetId;
 
-            timesheet.purchaseOrderNumOverride = PoNumber;
+            if (!string.IsNullOrEmpty(PoNumber))
+            {
+                timesheet.purchaseOrderNumOverride = PoNumber.Trim();
+            }
 
-            DateTime approvedOn = (DateTime) ApprovedDateTime.ConvertToBST();
+            DateTime approvedOn = DateTime.Parse(ApprovedDateTime);
             timesheet.comment = "Approved by: " + ApprovedBy + " on " + approvedOn.ToString("dd/MM/yyyy hh:ss");
 
             

@@ -6,6 +6,7 @@ using Microsoft.VisualBasic;
 using Newtonsoft.Json;
 using Randstad.Logging;
 using Randstad.OperatingCompanies;
+using Randstad.UfoRsm.BabelFish.Dtos;
 using Randstad.UfoRsm.BabelFish.Dtos.Ufo;
 using Randstad.UfoRsm.BabelFish.Helpers;
 using RandstadMessageExchange;
@@ -14,11 +15,11 @@ namespace Randstad.UfoRsm.BabelFish.Translators
 {
     public class CandidateTranslation : TranslatorBase, ITranslator
     {
-        private readonly Dictionary<string, string> _tomCodes;
+        private readonly List<DivisionCode> _divisionCodes;
 
-        public CandidateTranslation(IProducerService producer, string baseRoutingKey, Dictionary<string, string> employerRefs, Dictionary<string, string> tomCodes, ILogger logger, string opCosToSend, bool allowBlockByDivision) : base(producer, baseRoutingKey, logger, opCosToSend, allowBlockByDivision)
+        public CandidateTranslation(IProducerService producer, string baseRoutingKey, Dictionary<string, string> employerRefs, List<DivisionCode> divisionCodes, ILogger logger, string opCosToSend, bool allowBlockByDivision) : base(producer, baseRoutingKey, logger, opCosToSend, allowBlockByDivision)
         {
-            _tomCodes = tomCodes;
+            _divisionCodes = divisionCodes;
         }
 
         public async Task Translate(ExportedEntity entity)
@@ -110,7 +111,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
 
             try
             {
-                rmsWorker = candidate.MapWorker(_tomCodes, _logger, entity.CorrelationId);
+                rmsWorker = candidate.MapWorker(_divisionCodes, _logger, entity.CorrelationId);
             }
             catch (Exception exp)
             {

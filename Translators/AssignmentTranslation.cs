@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Randstad.Logging;
 using Randstad.UfoRsm.BabelFish;
+using Randstad.UfoRsm.BabelFish.Dtos;
 using Randstad.UfoRsm.BabelFish.Dtos.Ufo;
 using Randstad.UfoRsm.BabelFish.Helpers;
 using Randstad.UfoRsm.BabelFish.Translators;
@@ -16,12 +17,13 @@ namespace Randstad.UfoRsm.BabelFish.Translators
     public class AssignmentTranslation : TranslatorBase, ITranslator
     {
         private readonly Dictionary<string, string> _rateCodes;
-        private readonly Dictionary<string, string> _tomCodes;
+        private readonly List<DivisionCode> _divisionCodes;
 
-        public AssignmentTranslation(IProducerService producer, string routingKeyBase, Dictionary<string, string> tomCodes, Dictionary<string, string> rateCodes, ILogger logger, string opCosToSend, bool allowBlockByDivision) : base(producer, routingKeyBase, logger, opCosToSend, allowBlockByDivision)
+        public AssignmentTranslation(IProducerService producer, string routingKeyBase, Dictionary<string, string> rateCodes, ILogger logger, string opCosToSend, bool allowBlockByDivision, List<DivisionCode> divisionCodes) : base(producer, routingKeyBase, logger, opCosToSend, allowBlockByDivision)
         {
-            _tomCodes = tomCodes;
+
             _rateCodes = rateCodes;
+            _divisionCodes = divisionCodes;
         }
 
         public async Task Translate(ExportedEntity entity)
@@ -75,6 +77,13 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                     return;
                 }
 
+                //if (assign.Candidate.LiveInPayroll == null || assign.Candidate.LiveInPayroll == false) 
+                //{
+                //    _logger.Warn($"Candidate {assign.Candidate.CandidateRef} on Assignment {assign.AssignmentRef} is not live in Payroll or has no live in payroll set (probably because the candidate was created before employee file generated)", entity.CorrelationId, entity, candidate.CandidateRef, "Dtos.Ufo.Candidate", null);
+                //    entity.ExportSuccess = true;
+                //    return;
+                //}
+
             }
             catch (Exception exp)
             {
@@ -101,7 +110,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
             
             try
             {
-                assignment = assign.MapAssignment(_tomCodes, _logger, _rateCodes, entity.CorrelationId);
+                assignment = assign.MapAssignment( _logger, _rateCodes, entity.CorrelationId, _divisionCodes);
 
             }
             catch (Exception exp)

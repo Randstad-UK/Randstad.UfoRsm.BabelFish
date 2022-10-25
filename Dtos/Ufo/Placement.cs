@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Serialization.Formatters;
 using System.Text;
 using Randstad.Logging;
@@ -39,7 +40,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
         public List<ConsultantSplit> ConsultantSplits { get; set; }
 
-        public Dtos.RsmInherited.Placement MapPlacement(Dictionary<string, string> tomCodes, ILogger logger, Guid correlationId)
+        public Dtos.RsmInherited.Placement MapPlacement( ILogger logger, Guid correlationId, List<DivisionCode> divisionCodes)
         {
 
             var placement = new Dtos.RsmInherited.Placement();
@@ -63,7 +64,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             placement.cisApplicableSpecified = true;
             placement.cisApplicable = false;
 
-            placement.client = Hle.MapClient();
+            placement.client = Hle.MapClient(divisionCodes);
 
             placement.clientSite = RsmClient.ClientName;
             if (placement.clientSite.Length > 80)
@@ -108,7 +109,11 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             {
                 placement.invoiceRequiresPOSpecified = true;
                 placement.invoiceRequiresPO = Mappers.MapBool(PoRequired);
-                placement.purchaseOrderNum = PoNumber;
+
+                if (!string.IsNullOrEmpty(PoNumber))
+                {
+                    placement.purchaseOrderNum = PoNumber.Trim();
+                }
             }
 
             placement.invoiceContactOverride = InvoicePerson.MapContact();
@@ -131,9 +136,13 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             //ToDo: Remove this when confirmed fix is right
             //placement.purchaseDivision = OpCo.Name;
 
-            placement.purchaseDivision = tomCodes[Unit.FinanceCode];
+            placement.purchaseDivision = divisionCodes.SingleOrDefault(x=>x.Code==Unit.FinanceCode)?.Division;
 
-            placement.purchaseOrderNum = PoNumber;
+            if (!string.IsNullOrEmpty(PoNumber))
+            {
+                placement.purchaseOrderNum = PoNumber.Trim();
+            }
+
             placement.roundToNearestMinSpecified = true;
             placement.roundToNearestMin = 1;
             placement.siteAddress = RsmClient.WorkAddress.GetAddress();

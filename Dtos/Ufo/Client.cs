@@ -18,11 +18,13 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
         public string ClientId { get; set; }
         public string ClientRef { get; set; }
         public string ClientName { get; set; }
+        public bool IsLegalHirer { get; set; }
         public bool? NoVat { get; set; }
 
         public string VatNo { get; set; }
         public string CompanyRegNum { get; set; }
         public decimal? CreditLimit { get; set; }
+
         public string InvoiceDeliveryMethod { get; set; }
         public string InvoiceEmail { get; set; }
         public string InvoiceEmail2 { get; set; }
@@ -38,8 +40,9 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
         public Client HleClient { get; set; }
         public string PoRequired { get; set; }
+        public string SendRatesFormat { get; set; }
 
-        public RSM.Client MapClient()
+        public RSM.Client MapClient(List<DivisionCode> divisionCodes)
         {
             var client = new RSM.Client();
             
@@ -80,26 +83,28 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             client.whtGrossUpSpecified = false;
             client.whtHideOnInvoicesSpecified = false;
 
-
             client.companyNo = HleClient != null ? HleClient.CompanyRegNum : CompanyRegNum;
-            
+
             if (client.companyNo == null)
                 client.companyNo = "";
 
             client.customText2 = HleClient != null ? "" : CreditLimit.ToString();
-            
+
             if (client.customText2 == null)
                 client.customText2 = "";
 
-            client.companyVatNo = HleClient !=null ? HleClient.VatNo : VatNo;
-
+            client.companyVatNo = HleClient != null ? HleClient.VatNo : VatNo;
             if (client.companyVatNo == null)
                 client.companyVatNo = "";
-            
+
             client.externalId = ClientRef;
-            
             client.invoiceDeliveryMethodSpecified = true;
-            client.invoiceDeliveryMethod = Mappers.MapInvoiceDeliveryMethod(InvoiceDeliveryMethod);
+            client.invoiceDeliveryMethod = 0;
+
+            if (!string.IsNullOrEmpty(InvoiceDeliveryMethod))
+            {
+                client.invoiceDeliveryMethod = Mappers.MapInvoiceDeliveryMethod(InvoiceDeliveryMethod);
+            }
 
             client.invoicePeriodSpecified = true;
             client.invoicePeriod = 0;
@@ -124,7 +129,14 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             client.termsDaysSpecified = true;
             client.termsDays = 14;
 
-            //TODO: (Done) set terms template on client when set up in RSM
+            //ToDo: Once this is specced
+            /*client.termsTemplateName = divisionCodes.SingleOrDefault(x => x.Code == Unit.FinanceCode)?.InvoiceTemplate;
+
+            if (string.IsNullOrEmpty(client.termsTemplateName))
+            {
+                client.termsTemplateName = "Default Charge Terms";
+            }*/
+
             client.termsTemplateName = "Default Charge Terms";
 
             client.vatCode = "T1";
@@ -161,6 +173,8 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             {
                 client.primaryContact.address = WorkAddress.GetAddress();
             }
+
+
 
             return client;
         }

@@ -27,8 +27,8 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
         public bool IR35 { get; set; }
         public string PoNumber { get; set; }
         public bool? PoRequired { get; set; }
-        public DateTime? StartDate { get; set; }
-        public DateTime? EndDate { get; set; }
+        public string StartDate { get; set; }
+        public string EndDate { get; set; }
         public string AssignmentJobTitle { get; set; }
         public Consultant Owner { get; set; }
         public InvoiceAddress InvoiceAddress { get; set; }
@@ -47,13 +47,14 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
         public Client Hle { get; set; }
         public Candidate Candidate { get; set; }
         public ClientContact ClientContact { get; set; }
+        public string SendRatesFormat { get; set; }
         public string StudentFirstname { get; set; }
         public string StudentLastname { get; set; }
         public DateTime StudentDob { get; set; }
         public string StudentCrn { get; set; }
         public Client FundingBody { get; set; }
 
-        public Dtos.RsmInherited.Placement MapAssignment(Dictionary<string, string> tomCodes, ILogger logger, Dictionary<string, string> rateCodes, Guid correlationId)
+        public Dtos.RsmInherited.Placement MapAssignment(ILogger logger, Dictionary<string, string> rateCodes, Guid correlationId, List<DivisionCode> divisionCodes)
         {
 
             var placement = new Dtos.RsmInherited.Placement();
@@ -68,16 +69,25 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             placement.bulkEntrySpecified = false;
 
             //TODO: Assignment CIS needs to be pulled once UFO solution specced
-            placement.cisApplicableSpecified = false;
+            placement.cisApplicableSpecified = true;
+            placement.cisApplicable = false;
 
-            placement.client = Client.MapClient();
+
+
+            placement.client = Client.MapClient(divisionCodes);
             placement.consultant = Owner.MapConsultant();
 
             placement.contractedHoursSpecified = true;
             placement.contractedHours = 40;
 
-            placement.endSpecified = true;
-            placement.end = EndDate.ConvertToBST();
+            
+
+            if (!string.IsNullOrEmpty(EndDate))
+            {
+                placement.endSpecified = true;
+                placement.end = DateTime.Parse(EndDate);
+
+            }
 
             placement.expenseEmailApprovalSpecified = true;
             placement.expenseEmailApproval = false;
@@ -114,6 +124,9 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             placement.invoiceContactOverride.address = InvoiceAddress.MapAddress();
 
             var invoiceEmailList = new List<string>();
+
+
+
             if (!string.IsNullOrEmpty(Client.InvoiceEmail))
             {
                 invoiceEmailList.Add(Client.InvoiceEmail);
@@ -127,6 +140,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             if (!string.IsNullOrEmpty(Client.InvoiceEmail3))
             {
                 invoiceEmailList.Add(Client.InvoiceEmail3);
+
             }
             
             placement.invoiceContactOverride.email = string.Empty;
@@ -141,11 +155,14 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                 placement.invoiceContactOverride.email = placement.invoiceContactOverride.email + email + "; ";
             }
 
-            if (!string.IsNullOrEmpty(placement.invoiceContactOverride.email) &&
-                placement.invoiceContactOverride.email.EndsWith("; "))
+            if (!string.IsNullOrEmpty(placement.invoiceContactOverride.email) && placement.invoiceContactOverride.email.EndsWith("; "))
             {
                 placement.invoiceContactOverride.email = placement.invoiceContactOverride.email.Remove(placement.invoiceContactOverride.email.LastIndexOf(";"));
             }
+
+
+
+            placement.invoiceContactOverride.address = InvoiceAddress.MapAddress();
 
             placement.jobTitle = string.IsNullOrEmpty(PositionName) ? "Not Stated" : PositionName;
 
@@ -158,8 +175,15 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             placement.purchaseBranch = Unit.Name;
             placement.purchaseCostCentre = Unit.FinanceCode;
 
-            placement.purchaseDivision = tomCodes[Unit.FinanceCode];
-            placement.purchaseOrderNum = PoNumber;
+            //ToDo: remove once fix confirmed
+            //placement.purchaseDivision = OpCo.Name;
+
+            placement.purchaseDivision = divisionCodes.SingleOrDefault(x=>x.Code==Unit.FinanceCode)?.Division;
+
+            if (!string.IsNullOrEmpty(PoNumber))
+            {
+                placement.purchaseOrderNum = PoNumber.Trim();
+            }
 
             placement.roundToNearestMinSpecified = true;
             placement.roundToNearestMin = 1;
@@ -172,12 +196,17 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
             MapConsultantSplit(placement);
 
-            placement.startSpecified = true;
-            placement.start = StartDate.ConvertToBST();
+            
+
+            if (!string.IsNullOrEmpty(StartDate))
+            {
+                placement.startSpecified = true;
+                placement.start = DateTime.Parse(StartDate);
+            }
 
             placement.timesheetEmailApprovalSpecified = true;
             placement.timesheetEmailApproval = false;
-            placement.worker = Candidate.MapWorker(tomCodes, logger, correlationId);
+            placement.worker = Candidate.MapWorker(divisionCodes, logger, correlationId);
 
             placement.awrWeekSpecified = false;
             placement.excludeFromMissingTimeSpecified = true;
@@ -246,8 +275,6 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
             placement.roundToNearestMinSpecified = true;
             placement.roundToNearestMin = 1;
-            MapLtdValues(placement);
-
             MapPayeValues(placement);
 
             //Most of the business uses client ref for both client ref and invoice to client
@@ -276,7 +303,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
 
 
-            if (HolidayPay.ToLower() == "rolled up holiday pay")
+            if (!string.IsNullOrEmpty(HolidayPay) && HolidayPay.ToLower() == "rolled up holiday pay")
             {
                 placement.holidayAccrualRateSpecified = true;
                 placement.holidayAccrualRate = 0;
@@ -334,12 +361,6 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             }
         }
 
-        private void MapLtdValues(Dtos.RsmInherited.Placement placement)
-        {
-            if (Candidate.PayType != PaymentTypes.LTD) return;
-
-            placement.cisApplicable = Mappers.MapBool(Candidate.LtdCompany.Cis);
-        }
 
         private void MapConsultantSplit(Dtos.RsmInherited.Placement placement)
         {

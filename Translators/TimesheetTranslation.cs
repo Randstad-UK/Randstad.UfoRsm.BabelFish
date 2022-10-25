@@ -36,6 +36,8 @@ namespace Randstad.UfoRsm.BabelFish.Translators
             {
                 timesheet = JsonConvert.DeserializeObject<Timesheet>(entity.Payload);
 
+                _logger.Success($"Received Timesheet {timesheet.TimesheetRef}", entity.CorrelationId, timesheet, timesheet.TimesheetRef, "Dtos.Ufo.Timesheet", null);
+
                 if (BlockExport(Mappers.MapOpCoFromName(timesheet.OpCo.Name)))
                 {
                     _logger.Warn($"Timesheet OpCo not live in RSM {timesheet.OpCo.Name} {timesheet.TimesheetRef}", entity.CorrelationId, entity, timesheet.TimesheetRef, "Dtos.Ufo.ExportedEntity", null);
@@ -50,14 +52,21 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                     return;
                 }
 
-                if ((timesheet.TimesheetLines==null || !timesheet.TimesheetLines.Any()) && (timesheet.Expenses==null || !timesheet.Expenses.Any()))
+                if (string.IsNullOrEmpty(timesheet.ApprovedBy))
+                {
+                    _logger.Warn($"Timesheet {timesheet.TimesheetRef} is not approved", entity.CorrelationId, entity, timesheet.TimesheetRef, "Dtos.Ufo.ExportedEntity", null);
+                    entity.ExportSuccess = false;
+                    return;
+                }
+
+                if (!timesheet.Cancelled && (timesheet.TimesheetLines==null || !timesheet.TimesheetLines.Any()) && (timesheet.Expenses==null || !timesheet.Expenses.Any()))
                 {
                     _logger.Warn($"No Timesheetlines or expenses on {timesheet.TimesheetRef} Opco", entity.CorrelationId, entity, timesheet.TimesheetRef, "Dtos.Ufo.ExportedEntity", null);
                     entity.ExportSuccess = false;
                     return;
                 }
 
-                if (timesheet.TimesheetLines != null && !timesheet.TimesheetLines.Any())
+                if (timesheet.TimesheetLines != null && timesheet.TimesheetLines.Any())
                 {
                     var noRate = timesheet.TimesheetLines.Where(x => x.Rate == null);
 
@@ -76,7 +85,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                 throw new Exception($"Problem deserialising Timesheet from UFO {entity.ObjectId} - {exp.Message}");
             }
 
-            _logger.Success($"Received Timesheet {timesheet.TimesheetRef}", entity.CorrelationId, timesheet, timesheet.TimesheetRef, "Dtos.Ufo.Timesheet", null);
+            
 
             RSM.ExpenseClaim claim = null;
             List<RSM.Timesheet> mappedTimesheetList = null;

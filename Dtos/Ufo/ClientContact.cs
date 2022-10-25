@@ -47,6 +47,8 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             manager.refCode = ContactId;
             manager.clientExternalId = client.ClientId;
             manager.externalId = ContactId;
+            manager.commsDisabledSpecified = true;
+            manager.commsDisabled = true;
             return manager;
         }
 

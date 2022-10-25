@@ -9,22 +9,16 @@ namespace Randstad.UfoRsm.BabelFish.Template.Extensions
 
         public static long GetDateTimeMilliseconds(this DateTime? date)
         {
-            var centuryBegin = new DateTime(1970,1, 1);
             var currentDate = (DateTime)date;
-
-            var elapsedTicks = (currentDate.Ticks - centuryBegin.Ticks) / TimeSpan.TicksPerMillisecond;
-
-            return elapsedTicks;
+            long eTicks = (long)currentDate.ToUniversalTime().Subtract(DateTime.UnixEpoch).TotalMilliseconds;
+            return eTicks;
         }
 
-        public static long GetDateTimeMilliseconds(this DateTime date)
+        public static long GetDateTimeMilliseconds(this string date)
         {
-            var centuryBegin = new DateTime(1970, 1, 1);
-            var currentDate = (DateTime)date;
-
-            var elapsedTicks = (currentDate.Ticks - centuryBegin.Ticks) / TimeSpan.TicksPerMillisecond;
-
-            return elapsedTicks;
+            var d = DateTime.Parse(date);
+            long eTicks = (long)d.ToUniversalTime().Subtract(DateTime.UnixEpoch).TotalMilliseconds;
+            return eTicks;
         }
 
         public static long GetDateMilliseconds(this DateTime? date)
