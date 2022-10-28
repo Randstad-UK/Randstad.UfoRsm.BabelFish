@@ -40,7 +40,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
         public List<ConsultantSplit> ConsultantSplits { get; set; }
 
-        public Dtos.RsmInherited.Placement MapPlacement( ILogger logger, Guid correlationId, List<DivisionCode> divisionCodes)
+        public Dtos.RsmInherited.Placement MapPlacement(ILogger logger, Guid correlationId, List<DivisionCode> divisionCodes)
         {
 
             var placement = new Dtos.RsmInherited.Placement();
@@ -109,11 +109,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             {
                 placement.invoiceRequiresPOSpecified = true;
                 placement.invoiceRequiresPO = Mappers.MapBool(PoRequired);
-
-                if (!string.IsNullOrEmpty(PoNumber))
-                {
-                    placement.purchaseOrderNum = PoNumber.Trim();
-                }
+                placement.purchaseOrderNum = PoNumber;
             }
 
             placement.invoiceContactOverride = InvoicePerson.MapContact();
@@ -136,13 +132,9 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             //ToDo: Remove this when confirmed fix is right
             //placement.purchaseDivision = OpCo.Name;
 
-            placement.purchaseDivision = divisionCodes.SingleOrDefault(x=>x.Code==Unit.FinanceCode)?.Division;
+            placement.purchaseDivision = divisionCodes.SingleOrDefault(x=>x.Code==Unit.FinanceCode).Division;
 
-            if (!string.IsNullOrEmpty(PoNumber))
-            {
-                placement.purchaseOrderNum = PoNumber.Trim();
-            }
-
+            placement.purchaseOrderNum = PoNumber;
             placement.roundToNearestMinSpecified = true;
             placement.roundToNearestMin = 1;
             placement.siteAddress = RsmClient.WorkAddress.GetAddress();

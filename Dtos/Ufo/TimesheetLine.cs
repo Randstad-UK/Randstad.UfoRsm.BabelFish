@@ -17,6 +17,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
         public string HoursType { get; set; }
         public string BreakStartTime { get; set; }
         public string BreakEndTime { get; set; }
+        public string PoNumber { get; set; }
 
 
     }

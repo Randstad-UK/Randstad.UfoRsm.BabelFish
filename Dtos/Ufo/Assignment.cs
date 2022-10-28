@@ -196,8 +196,6 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
             MapConsultantSplit(placement);
 
-            
-
             if (!string.IsNullOrEmpty(StartDate))
             {
                 placement.startSpecified = true;
@@ -285,7 +283,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
                 if (Unit.Name != "NTP Tuition Pillar")
                 {
-                    placement.client = FundingBody.MapClient();
+                    placement.client = FundingBody.MapClient(divisionCodes);
                     placement.clientSite = FundingBody.ClientName;
                     placement.customText2 = FundingBody.ClientRef;
 

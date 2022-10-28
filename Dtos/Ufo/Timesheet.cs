@@ -85,52 +85,6 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
         }
 
 
-        private List<IGrouping<string, Expense>> GetConsolidatedExpenses(out List<Expense> consolidatedExpenses)
-        {
-            consolidatedExpenses = null;
-
-            if (Expenses == null) return null;
-            
-            var expenses = Expenses.GroupBy(x => x.ExpenseType).ToList();
-
-            if (!expenses.Any())
-            {
-                consolidatedExpenses = null;
-                return null;
-            }
-
-            consolidatedExpenses = new List<Expense>();
-            foreach (var a in expenses)
-            {
-                var expenseLines = a.AsEnumerable().ToList();
-                var expenseConsolidated = JsonConvert.DeserializeObject<Expense>(JsonConvert.SerializeObject(expenseLines.FirstOrDefault()));
-                
-                if (expenseConsolidated.ExpenseType=="Bonus") continue;
-                if (expenseConsolidated != null && expenseConsolidated.ExpenseType == "Mileage" || !expenseConsolidated.ExpenseType.Contains("Back Pay"))
-                {
-
-                    for (var i = 0; i < expenseLines.Count(); i++)
-                    {
-                        if (expenseLines[i].ExpenseType.ToLower() == "mileage")
-                        {
-                            expenseConsolidated.Quantity = expenseConsolidated.Quantity + expenseLines[i].Quantity;
-                        }
-                        else
-                        {
-                            expenseConsolidated.Quantity = 1;
-                            expenseConsolidated.Amount = expenseConsolidated.Amount + expenseLines[i].Amount;
-                        }
-                    }
-
-                    consolidatedExpenses.Add(expenseConsolidated);
-                }
-            }
-
-            return expenses;
-
-        }
-
-
         public List<RSM.Timesheet> MapTimesheet(ILogger logger, Dictionary<string, string> rateCodes, Guid correlationId, out RSM.ExpenseClaim claim)
         {
             claim = null;
@@ -213,7 +167,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                     {
                         shift.comment = StudentFirstName + " " + StudentSurname;
                     }
-
+                    
 
                     //Hourly rate
                     if (line.DaysReported == null && (line.TotalHours > 0 || line.TotalHours < 0))
@@ -293,12 +247,17 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
                     expenseItem.receiptDate = DateTime.Parse(PeriodEndDate).Date;
 
+                    if (Division.Name == "Tuition Services" || Division.Name == "Student Support")
+                    {
+                        expenseItem.freehandRef = StudentFirstName + " " + StudentSurname;
+                    }
+
                     if (TimesheetRef.StartsWith("NT"))
                     {
                         expenseItem.freehandRef = ExternalTimesheetId;
                     }
-
-                    expenseItem.freehandRef = StudentFirstName + " "+ StudentSurname;
+                    
+                    
                     expenseItem.payrollRef = TimesheetRef;
 
                     if (expense.ExpenseType.ToLower() == "mileage")
@@ -380,7 +339,11 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             timesheet.salesWrittenOffSpecified = true;
             timesheet.salesWrittenOff = false;
 
-            timesheet.freehandRef = TimesheetRef;
+            if (Division.Name == "Tuition Services" || Division.Name == "Student Support")
+            {
+                timesheet.freehandRef = StudentFirstName + " " + StudentSurname;
+            }
+                
             if (TimesheetRef.StartsWith("NT"))
             {
                 timesheet.freehandRef = ExternalTimesheetId;
@@ -410,8 +373,8 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             var deduction = new TimesheetLine();
             deduction.StartDateTime = basic[0].StartDateTime;
             deduction.EndDateTime = basic[0].EndDateTime;
-            deduction.StartTime = basic[0].StartTime;
-            deduction.EndTime = basic[0].EndTime;
+            deduction.StartDateTime = basic[0].StartDateTime;
+            deduction.EndDateTime = basic[0].EndDateTime;
             deduction.HoursType = basic[0].HoursType;
             deduction.PoNumber = basic[0].PoNumber;
             deduction.TotalHours = 0;
@@ -428,7 +391,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             deduction.Rate.OvertimeType = feeName;
             deduction.Rate.PayRateCurrency = 0;
             deduction.Rate.PayUnit = basic[0].Rate.PayUnit;
-            deduction.Rate.StartDate = AssignmentStart;
+            deduction.Rate.StartDate = AssignmentStart.ToString();
 
             var charge = (decimal)basic[0].Rate.ChargeRateCurrency;
             var percentage = percentageDeduction / 100;
