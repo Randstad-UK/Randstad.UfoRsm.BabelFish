@@ -70,9 +70,23 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                     return;
                 }
 
+                if (assign.InvoiceAddress == null)
+                {
+                    _logger.Warn($"Invoice Address for {assign.AssignmentRef} is missing", entity.CorrelationId, entity, assign.AssignmentRef, "Dtos.Ufo.ExportedEntity", null);
+                    entity.ExportSuccess = false;
+                    return;
+                }
+
                 if (assign.InvoicePerson == null)
                 {
                     _logger.Warn($"Invoice Person for {assign.AssignmentRef} is missing", entity.CorrelationId, entity, assign.AssignmentRef, "Dtos.Ufo.ExportedEntity", null);
+                    entity.ExportSuccess = false;
+                    return;
+                }
+
+                if (assign.Candidate.PayType.ToString() == "PAYE" && string.IsNullOrEmpty(assign.HolidayPay))
+                {
+                    _logger.Warn($"PAYE assignment is missing Holiday Pay for assignment {assign.AssignmentRef}", entity.CorrelationId, entity, assign.AssignmentRef, "Dtos.Ufo.ExportedEntity", null);
                     entity.ExportSuccess = false;
                     return;
                 }

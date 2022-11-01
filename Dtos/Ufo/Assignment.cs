@@ -292,7 +292,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                 }
             }
 
-            if (HolidayPay.ToLower() == "accrue holiday pay")
+            if (!string.IsNullOrEmpty(HolidayPay) && HolidayPay.ToLower() == "accrue holiday pay")
             {
                 if (PreAwrHolidayPercentage != null)
                 {

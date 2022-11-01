@@ -79,6 +79,19 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                     }
                 }
 
+                if (timesheet.Expenses != null && timesheet.Expenses.Any())
+                {
+                    var noRate = timesheet.Expenses.Where(x => x.Rate == null);
+
+                    if (noRate.Any())
+                    {
+                        _logger.Warn($"Timesheet contains expenses with no rates on {timesheet.TimesheetRef}",
+                            entity.CorrelationId, entity, timesheet.TimesheetRef, "Dtos.Ufo.ExportedEntity", null);
+                        entity.ExportSuccess = false;
+                        return;
+                    }
+                }
+
             }
             catch (Exception exp)
             {
