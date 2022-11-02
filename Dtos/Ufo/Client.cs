@@ -67,7 +67,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
             client.intermediarySpecified = true;
             client.intermediary = false;
-
+            
             client.onHoldSpecified = true;
             client.onHoldSpecified = false;
 
@@ -173,8 +173,6 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             {
                 client.primaryContact.address = WorkAddress.GetAddress();
             }
-
-
 
             return client;
         }

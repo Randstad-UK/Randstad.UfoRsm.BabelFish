@@ -29,8 +29,8 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
         public bool Cancelled { get; set; }
         public string PoNumber { get; set; }
         public string TimesheetRef { get; set; }
-        public string PeriodStartDate { get; set; }
-        public string PeriodEndDate { get; set; }
+        public string StartDate { get; set; }
+        public string EndDate { get; set; }
         public string ExternalTimesheetId { get; set; }
 
         public Team OpCo { get; set; }
@@ -74,7 +74,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
                     shift.rateName = exp.ExpenseType;
                     shift.daySpecified = true;
-                    shift.day = PeriodEndDate.GetDateTimeMilliseconds();
+                    shift.day = EndDate.GetDateTimeMilliseconds();
                     shift.rateName = exp.Rate.FeeName;
                     shift.@decimal = (decimal) exp.Quantity;
                     shift.decimalSpecified = true;
@@ -245,7 +245,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                     
                     expenseItem.receiptDateSpecified = true;
 
-                    expenseItem.receiptDate = DateTime.Parse(PeriodEndDate).Date;
+                    expenseItem.receiptDate = DateTime.Parse(EndDate).Date;
 
                     if (Division.Name == "Tuition Services" || Division.Name == "Student Support")
                     {
@@ -314,20 +314,20 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             var timesheet = new RSM.Timesheet();
 
             timesheet.periodEndDateSpecified = false;
-            if (PeriodEndDate != null)
+            if (EndDate != null)
             {
                 timesheet.periodEndDateSpecified = true;
 
-                DateTime periodEnd = DateTime.Parse(PeriodEndDate);
+                DateTime periodEnd = DateTime.Parse(EndDate);
                 timesheet.periodEndDate = periodEnd.Date;
             }
 
             timesheet.periodStartDateSpecified = false;
-            if (PeriodStartDate != null)
+            if (StartDate != null)
             {
                 timesheet.periodStartDateSpecified = true;
 
-                DateTime periodStart = DateTime.Parse(PeriodStartDate);
+                DateTime periodStart = DateTime.Parse(StartDate);
                 timesheet.periodStartDate = periodStart.Date;
             }
 
