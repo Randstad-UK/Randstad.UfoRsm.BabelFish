@@ -29,6 +29,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
         public string Sex { get; set; }
         public DateTime? DateOfBirth { get; set; }
         public string NiNumber { get; set; }
+        public string PaymentFrequency { get; set; }
 
         public string Phone { get; set; }
         public string Mobile { get; set; }
@@ -124,6 +125,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             worker.nationalInsuranceNumber = NiNumber;
 
             worker.address = HomeAddress.GetAddress();
+            worker.paymentFrequency = PaymentFrequency;
 
             MapPaye(worker);
             MapLtd(worker);
