@@ -47,6 +47,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
         public ThirdPartyAgency OutsourcedAgency { get; set; }
         public Paye Paye { get; set; }
         public PaymentTypes? PayType { get; set; }
+        public string PaymentFrequency { get; set; }
 
         public Team OperatingCo { get; set; }
         public Team Division { get; set; }
@@ -124,6 +125,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             worker.nationalInsuranceNumber = NiNumber;
 
             worker.address = HomeAddress.GetAddress();
+            worker.paymentFrequency = PaymentFrequency;
 
             MapPaye(worker);
             MapLtd(worker);
