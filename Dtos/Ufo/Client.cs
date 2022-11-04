@@ -146,7 +146,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
             if (ClientRef == "A200200")
             {
-                client.termsTemplateName = "Student Support SFE";
+                client.termsTemplateName = "Student Support";
             }
 
             var divisionCode = divisionCodes.SingleOrDefault(x => x.Code == Unit.FinanceCode)?.InvoiceTemplate;
@@ -154,7 +154,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             //is parent child client relationship 
             if (string.IsNullOrEmpty(divisionCode) && ClientRef != HleClient.ClientRef)
             {
-                client.termsTemplateName = "Parent/Child Relationship";
+                client.termsTemplateName = "Parent Child";
             }
 
             client.vatCode = "T1";
