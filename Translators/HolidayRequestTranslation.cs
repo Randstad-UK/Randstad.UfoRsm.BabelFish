@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Randstad.Logging;
+using Randstad.UfoRsm.BabelFish.Dtos;
 using Randstad.UfoRsm.BabelFish.Dtos.RsmInherited;
 using Randstad.UfoRsm.BabelFish.Dtos.Ufo;
 using Randstad.UfoRsm.BabelFish.Helpers;
@@ -14,10 +15,11 @@ namespace Randstad.UfoRsm.BabelFish.Translators
 {
     public class HolidayRequestTranslation : TranslatorBase, ITranslator
     {
+        private List<DivisionCode> _divisionCodes;
 
-        public HolidayRequestTranslation(IProducerService producer, string routingKeyBase, ILogger logger, string opCosToSend, bool allowBlockByDivision) : base(producer, routingKeyBase, logger, opCosToSend, allowBlockByDivision)
+        public HolidayRequestTranslation(IProducerService producer, string routingKeyBase, ILogger logger, string opCosToSend, bool allowBlockByDivision, List<DivisionCode> divisionCodes) : base(producer, routingKeyBase, logger, opCosToSend, allowBlockByDivision)
         {
-
+            _divisionCodes = divisionCodes;
         }
 
         public async Task Translate(ExportedEntity entity)
@@ -53,10 +55,10 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                 holidayRequest, holidayRequest.HolidayRequestRef, "Dtos.Ufo.HolidayRequest", null);
 
 
-            Absence rsmHolidayRequest = null;
+            RSM.HolidayClaim rsmHolidayRequest = null;
             try
             {
-                rsmHolidayRequest = holidayRequest.MapHolidayRequest();
+                rsmHolidayRequest = holidayRequest.MapHolidayRequest(_divisionCodes, _logger, entity.CorrelationId);
             }
             catch (Exception exp)
             {

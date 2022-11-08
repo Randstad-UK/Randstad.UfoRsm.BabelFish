@@ -129,22 +129,33 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             client.termsDaysSpecified = true;
             client.termsDays = 14;
 
-            //set default terms and override depending on scenario
-            client.termsTemplateName = "Default Charge Terms";
-
+            //SFE Client
             if (ClientRef == "A200200")
             {
-                client.termsTemplateName = "Student Support SFE";
+                client.termsTemplateName = "SFE";
             }
-
-            var divisionCode = divisionCodes.SingleOrDefault(x => x.Code == Unit.FinanceCode)?.InvoiceTemplate;
-
-            //is parent child client relationship 
-            if (string.IsNullOrEmpty(divisionCode) && ClientRef != HleClient.ClientRef)
+            else
             {
-                client.termsTemplateName = "Parent/Child Relationship";
+                //is parent child client relationship 
+                if (ClientRef != HleClient.ClientRef)
+                {
+                    client.termsTemplateName = "Parent Child";
+                }
+
+                //check division to see if it has an invoice template if it has one then use that
+                var invoiceTemplate = divisionCodes.SingleOrDefault(x => x.Code == Unit.FinanceCode)?.InvoiceTemplate;
+
+                if (!string.IsNullOrEmpty(invoiceTemplate))
+                {
+                    client.termsTemplateName = invoiceTemplate;
+                }
             }
 
+            //if not set then default
+            if (string.IsNullOrEmpty(client.termsTemplateName))
+            {
+                client.termsTemplateName = "Default Charge Terms";
+            }
 
             client.vatCode = "T1";
 
