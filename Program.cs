@@ -139,7 +139,7 @@ namespace Randstad.UfoRsm.BabelFish
                     var assignmentTranslator = new AssignmentTranslation(producer, applicationSettings.RsmRoutingKeyBase, rateMap, logger, applicationSettings.OpCosToSend, applicationSettings.AllowBlockByDivision, divisionCodes);
                     var placementTranslator = new PlacementTranslation(producer, applicationSettings.RsmRoutingKeyBase, divisionCodes, logger, applicationSettings.OpCosToSend, applicationSettings.AllowBlockByDivision);
                     var timesheetTranslator = new TimesheetTranslation(producer, applicationSettings.RsmRoutingKeyBase, logger, rateMap, applicationSettings.OpCosToSend, applicationSettings.AllowBlockByDivision);
-                    var holidayRequestTranslator = new HolidayRequestTranslation(producer, applicationSettings.RsmRoutingKeyBase, logger, applicationSettings.OpCosToSend, applicationSettings.AllowBlockByDivision);
+                    var holidayRequestTranslator = new HolidayRequestTranslation(producer, applicationSettings.RsmRoutingKeyBase, logger, applicationSettings.OpCosToSend, applicationSettings.AllowBlockByDivision, divisionCodes);
                     var assignmentRateTranslator = new AssignmentRateTranslation(rateMap, producer, applicationSettings.RsmRoutingKeyBase, logger, applicationSettings.OpCosToSend, applicationSettings.AllowBlockByDivision);
                     var ltdCompanyTranslator = new LtdCompanyTranslation(producer, applicationSettings.RsmRoutingKeyBase, logger, applicationSettings.OpCosToSend, applicationSettings.AllowBlockByDivision);
 

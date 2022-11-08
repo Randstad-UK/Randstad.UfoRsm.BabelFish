@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Randstad.Logging;
+using Randstad.UfoRsm.BabelFish.Dtos;
 using Randstad.UfoRsm.BabelFish.Dtos.Ufo;
+using RSM;
 
 namespace Randstad.UfRsm.BabelFish.Dtos.Ufo
 {
@@ -12,16 +15,33 @@ namespace Randstad.UfRsm.BabelFish.Dtos.Ufo
         public DateTime EndDate { get; set; }
         public string HolidayRequestRef { get; set; }
         public Decimal Hours { get; set; }
+        public string ApproverExternalId { get; set; }
 
-        public UfoRsm.BabelFish.Dtos.RsmInherited.Absence MapHolidayRequest()
+
+        public RSM.HolidayClaim MapHolidayRequest(List<DivisionCode> divisionCodes, ILogger logger, Guid correlationId)
         {
-            var hr = new UfoRsm.BabelFish.Dtos.RsmInherited.Absence();
 
-            hr.StartDate = StartDate.ToLocalTime();
-            hr.EndDate = EndDate.ToLocalTime();
-            hr.EmployeeNo = Candidate.PayrollRefNumber;
-            hr.NoOfUnits = Hours;
-            hr.AbsenceType = 1;
+
+            var hr = new RSM.HolidayClaim();
+            hr.worker = Candidate.MapWorker(divisionCodes, logger, correlationId);
+
+            hr.daysClaimedSpecified = true;
+            hr.daysClaimed = Hours;
+
+            hr.periodStartDateSpecified = true;
+            hr.periodStartDate = StartDate;
+
+            hr.periodEndDateSpecified = true;
+            hr.periodEndDate = EndDate;
+            hr.showIn = "hours";
+            hr.showInString = "hours";
+
+            hr.submittedSpecified = true;
+            hr.submitter = new User() { externalId = Candidate.CandidateRef };
+
+            hr.approver = new User();
+            hr.approver.externalId = ApproverExternalId;
+
             return hr;
         }
     }
