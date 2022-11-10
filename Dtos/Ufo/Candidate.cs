@@ -124,7 +124,11 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
             worker.nationalInsuranceNumber = NiNumber;
 
-            worker.address = HomeAddress.GetAddress();
+            if (HomeAddress != null)
+            {
+                worker.address = HomeAddress.GetAddress();
+            }
+
             worker.paymentFrequency = PaymentFrequency;
 
             MapPaye(worker);
