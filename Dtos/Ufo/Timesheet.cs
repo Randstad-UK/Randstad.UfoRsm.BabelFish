@@ -105,10 +105,13 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                 timesheet.shifts = new Shift[0];
                 var shiftIndex = 0;
 
+
+                //removed as no longer needed
+                /*
                 if ((Division.Name == "Tuition Services" || Division.Name == "Student Support") && Unit.Name=="NTP Tuition Pillar")
                 {
                     TimesheetLines.Add(GetDeduction(30, "DFE Subsidy - 70%"));
-                }
+                }*/
 
                 //Map all the time values
                 foreach (var line in TimesheetLines)
