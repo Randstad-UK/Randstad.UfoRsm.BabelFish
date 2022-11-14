@@ -41,6 +41,8 @@ namespace Randstad.UfRsm.BabelFish.Dtos.Ufo
 
             hr.approver = new User();
             hr.approver.externalId = ApproverExternalId;
+            hr.comment = HolidayRequestRef;
+            hr.recordStatus = "Approved";
 
             return hr;
         }
