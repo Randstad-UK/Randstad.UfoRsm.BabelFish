@@ -32,6 +32,24 @@ namespace Randstad.UfoRsm.BabelFish.Translators
             {
                 holidayRequest = JsonConvert.DeserializeObject<Randstad.UfRsm.BabelFish.Dtos.Ufo.HolidayRequest>(entity.Payload);
 
+                _logger.Debug("Received Routing Key: " + entity.ReceivedOnRoutingKey, entity.CorrelationId, entity, holidayRequest.HolidayRequestRef, null, null);
+                if (entity.ReceivedOnRoutingKeyNodes != null && entity.ReceivedOnRoutingKeyNodes.Length == 9)
+                {
+                    if ((bool)holidayRequest.Candidate.LiveInPayroll && entity.ReceivedOnRoutingKeyNodes[8] != "startchecked")
+                    {
+                        _logger.Warn($"Holiday request for candidate {holidayRequest.Candidate.CandidateRef} is checked in but there is no startchecked on the routing key" + entity.ReceivedOnRoutingKey, entity.CorrelationId, entity, holidayRequest.HolidayRequestRef, null, null);
+                    }
+
+                    if ((bool)holidayRequest.Candidate.LiveInPayroll && entity.ReceivedOnRoutingKeyNodes[8] == "startchecked")
+                    {
+                        _logger.Debug($"Received Routing has startchecked and candidate {holidayRequest.Candidate.CandidateRef} is live in payroll", entity.CorrelationId, entity, holidayRequest.HolidayRequestRef, null, null);
+                    }
+                }
+                else
+                {
+                    _logger.Warn($"Candidate {holidayRequest.Candidate.CandidateRef} on Holiday Request {holidayRequest.HolidayRequestRef} has no startchecked flag on routing key " + entity.ReceivedOnRoutingKey, entity.CorrelationId, entity, holidayRequest.HolidayRequestRef, null, null);
+                }
+
                 if (BlockExport(Mappers.MapOpCoFromName(holidayRequest.Candidate.OperatingCo.Name)))
                 {
                     _logger.Warn($"Candidate OpCo not live in RSM {holidayRequest.Candidate.CandidateRef} {holidayRequest.Candidate.OperatingCo.Name}", entity.CorrelationId, entity, holidayRequest.HolidayRequestRef, "Dtos.Ufo.ExportedEntity", null);
@@ -45,6 +63,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                     entity.ExportSuccess = false;
                     return;
                 }
+
             }
             catch (Exception exp)
             {
@@ -71,11 +90,22 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                 return;
             }
 
+            if (holidayRequest.Candidate.Division.Name == "Tuition Services" || holidayRequest.Candidate.Division.Name == "Student Support")
+            {
+                SendToRsm(JsonConvert.SerializeObject(rsmHolidayRequest), Mappers.MapOpCoFromName(holidayRequest.Candidate.OperatingCo.Name).ToString(), "holidayclaim", entity.CorrelationId, true);
 
-            SendToRsm(JsonConvert.SerializeObject(rsmHolidayRequest), Mappers.MapOpCoFromName(holidayRequest.Candidate.OperatingCo.Name).ToString(), "holidayclaim", entity.CorrelationId, true);
+                _logger.Success($"Successfully sent holidayrequest {holidayRequest.Candidate.CandidateRef} for {holidayRequest.Candidate.OperatingCo.Name} on {_updatedRoutingKey} to sws RSM", entity.CorrelationId,
+                    rsmHolidayRequest, holidayRequest.HolidayRequestRef, "Dtos.Ufo.HolidayRequest", null, null, "Ufo.HolidayRequest");
+            }
+            else
+            {
+                SendToRsm(JsonConvert.SerializeObject(rsmHolidayRequest), Mappers.MapOpCoFromName(holidayRequest.Candidate.OperatingCo.Name).ToString(), "holidayclaim", entity.CorrelationId, true);
 
-            _logger.Success($"Successfully sent holidayrequest {holidayRequest.Candidate.CandidateRef} to {holidayRequest.Candidate.OperatingCo.Name} on {_updatedRoutingKey}", entity.CorrelationId,
-                rsmHolidayRequest, holidayRequest.HolidayRequestRef, "Dtos.Ufo.HolidayRequest", null, null, "Ufo.HolidayRequest");
+                _logger.Success($"Successfully sent holidayrequest {holidayRequest.Candidate.CandidateRef} to {holidayRequest.Candidate.OperatingCo.Name} on {_updatedRoutingKey} to RSM", entity.CorrelationId,
+                    rsmHolidayRequest, holidayRequest.HolidayRequestRef, "Dtos.Ufo.HolidayRequest", null, null, "Ufo.HolidayRequest");
+            }
+
+
 
 
 

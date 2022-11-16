@@ -35,6 +35,29 @@ namespace Randstad.UfoRsm.BabelFish.Translators
             {
                 assign = JsonConvert.DeserializeObject<Assignment>(entity.Payload);
 
+                _logger.Debug("Received Routing Key: "+ entity.ReceivedOnRoutingKey, entity.CorrelationId, entity, assign.AssignmentRef, null,null);
+                if (entity.ReceivedOnRoutingKeyNodes!=null && entity.ReceivedOnRoutingKeyNodes.Length == 9)
+                {
+                    if (assign.CheckIn.ToLower() == "checked in" && entity.ReceivedOnRoutingKeyNodes[8] != "startchecked")
+                    {
+                        _logger.Warn($"Assignment {assign.AssignmentRef} is Checked in but there is no startchecked on Routing Key", entity.CorrelationId, entity, assign.AssignmentRef, null, null);
+                    }
+
+                    if (assign.CheckIn.ToLower() == "checked in" && entity.ReceivedOnRoutingKeyNodes[8] == "startchecked")
+                    {
+                        _logger.Debug($"Received Routing has startchecked and assignment {assign.AssignmentRef} is checked in", entity.CorrelationId, entity, assign.AssignmentRef, null, null);
+                    }
+
+                    if (string.IsNullOrEmpty(assign.CheckIn.ToLower()))
+                    {
+                        _logger.Warn($"Assignment {assign.AssignmentRef} is not checked in " + entity.ReceivedOnRoutingKey, entity.CorrelationId, entity, assign.AssignmentRef, null, null);
+                    }
+                }
+                else
+                {
+                    _logger.Warn($"Assignment {assign.AssignmentRef} has no startchecked flag on routing key " + entity.ReceivedOnRoutingKey, entity.CorrelationId, entity, assign.AssignmentRef, null, null);
+                }
+
                 if (BlockExport(Mappers.MapOpCoFromName(assign.OpCo.Name)))
                 {
                     _logger.Warn($"Assignment OpCo not live in RSM {assign.AssignmentRef} {assign.OpCo.Name}", entity.CorrelationId, entity, assign.AssignmentRef, "Dtos.Ufo.ExportedEntity", null);
@@ -59,6 +82,13 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                 if (string.IsNullOrEmpty(assign.PreferredPeriod))
                 {
                     _logger.Warn($"Assignment {assign.AssignmentRef} is historic should not export", entity.CorrelationId, entity, assign.AssignmentRef, "Dtos.Ufo.ExportedEntity", null);
+                    entity.ExportSuccess = false;
+                    return;
+                }
+
+                if (assign.InvoiceAddress == null)
+                {
+                    _logger.Warn($"Assignment {assign.AssignmentRef} does not have an invoice address set", entity.CorrelationId, entity, assign.AssignmentRef, "Dtos.Ufo.ExportedEntity", null);
                     entity.ExportSuccess = false;
                     return;
                 }
@@ -125,11 +155,17 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                 return;
             }
 
+            if (assign.Division.Name == "Tuition Services" || assign.Division.Name == "Student Support")
+            {
+                SendToRsm(JsonConvert.SerializeObject(assignment), "sws", "Assignment", entity.CorrelationId, Helpers.Mappers.MapCheckin(assign.CheckIn));
+                _logger.Success($"Successfully mapped Assignment {assign.AssignmentRef} and sent to SWS RSM", entity.CorrelationId, assignment, assign.AssignmentRef, "Dtos.Ufo.Assignment", null, null, "Dtos.Sti.Assignment");
+            }
+            else
+            {
+                SendToRsm(JsonConvert.SerializeObject(assignment), Mappers.MapOpCoFromName(assign.OpCo.Name).ToString(), "Assignment", entity.CorrelationId, Helpers.Mappers.MapCheckin(assign.CheckIn));
+                _logger.Success($"Successfully mapped Assignment {assign.AssignmentRef} and sent to RSM", entity.CorrelationId, assignment, assign.AssignmentRef, "Dtos.Ufo.Assignment", null, null, "Dtos.Sti.Assignment");
+            }
 
-            SendToRsm(JsonConvert.SerializeObject(assignment), Mappers.MapOpCoFromName(assign.OpCo.Name).ToString(), "Assignment", entity.CorrelationId, Helpers.Mappers.MapCheckin(assign.CheckIn));
-
-            _logger.Success($"Successfully mapped Assignment {assign.AssignmentRef} and sent to RSM", entity.CorrelationId, assignment, assign.AssignmentRef, "Dtos.Ufo.Assignment", null, null, "Dtos.Sti.Assignment");
-            
             entity.ExportSuccess = true;
         }
     }

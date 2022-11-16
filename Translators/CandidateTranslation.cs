@@ -41,6 +41,25 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                     return;
                 }
 
+                _logger.Debug("Received Routing Key: " + entity.ReceivedOnRoutingKey, entity.CorrelationId, entity, candidate.CandidateRef, null, null);
+                if (entity.ReceivedOnRoutingKeyNodes!=null && entity.ReceivedOnRoutingKeyNodes.Length == 9)
+                {
+                    if ((bool)candidate.LiveInPayroll && entity.ReceivedOnRoutingKeyNodes[8] != "startchecked")
+                    {
+                        _logger.Warn($"Candidate {candidate.CandidateRef} is live in payroll but there is no startcheck on the routing key " + entity.ReceivedOnRoutingKey, entity.CorrelationId, entity,candidate.CandidateRef, null, null);
+                    }
+
+                    if ((bool) candidate.LiveInPayroll && entity.ReceivedOnRoutingKeyNodes[8] == "startchecked")
+                    {
+                        _logger.Debug($"Received Routing has startchecked and candidate {candidate.CandidateRef} is live in payroll", entity.CorrelationId, entity, candidate.CandidateRef, null, null);
+                    }
+                }
+                else
+                {
+                    _logger.Warn($"Candidate {candidate.CandidateRef} has no startchecked flag on routing key " + entity.ReceivedOnRoutingKey, entity.CorrelationId, entity, candidate.CandidateRef, null, null);
+                }
+                
+
 
                 liveInPayroll = (bool)candidate.LiveInPayroll;
                 if (BlockExport(Mappers.MapOpCoFromName(candidate.OperatingCo.Name)))
@@ -132,8 +151,18 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                 return;
             }
 
-            SendToRsm(JsonConvert.SerializeObject(rmsWorker), Mappers.MapOpCoFromName(candidate.OperatingCo.Name.ToLower()).ToString(), "Worker", entity.CorrelationId, liveInPayroll);
-            _logger.Success($"Successfully mapped Candidate {candidate.CandidateRef} and sent to RSM", entity.CorrelationId, rmsWorker, candidate.CandidateRef, "Dtos.Ufo.Candidate", null, null, "RSM.Worker");
+            if (candidate.Division.Name == "Tuition Services" || candidate.Division.Name == "Student Support")
+            {
+                SendToRsm(JsonConvert.SerializeObject(rmsWorker), "sws", "Worker", entity.CorrelationId, liveInPayroll);
+                _logger.Success($"Successfully mapped Candidate {candidate.CandidateRef} and sent to SWS RSM", entity.CorrelationId, rmsWorker, candidate.CandidateRef, "Dtos.Ufo.Candidate", null, null, "RSM.Worker");
+            }
+            else
+            {
+                SendToRsm(JsonConvert.SerializeObject(rmsWorker), Mappers.MapOpCoFromName(candidate.OperatingCo.Name.ToLower()).ToString(), "Worker", entity.CorrelationId, liveInPayroll);
+                _logger.Success($"Successfully mapped Candidate {candidate.CandidateRef} and sent to RSM", entity.CorrelationId, rmsWorker, candidate.CandidateRef, "Dtos.Ufo.Candidate", null, null, "RSM.Worker");
+            }
+
+            
             entity.ExportSuccess = true;
         }
 

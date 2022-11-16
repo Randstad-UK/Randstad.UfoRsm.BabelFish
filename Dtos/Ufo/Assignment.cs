@@ -121,11 +121,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                 placement.invoiceContactOverride.externalId = "DUMMY123";
             }
 
-            placement.invoiceContactOverride.address = InvoiceAddress.MapAddress();
-
             var invoiceEmailList = new List<string>();
-
-
 
             if (!string.IsNullOrEmpty(Client.InvoiceEmail))
             {
@@ -159,8 +155,6 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             {
                 placement.invoiceContactOverride.email = placement.invoiceContactOverride.email.Remove(placement.invoiceContactOverride.email.LastIndexOf(";"));
             }
-
-
 
             placement.invoiceContactOverride.address = InvoiceAddress.MapAddress();
 
@@ -258,11 +252,6 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             placement.customText5 = Candidate.Name + " " + Candidate.Surname;
 
             placement.clientSite = Client.ClientName;
-            //max length in RSM is 90 characters
-            if (placement.clientSite.Length > 80)
-            {
-                placement.clientSite = placement.clientSite.Substring(0, 79);
-            }
 
             MapRates(rateCodes, placement);
 
@@ -278,17 +267,25 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             //Most of the business uses client ref for both client ref and invoice to client
             if (Division.Name == "Tuition Services" || Division.Name == "Student Support")
             {
+                placement.client = FundingBody.MapClient(divisionCodes);
+                placement.customText2 = FundingBody.ClientRef;
                 placement.customText4 = Client.ClientName;
                 placement.customText5 = StudentFirstname + " | " + StudentLastname + " | " + StudentDob.ToString("dd/MM/yyyy")+" | "+ StudentCrn;
+                placement.clientSite = FundingBody.ClientName;
 
-                if (Unit.Name != "NTP Tuition Pillar")
+                if (Unit.Name == "NTP Tuition Pillar")
                 {
-                    placement.client = FundingBody.MapClient(divisionCodes);
-                    placement.clientSite = FundingBody.ClientName;
-                    placement.customText2 = FundingBody.ClientRef;
-
+                    placement.client = Client.MapClient(divisionCodes);
+                    placement.clientSite = Client.ClientName;
+                    placement.customText2 = Client.ClientRef;
                 }
 
+            }
+
+            //max length in RSM is 90 characters
+            if (placement.clientSite.Length > 80)
+            {
+                placement.clientSite = placement.clientSite.Substring(0, 79);
             }
 
 

@@ -17,5 +17,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
         public bool IsCheckedIn { get; set; }
         public List<string> ValidationErrors { get; set; }
         public bool ExportSuccess { get; set; }
+        public string ReceivedOnRoutingKey { get; set; }
+        public string[] ReceivedOnRoutingKeyNodes { get; set; }
     }
 }

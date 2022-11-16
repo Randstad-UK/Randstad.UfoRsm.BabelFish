@@ -285,7 +285,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             if (PayType != PaymentTypes.SelfEmployed) return;
 
             worker.workerType = "UMB";
-            worker.limitedCompanyProviderExternalId = OutsourcedAgency.AslRef;
+            //worker.limitedCompanyProviderExternalId = OutsourcedAgency.AslRef;
             worker.paymentMethod = "BACS";
             worker.email = "selfemployed@randstad.co.uk";
         }

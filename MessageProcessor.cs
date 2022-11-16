@@ -33,6 +33,8 @@ namespace Randstad.UfoRsm.BabelFish
             await Task.CompletedTask;
 
             var entity = JsonConvert.DeserializeObject<ExportedEntity>(queueMessage.Body);
+            entity.ReceivedOnRoutingKey = queueMessage.RoutingKey;
+            entity.ReceivedOnRoutingKeyNodes = queueMessage.RoutingKeyNodes;
 
             foreach (var t in _translators)
             {

@@ -51,8 +51,17 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                 return;
             }
 
-            SendToRsm(JsonConvert.SerializeObject(mappedContact), Mappers.MapOpCoFromName(contact.OpCo.Name.ToLower()).ToString(), "Client", entity.CorrelationId, (bool)contact.IsCheckedIn);
-            _logger.Success($"Successfully mapped ClientContact {contact.Forename} {contact.Surname} and Sent To RSM", entity.CorrelationId, contact, contact.ContactId, "Dtos.Ufo.Client", null, null, "RSM.Client");
+            if (contact.Division.Name == "Tuition Services" || contact.Division.Name == "Student Support")
+            {
+                SendToRsm(JsonConvert.SerializeObject(mappedContact), "sws", "Client", entity.CorrelationId, (bool)contact.IsCheckedIn);
+                _logger.Success($"Successfully mapped ClientContact {contact.Forename} {contact.Surname} and Sent To SWS RSM", entity.CorrelationId, contact, contact.ContactId, "Dtos.Ufo.Client", null, null, "RSM.Client");
+            }
+            else
+            {
+                SendToRsm(JsonConvert.SerializeObject(mappedContact), Mappers.MapOpCoFromName(contact.OpCo.Name.ToLower()).ToString(), "Client", entity.CorrelationId, (bool)contact.IsCheckedIn);
+                _logger.Success($"Successfully mapped ClientContact {contact.Forename} {contact.Surname} and Sent To RSM", entity.CorrelationId, contact, contact.ContactId, "Dtos.Ufo.Client", null, null, "RSM.Client");
+            }
+            
             entity.ExportSuccess = true;
 
         }
