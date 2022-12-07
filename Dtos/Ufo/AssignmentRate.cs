@@ -68,7 +68,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             postRate.chargeSpecified = false;
             postRate.commentsEnabledSpecified = false;
             postRate.effectiveFromSpecified = true;
-
+            
             if (!string.IsNullOrEmpty(StartDate))
             {
                 postRate.effectiveFrom = DateTime.Parse(StartDate);

@@ -315,7 +315,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
         private RSM.Timesheet MapBasicTimesheet()
         {
             var timesheet = new RSM.Timesheet();
-
+            
             timesheet.periodEndDateSpecified = false;
             if (EndDate != null)
             {

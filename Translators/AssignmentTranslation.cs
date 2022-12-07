@@ -38,20 +38,30 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                 _logger.Debug("Received Routing Key: "+ entity.ReceivedOnRoutingKey, entity.CorrelationId, entity, assign.AssignmentRef, null,null);
                 if (entity.ReceivedOnRoutingKeyNodes!=null && entity.ReceivedOnRoutingKeyNodes.Length == 9)
                 {
-                    if (assign.CheckIn.ToLower() == "checked in" && entity.ReceivedOnRoutingKeyNodes[8] != "startchecked")
-                    {
-                        _logger.Warn($"Assignment {assign.AssignmentRef} is Checked in but there is no startchecked on Routing Key", entity.CorrelationId, entity, assign.AssignmentRef, null, null);
-                    }
-
-                    if (assign.CheckIn.ToLower() == "checked in" && entity.ReceivedOnRoutingKeyNodes[8] == "startchecked")
-                    {
-                        _logger.Debug($"Received Routing has startchecked and assignment {assign.AssignmentRef} is checked in", entity.CorrelationId, entity, assign.AssignmentRef, null, null);
-                    }
-
-                    if (string.IsNullOrEmpty(assign.CheckIn.ToLower()))
+                    if (string.IsNullOrEmpty(assign.CheckIn))
                     {
                         _logger.Warn($"Assignment {assign.AssignmentRef} is not checked in " + entity.ReceivedOnRoutingKey, entity.CorrelationId, entity, assign.AssignmentRef, null, null);
+                        entity.ExportSuccess = false;
+                        return;
                     }
+
+                    if (assign.CheckIn.ToLower() == "checked in" &&
+                        entity.ReceivedOnRoutingKeyNodes[8] != "startchecked")
+                    {
+                        _logger.Warn(
+                            $"Assignment {assign.AssignmentRef} is Checked in but there is no startchecked on Routing Key",
+                            entity.CorrelationId, entity, assign.AssignmentRef, null, null);
+                    }
+
+                    if (assign.CheckIn.ToLower() == "checked in" &&
+                        entity.ReceivedOnRoutingKeyNodes[8] == "startchecked")
+                    {
+                        _logger.Debug(
+                            $"Received Routing has startchecked and assignment {assign.AssignmentRef} is checked in",
+                            entity.CorrelationId, entity, assign.AssignmentRef, null, null);
+                    }
+                    
+
                 }
                 else
                 {

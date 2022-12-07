@@ -35,26 +35,46 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                 rate = JsonConvert.DeserializeObject<AssignmentRate>(entity.Payload);
 
                 _logger.Debug("Received Routing Key: " + entity.ReceivedOnRoutingKey, entity.CorrelationId, entity, rate.Assignment.AssignmentRef, null, null);
-                if (entity.ReceivedOnRoutingKeyNodes.Length == 9)
+                if (entity.ReceivedOnRoutingKeyNodes != null && entity.ReceivedOnRoutingKeyNodes.Length == 9)
                 {
-                    if (rate.Assignment.CheckIn.ToLower() == "checked in" && entity.ReceivedOnRoutingKeyNodes[8] != "startchecked")
+                    if (string.IsNullOrEmpty(rate.Assignment.CheckIn))
                     {
-                        _logger.Warn($"Assignment {rate.Assignment.AssignmentRef} is checked in but there is no startchecked on the Routing Key  " + entity.ReceivedOnRoutingKey, entity.CorrelationId, entity, rate.Assignment.AssignmentRef, null, null);
+                        _logger.Warn(
+                            $"Assignment {rate.Assignment.AssignmentRef} is not checked in " +
+                            entity.ReceivedOnRoutingKey, entity.CorrelationId, entity, rate.Assignment.AssignmentRef,
+                            null, null);
+                        entity.ExportSuccess = false;
+                        return;
                     }
 
-                    if (rate.Assignment.CheckIn.ToLower() == "checked in" && entity.ReceivedOnRoutingKeyNodes[8] == "startchecked")
+                    if (rate.Assignment.CheckIn.ToLower() == "checked in" &&
+                        entity.ReceivedOnRoutingKeyNodes[8] != "startchecked")
                     {
-                        _logger.Debug($"Received Routing has startchecked and assignment {rate.Assignment.AssignmentRef} is checked in", entity.CorrelationId, entity, rate.Assignment.AssignmentRef, null, null);
+                        _logger.Warn(
+                            $"Assignment {rate.Assignment.AssignmentRef} is checked in but there is no startchecked on the Routing Key  " +
+                            entity.ReceivedOnRoutingKey, entity.CorrelationId, entity,
+                            rate.Assignment.AssignmentRef, null, null);
                     }
 
-                    if (string.IsNullOrEmpty(rate.Assignment.CheckIn.ToLower()))
+                    if (rate.Assignment.CheckIn.ToLower() == "checked in" &&
+                        entity.ReceivedOnRoutingKeyNodes[8] == "startchecked")
                     {
-                        _logger.Warn($"Assignment {rate.Assignment.AssignmentRef} is not checked in " + entity.ReceivedOnRoutingKey, entity.CorrelationId, entity, rate.Assignment.AssignmentRef, null, null);
+                        _logger.Debug(
+                            $"Received Routing has startchecked and assignment {rate.Assignment.AssignmentRef} is checked in",
+                            entity.CorrelationId, entity, rate.Assignment.AssignmentRef, null, null);
                     }
+
                 }
                 else
                 {
                     _logger.Warn($"Assignment {rate.Assignment.AssignmentRef} has no startchecked flag on routing key " + entity.ReceivedOnRoutingKey, entity.CorrelationId, entity, rate.Assignment.AssignmentRef, null, null);
+                }
+
+                if(rate.Assignment.OpCo==null || rate.Assignment.Division == null)
+                {
+                    _logger.Warn($"Assignment OpCo and Division not populated for assignment {rate.Assignment.AssignmentRef}", entity.CorrelationId, entity, rate.FeeRef, "Dtos.Ufo.ExportedEntity", null);
+                    entity.ExportSuccess = false;
+                    return;
                 }
 
                 if (BlockExport(Mappers.MapOpCoFromName(rate.Assignment.OpCo.Name)))

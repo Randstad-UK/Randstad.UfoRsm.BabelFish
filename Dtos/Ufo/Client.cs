@@ -39,6 +39,8 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
         public Team Unit { get; set; }
 
         public Client HleClient { get; set; }
+        public Client RsmClient { get; set; }
+
         public string PoRequired { get; set; }
         public string SendRatesFormat { get; set; }
 
@@ -148,10 +150,14 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             }
             else
             {
+
                 //is parent child client relationship 
-                if (ClientRef != HleClient.ClientRef)
+                if (HleClient != null)
                 {
-                    client.termsTemplateName = "Parent Child";
+                    if (ClientRef != HleClient.ClientRef)
+                    {
+                        client.termsTemplateName = "Parent Child";
+                    }
                 }
 
                 //check division to see if it has an invoice template if it has one then use that

@@ -35,7 +35,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
         public ClientContact InvoicePerson { get; set; }
         public ClientContact ClientContact { get; set; }
 
-        public Client RsmClient { get; set; }
+        public Client Client { get; set; }
         public Client Hle { get; set; }
 
         public List<ConsultantSplit> ConsultantSplits { get; set; }
@@ -66,15 +66,15 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
             placement.client = Hle.MapClient(divisionCodes);
 
-            placement.clientSite = RsmClient.ClientName;
+            placement.clientSite = Client.ClientName;
             if (placement.clientSite.Length > 80)
             {
                 placement.clientSite = placement.clientSite.Substring(0, 79);
             }
 
             placement.consultant = Owner.MapConsultant();
-            placement.customText2 = RsmClient.ClientRef;
-            placement.customText3 = RsmClient.WorkAddress.GetConcatenatedAddress();
+            placement.customText2 = Client.ClientRef;
+            placement.customText3 = Client.WorkAddress.GetConcatenatedAddress();
 
             placement.endSpecified = true;
             placement.end = DateTime.Now;
@@ -137,7 +137,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             placement.purchaseOrderNum = PoNumber;
             placement.roundToNearestMinSpecified = true;
             placement.roundToNearestMin = 1;
-            placement.siteAddress = RsmClient.WorkAddress.GetAddress();
+            placement.siteAddress = Client.WorkAddress.GetAddress();
 
             placement.salesDivision = placement.purchaseDivision;
             placement.salesBranch = placement.purchaseBranch;
@@ -150,7 +150,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
             if (ClientContact != null)
             {
-                placement.manager = ClientContact.MapContactManager(RsmClient);
+                placement.manager = ClientContact.MapContactManager(Client);
             }
 
             placement.timesheetApprovalRoute = "Auto Approval Route";

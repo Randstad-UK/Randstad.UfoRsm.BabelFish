@@ -59,7 +59,8 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
             var placement = new Dtos.RsmInherited.Placement();
             placement.PAYEDeductionsOnLtdSpecified = true;
-            placement.PAYEDeductionsOnLtd = IR35;
+            placement.PAYEDeductionsOnLtd = false;
+
             placement.holidayAccrualRatePostAWRSpecified = false;
             placement.holidayAccrualRateSpecified = false;
 
@@ -263,6 +264,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             placement.roundToNearestMinSpecified = true;
             placement.roundToNearestMin = 1;
             MapPayeValues(placement);
+            MapLtdValues(placement);
 
             //Most of the business uses client ref for both client ref and invoice to client
             if (Division.Name == "Tuition Services" || Division.Name == "Student Support")
@@ -356,6 +358,14 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             }
         }
 
+        private void MapLtdValues(Dtos.RsmInherited.Placement placement)
+        {
+            if (Candidate.PayType != PaymentTypes.LTD) return;
+
+            placement.PAYEDeductionsOnLtdSpecified = true;
+            placement.PAYEDeductionsOnLtd = IR35;
+        }
+
 
         private void MapConsultantSplit(Dtos.RsmInherited.Placement placement)
         {
@@ -378,6 +388,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
         {
             if (Rates == null) return;
 
+            /*
             if (Unit.Name == "NTP Tuition Pillar")
             {
                 var basic = Rates.FirstOrDefault(x => x.RateType == "Basic Rate");
@@ -399,7 +410,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                     ntpRate.PostParityPayRateCurrency = ntpRate.PayRateCurrency;
                     Rates.Add(ntpRate);
                 }
-            }
+            }*/
 
             var noExpenses = Rates.Where(x => x.RateType != "Expense Rate" || x.FeeName=="Bonus" || x.FeeName== "Back Pay - Non WTR" || x.FeeName== "Back Pay - WTR").ToList();
 

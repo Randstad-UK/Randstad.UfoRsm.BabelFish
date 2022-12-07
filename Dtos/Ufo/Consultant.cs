@@ -25,7 +25,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
             consultant.canLoginSpecified = true;
             consultant.canLogin = IsActive;
-
+            
             consultant.commsDisabledSpecified = true;
             consultant.commsDisabled = true;
 
