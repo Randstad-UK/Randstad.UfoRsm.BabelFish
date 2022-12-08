@@ -92,7 +92,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
 
             if (holidayRequest.Candidate.Division.Name == "Tuition Services" || holidayRequest.Candidate.Division.Name == "Student Support")
             {
-                SendToRsm(JsonConvert.SerializeObject(rsmHolidayRequest), Mappers.MapOpCoFromName(holidayRequest.Candidate.OperatingCo.Name).ToString(), "holidayclaim", entity.CorrelationId, true);
+                SendToRsm(JsonConvert.SerializeObject(rsmHolidayRequest), "sws", "holidayclaim", entity.CorrelationId, true);
 
                 _logger.Success($"Successfully sent holidayrequest {holidayRequest.Candidate.CandidateRef} for {holidayRequest.Candidate.OperatingCo.Name} on {_updatedRoutingKey} to sws RSM", entity.CorrelationId,
                     rsmHolidayRequest, holidayRequest.HolidayRequestRef, "Dtos.Ufo.HolidayRequest", null, null, "Ufo.HolidayRequest");
