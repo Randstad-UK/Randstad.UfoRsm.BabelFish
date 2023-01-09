@@ -46,7 +46,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             var placement = new Dtos.RsmInherited.Placement();
             placement.holidayAccrualRateSpecified = false;
             placement.invoiceRequiresPOSpecified = false;
-            placement.bulkEntrySpecified = false;
+
             placement.holidayAccrualRatePostAWRSpecified = false;
             placement.startSpecified = true;
             placement.start = StartDate.ToLocalTime();
@@ -57,9 +57,6 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
             placement.PAYEDeductionsOnLtdSpecified = true;
             placement.PAYEDeductionsOnLtd = false;
-
-            placement.agencyOnlySpecified = true;
-            placement.agencyOnly = true;
 
             placement.cisApplicableSpecified = true;
             placement.cisApplicable = false;

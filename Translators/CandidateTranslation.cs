@@ -156,6 +156,11 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                 SendToRsm(JsonConvert.SerializeObject(rmsWorker), "sws", "Worker", entity.CorrelationId, liveInPayroll);
                 _logger.Success($"Successfully mapped Candidate {candidate.CandidateRef} and sent to SWS RSM", entity.CorrelationId, rmsWorker, candidate.CandidateRef, "Dtos.Ufo.Candidate", null, null, "RSM.Worker");
             }
+            else if(candidate.OperatingCo.Name=="Customer Success")
+            {
+                SendToRsm(JsonConvert.SerializeObject(rmsWorker), "ris", "Worker", entity.CorrelationId, liveInPayroll);
+                _logger.Success($"Successfully mapped Candidate {candidate.CandidateRef} and sent to RIS RSM", entity.CorrelationId, rmsWorker, candidate.CandidateRef, "Dtos.Ufo.Candidate", null, null, "RSM.Worker");
+            }
             else
             {
                 SendToRsm(JsonConvert.SerializeObject(rmsWorker), Mappers.MapOpCoFromName(candidate.OperatingCo.Name.ToLower()).ToString(), "Worker", entity.CorrelationId, liveInPayroll);

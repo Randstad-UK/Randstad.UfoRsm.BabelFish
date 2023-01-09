@@ -248,7 +248,14 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                     
                     expenseItem.receiptDateSpecified = true;
 
-                    expenseItem.receiptDate = DateTime.Parse(EndDate).Date;
+                    if (EndDate != null)
+                    {
+                        expenseItem.receiptDate = DateTime.Parse(EndDate).Date;
+                    }
+                    else
+                    {
+                        expenseItem.receiptDate = DateTime.Parse(ApprovedDateTime).Date;
+                    }
 
                     if (Division.Name == "Tuition Services" || Division.Name == "Student Support")
                     {

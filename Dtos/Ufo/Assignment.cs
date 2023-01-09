@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Runtime.Serialization.Formatters;
 using System.Text;
@@ -53,6 +54,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
         public DateTime StudentDob { get; set; }
         public string StudentCrn { get; set; }
         public Client FundingBody { get; set; }
+        public bool MultiStudentSupport { get; set; }
 
         public Dtos.RsmInherited.Placement MapAssignment(ILogger logger, Dictionary<string, string> rateCodes, Guid correlationId, List<DivisionCode> divisionCodes)
         {
@@ -64,16 +66,9 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             placement.holidayAccrualRatePostAWRSpecified = false;
             placement.holidayAccrualRateSpecified = false;
 
-            placement.agencyOnlySpecified = true;
-            placement.agencyOnly = true;
-
-            placement.bulkEntrySpecified = false;
-
             //TODO: Assignment CIS needs to be pulled once UFO solution specced
             placement.cisApplicableSpecified = true;
             placement.cisApplicable = false;
-
-
 
             placement.client = Client.MapClient(divisionCodes);
             placement.consultant = Owner.MapConsultant();
@@ -114,13 +109,6 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                 placement.invoiceContactOverride.firstname = string.Empty;
                 placement.invoiceContactOverride.lastname = string.Empty;
             }
-            else
-            {
-                placement.invoiceContactOverride = new RSM.Contact();
-                placement.invoiceContactOverride.firstname = "dummy";
-                placement.invoiceContactOverride.lastname = "invoice-person";
-                placement.invoiceContactOverride.externalId = "DUMMY123";
-            }
 
             var invoiceEmailList = new List<string>();
 
@@ -140,8 +128,6 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
             }
             
-            placement.invoiceContactOverride.email = string.Empty;
-
             foreach (var email in invoiceEmailList)
             {
                 if (placement.invoiceContactOverride == null)
@@ -152,12 +138,21 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                 placement.invoiceContactOverride.email = placement.invoiceContactOverride.email + email + "; ";
             }
 
-            if (!string.IsNullOrEmpty(placement.invoiceContactOverride.email) && placement.invoiceContactOverride.email.EndsWith("; "))
+            if (placement.invoiceContactOverride != null)
             {
-                placement.invoiceContactOverride.email = placement.invoiceContactOverride.email.Remove(placement.invoiceContactOverride.email.LastIndexOf(";"));
-            }
+                if (!string.IsNullOrEmpty(placement.invoiceContactOverride.email) && placement.invoiceContactOverride.email.EndsWith("; "))
+                {
+                    placement.invoiceContactOverride.email = placement.invoiceContactOverride.email.Remove(placement.invoiceContactOverride.email.LastIndexOf(";"));
+                }
 
-            placement.invoiceContactOverride.address = InvoiceAddress.MapAddress();
+                if (ClientContact != null)
+                {
+                    placement.invoiceContactOverride.firstname = ClientContact.Forename;
+                    placement.invoiceContactOverride.lastname = ClientContact.Surname;
+                }
+
+                placement.invoiceContactOverride.address = InvoiceAddress.MapAddress();
+            }
 
             placement.jobTitle = string.IsNullOrEmpty(PositionName) ? "Not Stated" : PositionName;
 
@@ -212,13 +207,6 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             {
                 placement.manager = ClientContact.MapContactManager(Client);
             }
-            else
-            {
-                placement.manager = new RSM.Manager();
-                placement.manager.firstname = "dummy";
-                placement.manager.lastname = "manager";
-                placement.manager.externalId = "MANAGER";
-            }
 
             if (WorkAddress != null)
             {
@@ -269,6 +257,47 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             //Most of the business uses client ref for both client ref and invoice to client
             if (Division.Name == "Tuition Services" || Division.Name == "Student Support")
             {
+                
+                invoiceEmailList = new List<string>();
+
+                if (!string.IsNullOrEmpty(FundingBody.InvoiceEmail))
+                {
+                    invoiceEmailList.Add(FundingBody.InvoiceEmail);
+                }
+
+                if (!string.IsNullOrEmpty(FundingBody.InvoiceEmail2))
+                {
+                    invoiceEmailList.Add(FundingBody.InvoiceEmail2);
+                }
+
+                if (!string.IsNullOrEmpty(FundingBody.InvoiceEmail3))
+                {
+                    invoiceEmailList.Add(FundingBody.InvoiceEmail3);
+
+                }
+
+                foreach (var email in invoiceEmailList)
+                {
+                    if (placement.invoiceContactOverride == null)
+                    {
+                        placement.invoiceContactOverride = new Contact();
+                    }
+
+                    if (placement.invoiceContactOverride == null)
+                    {
+                        placement.invoiceContactOverride = new Contact();
+                    }
+
+                    placement.invoiceContactOverride.email = placement.invoiceContactOverride.email + email + "; ";
+                    
+                }
+
+                if (!string.IsNullOrEmpty(placement.invoiceContactOverride.email) && placement.invoiceContactOverride.email.EndsWith("; "))
+                {
+                    placement.invoiceContactOverride.email = placement.invoiceContactOverride.email.Remove(placement.invoiceContactOverride.email.LastIndexOf(";"));
+                }
+                
+
                 placement.client = FundingBody.MapClient(divisionCodes);
                 placement.customText2 = FundingBody.ClientRef;
                 placement.customText4 = Client.ClientName;
