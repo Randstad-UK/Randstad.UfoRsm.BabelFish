@@ -138,11 +138,17 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                 placement.invoiceContactOverride.email = placement.invoiceContactOverride.email + email + "; ";
             }
 
-            if (placement.invoiceContactOverride != null)
+            //clear last semi colon if invoice email set
+            if (placement.invoiceContactOverride!=null && !string.IsNullOrEmpty(placement.invoiceContactOverride.email) && placement.invoiceContactOverride.email.EndsWith("; "))
             {
-                if (!string.IsNullOrEmpty(placement.invoiceContactOverride.email) && placement.invoiceContactOverride.email.EndsWith("; "))
+                placement.invoiceContactOverride.email = placement.invoiceContactOverride.email.Remove(placement.invoiceContactOverride.email.LastIndexOf(";"));
+            }
+
+            if (ClientContact != null)
+            {
+                if (placement.invoiceContactOverride == null)
                 {
-                    placement.invoiceContactOverride.email = placement.invoiceContactOverride.email.Remove(placement.invoiceContactOverride.email.LastIndexOf(";"));
+                    placement.invoiceContactOverride = new Contact();
                 }
 
                 if (ClientContact != null)
@@ -150,8 +156,18 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                     placement.invoiceContactOverride.firstname = ClientContact.Forename;
                     placement.invoiceContactOverride.lastname = ClientContact.Surname;
                 }
+            }
+
+
+            if (InvoiceAddress != null)
+            {
+                if (placement.invoiceContactOverride == null)
+                {
+                    placement.invoiceContactOverride= new Contact();
+                }
 
                 placement.invoiceContactOverride.address = InvoiceAddress.MapAddress();
+                
             }
 
             placement.jobTitle = string.IsNullOrEmpty(PositionName) ? "Not Stated" : PositionName;
@@ -164,9 +180,6 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
             placement.purchaseBranch = Unit.Name;
             placement.purchaseCostCentre = Unit.FinanceCode;
-
-            //ToDo: remove once fix confirmed
-            //placement.purchaseDivision = OpCo.Name;
 
             placement.purchaseDivision = divisionCodes.SingleOrDefault(x=>x.Code==Unit.FinanceCode)?.Division;
 
@@ -273,30 +286,26 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                 if (!string.IsNullOrEmpty(FundingBody.InvoiceEmail3))
                 {
                     invoiceEmailList.Add(FundingBody.InvoiceEmail3);
+                }
 
+                //if the contact override is already populated then ensure email is wiped out.
+                if (placement.invoiceContactOverride != null)
+                {
+                    placement.invoiceContactOverride.email = string.Empty;
+                    placement.invoiceContactOverride.firstname = string.Empty;
+                    placement.invoiceContactOverride.lastname = string.Empty;
                 }
 
                 foreach (var email in invoiceEmailList)
                 {
-                    if (placement.invoiceContactOverride == null)
-                    {
-                        placement.invoiceContactOverride = new Contact();
-                    }
-
-                    if (placement.invoiceContactOverride == null)
-                    {
-                        placement.invoiceContactOverride = new Contact();
-                    }
-
                     placement.invoiceContactOverride.email = placement.invoiceContactOverride.email + email + "; ";
-                    
                 }
 
-                if (!string.IsNullOrEmpty(placement.invoiceContactOverride.email) && placement.invoiceContactOverride.email.EndsWith("; "))
+                //remove trailing semi colon
+                if (placement.invoiceContactOverride!=null && !string.IsNullOrEmpty(placement.invoiceContactOverride.email) && placement.invoiceContactOverride.email.EndsWith("; "))
                 {
                     placement.invoiceContactOverride.email = placement.invoiceContactOverride.email.Remove(placement.invoiceContactOverride.email.LastIndexOf(";"));
                 }
-                
 
                 placement.client = FundingBody.MapClient(divisionCodes);
                 placement.customText2 = FundingBody.ClientRef;
@@ -416,30 +425,6 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
         private void MapRates(Dictionary<string, string> rateCodes, Dtos.RsmInherited.Placement placement)
         {
             if (Rates == null) return;
-
-            /*
-            if (Unit.Name == "NTP Tuition Pillar")
-            {
-                var basic = Rates.FirstOrDefault(x => x.RateType == "Basic Rate");
-
-                if (basic != null)
-                {
-                    var ntpRate = new AssignmentRate();
-                    ntpRate.FeeName = "DFE Subsidy - 70%";
-                    ntpRate.OvertimeType = ntpRate.FeeName;
-                    ntpRate.PayUnit = basic.PayUnit;
-                    ntpRate.RateType = "Other Rate";
-
-                    //set rate start date to start date of the assignment
-                    ntpRate.StartDate = StartDate;
-                    ntpRate.ChargeRateCurrency = basic.ChargeRateCurrency;
-                    ntpRate.PostParityChargeRateCurrency = basic.PostParityChargeRateCurrency;
-                    ntpRate.FeeRef = basic.FeeRef + "-DFE";
-                    ntpRate.PayRateCurrency = 0;
-                    ntpRate.PostParityPayRateCurrency = ntpRate.PayRateCurrency;
-                    Rates.Add(ntpRate);
-                }
-            }*/
 
             var noExpenses = Rates.Where(x => x.RateType != "Expense Rate" || x.FeeName=="Bonus" || x.FeeName== "Back Pay - Non WTR" || x.FeeName== "Back Pay - WTR").ToList();
 

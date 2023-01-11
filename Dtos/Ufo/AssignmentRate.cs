@@ -121,10 +121,10 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                         mapName += "Hours";
 
                         //for multistudent support need to pick rate that does not validate minimum wage in RSM
-                        /*if (Assignment.MultiStudentSupport)
+                        if (Assignment.MultiStudentSupport)
                         {
                             mapName = "Basic Hours non NMW";
-                        }*/
+                        }
 
                         rate.periodDuration = 60;
                         rate.periodDurationSpecified = true;
