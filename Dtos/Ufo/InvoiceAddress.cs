@@ -39,30 +39,30 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                 switch (x)
                 {
                     case 0:
-                    {
-                        address.line1 = addressLines[x];
-                        break;
-                    }
+                        {
+                            address.line1 = addressLines[x];
+                            break;
+                        }
                     case 1:
-                    {
-                        address.line2 = addressLines[x];
-                        break;
-                    }
+                        {
+                            address.line2 = addressLines[x];
+                            break;
+                        }
                     case 2:
-                    {
-                        address.town = addressLines[x];
-                        break;
-                    }
+                        {
+                            address.town = addressLines[x];
+                            break;
+                        }
                     case 3:
-                    {
-                        address.county = addressLines[x];
-                        break;
-                    }
+                        {
+                            address.county = addressLines[x];
+                            break;
+                        }
                     default:
-                    {
-                        country = country + addressLines[x] + ", ";
-                        break;
-                    }
+                        {
+                            country = country + addressLines[x] + ", ";
+                            break;
+                        }
                 }
             }
 
@@ -130,6 +130,6 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             return split;
         }
 
-        
+
     }
 }

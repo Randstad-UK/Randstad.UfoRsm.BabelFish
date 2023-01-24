@@ -12,7 +12,7 @@ namespace Randstad.UfoRsm.BabelFish.Template.Extensions
             DateTimeOffset localServerTime = DateTimeOffset.Now;
             var isDaylightSaving = info.IsDaylightSavingTime(localServerTime);
 
-            var d = (DateTime) date;
+            var d = (DateTime)date;
 
             return d.ToLocalTime();
         }

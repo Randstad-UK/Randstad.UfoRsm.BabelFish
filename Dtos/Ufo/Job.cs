@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Randstad.UfoRsm.BabelFish.Dtos.Ufo;
 
 namespace Randstad.UfoSti.BabelFish.Dtos.Ufo
 {
-    public class Job :ObjectBase
+    public class Job : ObjectBase
     {
         public string JobId { get; set; }
         public string MigratedJobId { get; set; }

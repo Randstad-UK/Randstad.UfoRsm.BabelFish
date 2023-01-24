@@ -59,7 +59,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                     return;
                 }
 
-                if (!timesheet.Cancelled && (timesheet.TimesheetLines==null || !timesheet.TimesheetLines.Any()) && (timesheet.Expenses==null || !timesheet.Expenses.Any()))
+                if (!timesheet.Cancelled && (timesheet.TimesheetLines == null || !timesheet.TimesheetLines.Any()) && (timesheet.Expenses == null || !timesheet.Expenses.Any()))
                 {
                     _logger.Warn($"No Timesheetlines or expenses on {timesheet.TimesheetRef} Opco", entity.CorrelationId, entity, timesheet.TimesheetRef, "Dtos.Ufo.ExportedEntity", null);
                     entity.ExportSuccess = false;
@@ -79,26 +79,13 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                     }
                 }
 
-                if (timesheet.Expenses != null && timesheet.Expenses.Any())
-                {
-                    var noRate = timesheet.Expenses.Where(x => x.Rate == null);
-
-                    if (noRate.Any())
-                    {
-                        _logger.Warn($"Timesheet contains expenses with no rates on {timesheet.TimesheetRef}",
-                            entity.CorrelationId, entity, timesheet.TimesheetRef, "Dtos.Ufo.ExportedEntity", null);
-                        entity.ExportSuccess = false;
-                        return;
-                    }
-                }
-
             }
             catch (Exception exp)
             {
                 throw new Exception($"Problem deserialising Timesheet from UFO {entity.ObjectId} - {exp.Message}");
             }
 
-            
+
 
             RSM.ExpenseClaim claim = null;
             List<RSM.Timesheet> mappedTimesheetList = null;
@@ -115,15 +102,30 @@ namespace Randstad.UfoRsm.BabelFish.Translators
 
             foreach (var ts in mappedTimesheetList)
             {
-                if (timesheet.TimesheetRef.StartsWith("UT"))
+                //None Netive timesheets go directly to Back Office
+                if (!timesheet.TimesheetRef.StartsWith("NT"))
                 {
-                    SendToRsm(JsonConvert.SerializeObject(ts), Mappers.MapOpCoFromName(timesheet.OpCo.Name.ToLower()).ToString(), "Timesheet", entity.CorrelationId, true);
+                    if (timesheet.Division.Name == "Tuition Services" || timesheet.Division.Name == "Student Support")
+                    {
+                        SendToRsm(JsonConvert.SerializeObject(ts), "sws", "Timesheet", entity.CorrelationId, true);
 
-                    _logger.Success($"Successfully mapped Timesheet {timesheet.TimesheetRef} and sent to RSM",
-                        entity.CorrelationId, ts, timesheet.TimesheetRef, "Dtos.Ufo.Timesheet", null, null,
-                        "RSM.Timesheet");
+                        _logger.Success($"Successfully mapped Timesheet {timesheet.TimesheetRef} and sent to SWS RSM",
+                            entity.CorrelationId, ts, timesheet.TimesheetRef, "Dtos.Ufo.Timesheet", null, null,
+                            "RSM.Timesheet");
+                    }
+                    else
+                    {
+                        SendToRsm(JsonConvert.SerializeObject(ts), Mappers.MapOpCoFromName(timesheet.OpCo.Name.ToLower()).ToString(), "Timesheet", entity.CorrelationId, true);
+
+                        _logger.Success($"Successfully mapped Timesheet {timesheet.TimesheetRef} and sent to RSM",
+                            entity.CorrelationId, ts, timesheet.TimesheetRef, "Dtos.Ufo.Timesheet", null, null,
+                            "RSM.Timesheet");
+                    }
+
+
                 }
 
+                //Netive timesheets go to the adjustment service
                 if (timesheet.TimesheetRef.StartsWith("NT"))
                 {
                     SendToRsm(JsonConvert.SerializeObject(ts), Mappers.MapOpCoFromName(timesheet.OpCo.Name.ToLower()).ToString(), "Timesheet", entity.CorrelationId, true, true);
@@ -134,25 +136,39 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                 }
             }
 
-            if (claim != null && claim.expenseItems!=null && claim.expenseItems.Any())
+            if (claim != null && claim.expenseItems != null && claim.expenseItems.Any())
             {
-                if (timesheet.TimesheetRef.StartsWith("UT"))
+                //None Netive timesheets go directly to Back Office
+                if (!timesheet.TimesheetRef.StartsWith("NT"))
                 {
-                    SendToRsm(JsonConvert.SerializeObject(claim), Mappers.MapOpCoFromName(timesheet.OpCo.Name.ToLower()).ToString(), "ExpenseClaim", entity.CorrelationId, true);
-                    _logger.Success($"Successfully mapped expenses for {timesheet.TimesheetRef} and sent to RSM",
-                        entity.CorrelationId, claim, timesheet.TimesheetRef, "Dtos.Ufo.Timesheet", null, null,
-                        "RSM.ExpenseClaim");
+                    if (timesheet.Division.Name == "Tuition Services" || timesheet.Division.Name == "Student Support")
+                    {
+                        SendToRsm(JsonConvert.SerializeObject(claim), "sws", "ExpenseClaim", entity.CorrelationId, true);
+                        _logger.Success($"Successfully mapped expenses for {timesheet.TimesheetRef} and sent to SWS RSM",
+                            entity.CorrelationId, claim, timesheet.TimesheetRef, "Dtos.Ufo.Timesheet", null, null,
+                            "RSM.ExpenseClaim");
+                    }
+                    else
+                    {
+                        SendToRsm(JsonConvert.SerializeObject(claim), Mappers.MapOpCoFromName(timesheet.OpCo.Name.ToLower()).ToString(), "ExpenseClaim", entity.CorrelationId, true);
+                        _logger.Success($"Successfully mapped expenses for {timesheet.TimesheetRef} and sent to RSM",
+                            entity.CorrelationId, claim, timesheet.TimesheetRef, "Dtos.Ufo.Timesheet", null, null,
+                            "RSM.ExpenseClaim");
+                    }
+
+
                 }
 
+                //Netive timesheets go directly to 
                 if (timesheet.TimesheetRef.StartsWith("NT"))
                 {
                     SendToRsm(JsonConvert.SerializeObject(claim), Mappers.MapOpCoFromName(timesheet.OpCo.Name.ToLower()).ToString(), "ExpenseClaim", entity.CorrelationId, true, true);
-                    _logger.Success($"Successfully mapped expenses for {timesheet.TimesheetRef} and sent to Adjustment Service", entity.CorrelationId, claim, timesheet.TimesheetRef, "Dtos.Ufo.Timesheet", null, null,"RSM.ExpenseClaim");
+                    _logger.Success($"Successfully mapped expenses for {timesheet.TimesheetRef} and sent to Adjustment Service", entity.CorrelationId, claim, timesheet.TimesheetRef, "Dtos.Ufo.Timesheet", null, null, "RSM.ExpenseClaim");
                 }
             }
 
             entity.ExportSuccess = true;
         }
     }
-    
+
 }

@@ -35,6 +35,39 @@ namespace Randstad.UfoRsm.BabelFish.Translators
             {
                 assign = JsonConvert.DeserializeObject<Assignment>(entity.Payload);
 
+                _logger.Debug("Received Routing Key: " + entity.ReceivedOnRoutingKey, entity.CorrelationId, entity, assign.AssignmentRef, null, null);
+                if (entity.ReceivedOnRoutingKeyNodes != null && entity.ReceivedOnRoutingKeyNodes.Length == 9)
+                {
+                    if (string.IsNullOrEmpty(assign.CheckIn))
+                    {
+                        _logger.Warn($"Assignment {assign.AssignmentRef} is not checked in " + entity.ReceivedOnRoutingKey, entity.CorrelationId, entity, assign.AssignmentRef, null, null);
+                        entity.ExportSuccess = false;
+                        return;
+                    }
+
+                    if (assign.CheckIn.ToLower() == "checked in" &&
+                        entity.ReceivedOnRoutingKeyNodes[8] != "startchecked")
+                    {
+                        _logger.Warn(
+                            $"Assignment {assign.AssignmentRef} is Checked in but there is no startchecked on Routing Key",
+                            entity.CorrelationId, entity, assign.AssignmentRef, null, null);
+                    }
+
+                    if (assign.CheckIn.ToLower() == "checked in" &&
+                        entity.ReceivedOnRoutingKeyNodes[8] == "startchecked")
+                    {
+                        _logger.Debug(
+                            $"Received Routing has startchecked and assignment {assign.AssignmentRef} is checked in",
+                            entity.CorrelationId, entity, assign.AssignmentRef, null, null);
+                    }
+
+
+                }
+                else
+                {
+                    _logger.Warn($"Assignment {assign.AssignmentRef} has no startchecked flag on routing key " + entity.ReceivedOnRoutingKey, entity.CorrelationId, entity, assign.AssignmentRef, null, null);
+                }
+
                 if (BlockExport(Mappers.MapOpCoFromName(assign.OpCo.Name)))
                 {
                     _logger.Warn($"Assignment OpCo not live in RSM {assign.AssignmentRef} {assign.OpCo.Name}", entity.CorrelationId, entity, assign.AssignmentRef, "Dtos.Ufo.ExportedEntity", null);
@@ -63,6 +96,13 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                     return;
                 }
 
+                if (assign.InvoiceAddress == null)
+                {
+                    _logger.Warn($"Assignment {assign.AssignmentRef} does not have an invoice address set", entity.CorrelationId, entity, assign.AssignmentRef, "Dtos.Ufo.ExportedEntity", null);
+                    entity.ExportSuccess = false;
+                    return;
+                }
+
                 if (assign.Hle.Unit == null || string.IsNullOrEmpty(assign.Hle.Unit.FinanceCode))
                 {
                     _logger.Warn($"HLE for Assignment {assign.AssignmentRef} has no owning team or finance code is not set", entity.CorrelationId, entity, assign.AssignmentRef, "Dtos.Ufo.ExportedEntity", null);
@@ -70,23 +110,9 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                     return;
                 }
 
-                if (assign.InvoiceAddress == null)
-                {
-                    _logger.Warn($"Invoice Address for {assign.AssignmentRef} is missing", entity.CorrelationId, entity, assign.AssignmentRef, "Dtos.Ufo.ExportedEntity", null);
-                    entity.ExportSuccess = false;
-                    return;
-                }
-
-                if (assign.InvoicePerson == null)
+                if (assign.InvoicePerson == null && assign.Division.Name != "Tuition Services" && assign.Division.Name != "Student Support")
                 {
                     _logger.Warn($"Invoice Person for {assign.AssignmentRef} is missing", entity.CorrelationId, entity, assign.AssignmentRef, "Dtos.Ufo.ExportedEntity", null);
-                    entity.ExportSuccess = false;
-                    return;
-                }
-
-                if (assign.Candidate.PayType.ToString() == "PAYE" && string.IsNullOrEmpty(assign.HolidayPay))
-                {
-                    _logger.Warn($"PAYE assignment is missing Holiday Pay for assignment {assign.AssignmentRef}", entity.CorrelationId, entity, assign.AssignmentRef, "Dtos.Ufo.ExportedEntity", null);
                     entity.ExportSuccess = false;
                     return;
                 }
@@ -106,9 +132,9 @@ namespace Randstad.UfoRsm.BabelFish.Translators
 
             _logger.Success($"Received Assignment {assign.AssignmentRef}", entity.CorrelationId, assign, assign.AssignmentRef, "Dtos.Ufo.Assignment", null);
 
-            if (string.IsNullOrEmpty(assign.CheckIn) || assign.CheckIn!="Checked In")
+            if (string.IsNullOrEmpty(assign.CheckIn) || assign.CheckIn != "Checked In")
             {
-                if(entity.ValidationErrors==null)
+                if (entity.ValidationErrors == null)
                     entity.ValidationErrors = new List<string>();
 
                 var message = $"Assignment {assign.AssignmentRef} is not checked in";
@@ -117,14 +143,14 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                 _logger.Warn(message, entity.CorrelationId, assign, assign.AssignmentRef, "Dtos.Ufo.Assignment", null);
                 entity.ExportSuccess = false;
                 return;
-                
+
             }
 
             Dtos.RsmInherited.Placement assignment = null;
-            
+
             try
             {
-                assignment = assign.MapAssignment( _logger, _rateCodes, entity.CorrelationId, _divisionCodes);
+                assignment = assign.MapAssignment(_logger, _rateCodes, entity.CorrelationId, _divisionCodes);
 
             }
             catch (Exception exp)
@@ -139,11 +165,22 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                 return;
             }
 
+            if (assign.Division.Name == "Tuition Services" || assign.Division.Name == "Student Support")
+            {
+                SendToRsm(JsonConvert.SerializeObject(assignment), "sws", "Assignment", entity.CorrelationId, Helpers.Mappers.MapCheckin(assign.CheckIn));
+                _logger.Success($"Successfully mapped Assignment {assign.AssignmentRef} and sent to SWS RSM", entity.CorrelationId, assignment, assign.AssignmentRef, "Dtos.Ufo.Assignment", null, null, "Dtos.Sti.Assignment");
+            }
+            else if (assign.OpCo.Name == "Customer Success")
+            {
+                SendToRsm(JsonConvert.SerializeObject(assignment), "ris", "Assignment", entity.CorrelationId, Helpers.Mappers.MapCheckin(assign.CheckIn));
+                _logger.Success($"Successfully mapped Assignment {assign.AssignmentRef} and sent to RIS RSM", entity.CorrelationId, assignment, assign.AssignmentRef, "Dtos.Ufo.Assignment", null, null, "Dtos.Sti.Assignment");
+            }
+            else
+            {
+                SendToRsm(JsonConvert.SerializeObject(assignment), Mappers.MapOpCoFromName(assign.OpCo.Name).ToString(), "Assignment", entity.CorrelationId, Helpers.Mappers.MapCheckin(assign.CheckIn));
+                _logger.Success($"Successfully mapped Assignment {assign.AssignmentRef} and sent to RSM", entity.CorrelationId, assignment, assign.AssignmentRef, "Dtos.Ufo.Assignment", null, null, "Dtos.Sti.Assignment");
+            }
 
-            SendToRsm(JsonConvert.SerializeObject(assignment), Mappers.MapOpCoFromName(assign.OpCo.Name).ToString(), "Assignment", entity.CorrelationId, Helpers.Mappers.MapCheckin(assign.CheckIn));
-
-            _logger.Success($"Successfully mapped Assignment {assign.AssignmentRef} and sent to RSM", entity.CorrelationId, assignment, assign.AssignmentRef, "Dtos.Ufo.Assignment", null, null, "Dtos.Sti.Assignment");
-            
             entity.ExportSuccess = true;
         }
     }

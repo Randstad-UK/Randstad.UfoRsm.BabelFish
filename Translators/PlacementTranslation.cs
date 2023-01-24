@@ -33,6 +33,12 @@ namespace Randstad.UfoRsm.BabelFish.Translators
             {
                 placement = JsonConvert.DeserializeObject<Placement>(entity.Payload);
 
+
+                //_logger.Warn($"Placement {placement.PlacementRef} being removed from queue", entity.CorrelationId, entity, placement.PlacementRef, "Dtos.Ufo.ExportedEntity", null);
+                //entity.ExportSuccess = false;
+                //return;
+
+
                 if (BlockExport(Mappers.MapOpCoFromName(placement.OpCo.Name)))
                 {
                     _logger.Warn($"Placement OpCo not live in RSM {placement.PlacementRef} {placement.OpCo.Name}", entity.CorrelationId, entity, placement.PlacementRef, "Dtos.Ufo.ExportedEntity", null);
@@ -46,6 +52,40 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                     entity.ExportSuccess = false;
                     return;
                 }
+
+                _logger.Debug("Received Routing Key: " + entity.ReceivedOnRoutingKey, entity.CorrelationId, entity, placement.PlacementRef, null, null);
+                if (entity.ReceivedOnRoutingKeyNodes != null && entity.ReceivedOnRoutingKeyNodes.Length == 9)
+                {
+                    if (string.IsNullOrEmpty(placement.CheckIn))
+                    {
+                        _logger.Warn(
+                            $"Placement {placement.PlacementRef} is not checked in " + entity.ReceivedOnRoutingKey,
+                            entity.CorrelationId, entity, placement.PlacementRef, null, null);
+                        entity.ExportSuccess = false;
+                        return;
+                    }
+
+                    if (placement.CheckIn.ToLower() == "checked in" &&
+                            entity.ReceivedOnRoutingKeyNodes[8] != "startchecked")
+                    {
+                        _logger.Warn(
+                            $"Placement {placement.PlacementRef} is checked in but there is no startchecked on the routing key" +
+                            entity.ReceivedOnRoutingKey, entity.CorrelationId, entity, placement.PlacementRef, null,
+                            null);
+                    }
+
+                    if (placement.CheckIn.ToLower() == "checked in" &&
+                        entity.ReceivedOnRoutingKeyNodes[8] == "startchecked")
+                    {
+                        _logger.Debug(
+                            $"Received Routing has startchecked and placement {placement.PlacementRef} is checked in",
+                            entity.CorrelationId, entity, placement.PlacementRef, null, null);
+                    }
+                }
+                else
+                {
+                    _logger.Warn($"Placement {placement.PlacementRef} has no startchecked flag on routing key " + entity.ReceivedOnRoutingKey, entity.CorrelationId, entity, placement.PlacementRef, null, null);
+                }
             }
             catch (Exception exp)
             {
@@ -54,7 +94,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
 
             _logger.Success($"Received Placement {placement.PlacementRef}", entity.CorrelationId, placement, placement.PlacementRef, "Dtos.Ufo.Placement", null);
 
-            if (string.IsNullOrEmpty(placement.CheckIn) || placement.CheckIn=="No Show")
+            if (string.IsNullOrEmpty(placement.CheckIn) || placement.CheckIn == "No Show")
             {
                 if (entity.ValidationErrors == null)
                     entity.ValidationErrors = new List<string>();
@@ -78,8 +118,18 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                 throw new Exception($"Problem mapping placement from UFO {entity.ObjectId} - {exp.Message}");
             }
 
-            SendToRsm(JsonConvert.SerializeObject(mappedPlacement), Mappers.MapOpCoFromName(placement.OpCo.Name).ToString(), "Placement", entity.CorrelationId, Mappers.MapCheckin(placement.CheckIn));
-            _logger.Success($"Successfully mapped Placement {placement.PlacementRef} and sent to RSM", entity.CorrelationId, mappedPlacement, placement.PlacementRef, "Dtos.Ufo.Placement", null, null, "Dtos.Sti.Placement");
+            if (placement.Division.Name == "Tuition Services" || placement.Division.Name == "Student Support")
+            {
+                SendToRsm(JsonConvert.SerializeObject(mappedPlacement), "sws", "Placement", entity.CorrelationId, Mappers.MapCheckin(placement.CheckIn));
+                _logger.Success($"Successfully mapped Placement {placement.PlacementRef} and sent to SWS RSM", entity.CorrelationId, mappedPlacement, placement.PlacementRef, "Dtos.Ufo.Placement", null, null, "Dtos.Sti.Placement");
+            }
+            else
+            {
+                SendToRsm(JsonConvert.SerializeObject(mappedPlacement), Mappers.MapOpCoFromName(placement.OpCo.Name).ToString(), "Placement", entity.CorrelationId, Mappers.MapCheckin(placement.CheckIn));
+                _logger.Success($"Successfully mapped Placement {placement.PlacementRef} and sent to RSM", entity.CorrelationId, mappedPlacement, placement.PlacementRef, "Dtos.Ufo.Placement", null, null, "Dtos.Sti.Placement");
+            }
+
+
             entity.ExportSuccess = true;
         }
 

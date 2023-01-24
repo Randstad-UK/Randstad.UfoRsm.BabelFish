@@ -6,6 +6,6 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.RsmInherited
 {
     public class Placement : RSM.Placement
     {
-        public ConsultantSplit[] consultantSplits { get; set; } 
+        public ConsultantSplit[] consultantSplits { get; set; }
     }
 }

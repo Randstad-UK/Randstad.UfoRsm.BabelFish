@@ -23,7 +23,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
         {
             if (entity.ObjectType != "LtdCompany") return;
 
-            LtdCompany ltd= null;
+            LtdCompany ltd = null;
             try
             {
                 ltd = JsonConvert.DeserializeObject<LtdCompany>(entity.Payload);
@@ -37,6 +37,6 @@ namespace Randstad.UfoRsm.BabelFish.Translators
 
             entity.ExportSuccess = true;
         }
-    
+
     }
 }

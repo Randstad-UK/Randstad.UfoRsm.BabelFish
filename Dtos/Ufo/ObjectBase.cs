@@ -10,7 +10,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
         public Team Branch { get; set; }
         public Team Region { get; set; }
         public Team Division { get; set; }
-       
+
 
     }
 }

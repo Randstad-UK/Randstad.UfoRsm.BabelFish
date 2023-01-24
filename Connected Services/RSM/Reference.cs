@@ -88,6 +88,11 @@ namespace RSM
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         System.Threading.Tasks.Task<RSM.getInvoicesForClientResponse> getInvoicesForClientAsync(RSM.getInvoicesForClientRequest request);
         
+        [System.ServiceModel.OperationContractAttribute(Action="urn:readFiles", ReplyAction="urn:readFilesResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(RSM.IntimeServiceV3_4IntimeWebServiceException), Action="urn:readFilesIntimeServiceV3_4IntimeWebServiceException", Name="IntimeServiceV3_4IntimeWebServiceException", Namespace="http://in-time.co.uk/xsd")]
+        [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
+        System.Threading.Tasks.Task<RSM.readFilesResponse> readFilesAsync(RSM.readFilesRequest request);
+        
         [System.ServiceModel.OperationContractAttribute(Action="urn:getPaymentBatchByRefCode", ReplyAction="urn:getPaymentBatchByRefCodeResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(RSM.IntimeServiceV3_4IntimeWebServiceException), Action="urn:getPaymentBatchByRefCodeIntimeServiceV3_4IntimeWebServiceException", Name="IntimeServiceV3_4IntimeWebServiceException", Namespace="http://in-time.co.uk/xsd")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
@@ -157,6 +162,11 @@ namespace RSM
         [System.ServiceModel.FaultContractAttribute(typeof(RSM.IntimeServiceV3_4IntimeWebServiceException), Action="urn:getInvoicesForProviderIntimeServiceV3_4IntimeWebServiceException", Name="IntimeServiceV3_4IntimeWebServiceException", Namespace="http://in-time.co.uk/xsd")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         System.Threading.Tasks.Task<RSM.getInvoicesForProviderResponse> getInvoicesForProviderAsync(RSM.getInvoicesForProviderRequest request);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="urn:searchHolidayClaimRefCodes", ReplyAction="urn:searchHolidayClaimRefCodesResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(RSM.IntimeServiceV3_4IntimeWebServiceException), Action="urn:searchHolidayClaimRefCodesIntimeServiceV3_4IntimeWebServiceException", Name="IntimeServiceV3_4IntimeWebServiceException", Namespace="http://in-time.co.uk/xsd")]
+        [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
+        System.Threading.Tasks.Task<RSM.searchHolidayClaimRefCodesResponse> searchHolidayClaimRefCodesAsync(RSM.searchHolidayClaimRefCodesRequest request);
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:getUserById", ReplyAction="urn:getUserByIdResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(RSM.IntimeServiceV3_4IntimeWebServiceException), Action="urn:getUserByIdIntimeServiceV3_4IntimeWebServiceException", Name="IntimeServiceV3_4IntimeWebServiceException", Namespace="http://in-time.co.uk/xsd")]
@@ -255,15 +265,15 @@ namespace RSM
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         System.Threading.Tasks.Task<RSM.getProviderByRefCodeResponse> getProviderByRefCodeAsync(RSM.getProviderByRefCodeRequest request);
         
-        [System.ServiceModel.OperationContractAttribute(Action="urn:submitExpenseClaim", ReplyAction="urn:submitExpenseClaimResponse")]
-        [System.ServiceModel.FaultContractAttribute(typeof(RSM.IntimeServiceV3_4IntimeWebServiceException), Action="urn:submitExpenseClaimIntimeServiceV3_4IntimeWebServiceException", Name="IntimeServiceV3_4IntimeWebServiceException", Namespace="http://in-time.co.uk/xsd")]
-        [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
-        System.Threading.Tasks.Task<RSM.submitExpenseClaimResponse> submitExpenseClaimAsync(RSM.submitExpenseClaimRequest request);
-        
         [System.ServiceModel.OperationContractAttribute(Action="urn:markTimesheetAndExpenseAsExported", ReplyAction="urn:markTimesheetAndExpenseAsExportedResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(RSM.IntimeServiceV3_4IntimeWebServiceException), Action="urn:markTimesheetAndExpenseAsExportedIntimeServiceV3_4IntimeWebServiceException", Name="IntimeServiceV3_4IntimeWebServiceException", Namespace="http://in-time.co.uk/xsd")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         System.Threading.Tasks.Task<RSM.markTimesheetAndExpenseAsExportedResponse> markTimesheetAndExpenseAsExportedAsync(RSM.markTimesheetAndExpenseAsExportedRequest request);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="urn:submitExpenseClaim", ReplyAction="urn:submitExpenseClaimResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(RSM.IntimeServiceV3_4IntimeWebServiceException), Action="urn:submitExpenseClaimIntimeServiceV3_4IntimeWebServiceException", Name="IntimeServiceV3_4IntimeWebServiceException", Namespace="http://in-time.co.uk/xsd")]
+        [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
+        System.Threading.Tasks.Task<RSM.submitExpenseClaimResponse> submitExpenseClaimAsync(RSM.submitExpenseClaimRequest request);
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:createOrUpdateExchangeRate", ReplyAction="urn:createOrUpdateExchangeRateResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(RSM.IntimeServiceV3_4IntimeWebServiceException), Action="urn:createOrUpdateExchangeRateIntimeServiceV3_4IntimeWebServiceException", Name="IntimeServiceV3_4IntimeWebServiceException", Namespace="http://in-time.co.uk/xsd")]
@@ -275,15 +285,15 @@ namespace RSM
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         System.Threading.Tasks.Task<RSM.getModifiedItemsWithRefCodeResponse> getModifiedItemsWithRefCodeAsync(RSM.getModifiedItemsWithRefCodeRequest request);
         
-        [System.ServiceModel.OperationContractAttribute(Action="urn:createOrUpdatePlacement", ReplyAction="urn:createOrUpdatePlacementResponse")]
-        [System.ServiceModel.FaultContractAttribute(typeof(RSM.IntimeServiceV3_4IntimeWebServiceException), Action="urn:createOrUpdatePlacementIntimeServiceV3_4IntimeWebServiceException", Name="IntimeServiceV3_4IntimeWebServiceException", Namespace="http://in-time.co.uk/xsd")]
-        [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
-        System.Threading.Tasks.Task<RSM.createOrUpdatePlacementResponse> createOrUpdatePlacementAsync(RSM.createOrUpdatePlacementRequest request);
-        
         [System.ServiceModel.OperationContractAttribute(Action="urn:getInvoicesForWorker", ReplyAction="urn:getInvoicesForWorkerResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(RSM.IntimeServiceV3_4IntimeWebServiceException), Action="urn:getInvoicesForWorkerIntimeServiceV3_4IntimeWebServiceException", Name="IntimeServiceV3_4IntimeWebServiceException", Namespace="http://in-time.co.uk/xsd")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         System.Threading.Tasks.Task<RSM.getInvoicesForWorkerResponse> getInvoicesForWorkerAsync(RSM.getInvoicesForWorkerRequest request);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="urn:createOrUpdatePlacement", ReplyAction="urn:createOrUpdatePlacementResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(RSM.IntimeServiceV3_4IntimeWebServiceException), Action="urn:createOrUpdatePlacementIntimeServiceV3_4IntimeWebServiceException", Name="IntimeServiceV3_4IntimeWebServiceException", Namespace="http://in-time.co.uk/xsd")]
+        [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
+        System.Threading.Tasks.Task<RSM.createOrUpdatePlacementResponse> createOrUpdatePlacementAsync(RSM.createOrUpdatePlacementRequest request);
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:getProjectById", ReplyAction="urn:getProjectByIdResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(RSM.IntimeServiceV3_4IntimeWebServiceException), Action="urn:getProjectByIdIntimeServiceV3_4IntimeWebServiceException", Name="IntimeServiceV3_4IntimeWebServiceException", Namespace="http://in-time.co.uk/xsd")]
@@ -319,6 +329,10 @@ namespace RSM
         [System.ServiceModel.FaultContractAttribute(typeof(RSM.IntimeServiceV3_4IntimeWebServiceException), Action="urn:getAllInvoicingTermsIntimeServiceV3_4IntimeWebServiceException", Name="IntimeServiceV3_4IntimeWebServiceException", Namespace="http://in-time.co.uk/xsd")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         System.Threading.Tasks.Task<RSM.getAllInvoicingTermsResponse> getAllInvoicingTermsAsync(RSM.getAllInvoicingTermsRequest request);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="urn:getElapsedTime", ReplyAction="urn:getElapsedTimeResponse")]
+        [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
+        System.Threading.Tasks.Task<RSM.getElapsedTimeResponse> getElapsedTimeAsync(RSM.getElapsedTimeRequest request);
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:getConsultantById", ReplyAction="urn:getConsultantByIdResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(RSM.IntimeServiceV3_4IntimeWebServiceException), Action="urn:getConsultantByIdIntimeServiceV3_4IntimeWebServiceException", Name="IntimeServiceV3_4IntimeWebServiceException", Namespace="http://in-time.co.uk/xsd")]
@@ -600,6 +614,11 @@ namespace RSM
         [System.ServiceModel.FaultContractAttribute(typeof(RSM.IntimeServiceV3_4IntimeWebServiceException), Action="urn:getLtdCoUsersByExternalIdIntimeServiceV3_4IntimeWebServiceException", Name="IntimeServiceV3_4IntimeWebServiceException", Namespace="http://in-time.co.uk/xsd")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         System.Threading.Tasks.Task<RSM.getLtdCoUsersByExternalIdResponse> getLtdCoUsersByExternalIdAsync(RSM.getLtdCoUsersByExternalIdRequest request);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="urn:getHolidayClaimsByRefCodes", ReplyAction="urn:getHolidayClaimsByRefCodesResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(RSM.IntimeServiceV3_4IntimeWebServiceException), Action="urn:getHolidayClaimsByRefCodesIntimeServiceV3_4IntimeWebServiceException", Name="IntimeServiceV3_4IntimeWebServiceException", Namespace="http://in-time.co.uk/xsd")]
+        [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
+        System.Threading.Tasks.Task<RSM.getHolidayClaimsByRefCodesResponse> getHolidayClaimsByRefCodesAsync(RSM.getHolidayClaimsByRefCodesRequest request);
         
         [System.ServiceModel.OperationContractAttribute(Action="urn:getAllApprovalRoutes", ReplyAction="urn:getAllApprovalRoutesResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(RSM.IntimeServiceV3_4IntimeWebServiceException), Action="urn:getAllApprovalRoutesIntimeServiceV3_4IntimeWebServiceException", Name="IntimeServiceV3_4IntimeWebServiceException", Namespace="http://in-time.co.uk/xsd")]
@@ -5125,9 +5144,9 @@ namespace RSM
     /// <remarks/>
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(LtdCoUser))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Administrator))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Worker))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Consultant))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Manager))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(Worker))]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://v3_4.webservices.intime.ipfour.com/xsd")]
@@ -5715,150 +5734,6 @@ namespace RSM
             set
             {
                 this.providerRefCodeField = value;
-            }
-        }
-    }
-    
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://v3_4.webservices.intime.ipfour.com/xsd")]
-    public partial class Consultant : User
-    {
-        
-        private System.Nullable<int> roleLevelField;
-        
-        private bool roleLevelFieldSpecified;
-        
-        private string teamField;
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true, Order=0)]
-        public System.Nullable<int> roleLevel
-        {
-            get
-            {
-                return this.roleLevelField;
-            }
-            set
-            {
-                this.roleLevelField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool roleLevelSpecified
-        {
-            get
-            {
-                return this.roleLevelFieldSpecified;
-            }
-            set
-            {
-                this.roleLevelFieldSpecified = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true, Order=1)]
-        public string team
-        {
-            get
-            {
-                return this.teamField;
-            }
-            set
-            {
-                this.teamField = value;
-            }
-        }
-    }
-    
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://v3_4.webservices.intime.ipfour.com/xsd")]
-    public partial class Manager : User
-    {
-        
-        private Client clientField;
-        
-        private string clientExternalIdField;
-        
-        private System.Nullable<long> clientIdField;
-        
-        private bool clientIdFieldSpecified;
-        
-        private string clientRefCodeField;
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true, Order=0)]
-        public Client client
-        {
-            get
-            {
-                return this.clientField;
-            }
-            set
-            {
-                this.clientField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true, Order=1)]
-        public string clientExternalId
-        {
-            get
-            {
-                return this.clientExternalIdField;
-            }
-            set
-            {
-                this.clientExternalIdField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true, Order=2)]
-        public System.Nullable<long> clientId
-        {
-            get
-            {
-                return this.clientIdField;
-            }
-            set
-            {
-                this.clientIdField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool clientIdSpecified
-        {
-            get
-            {
-                return this.clientIdFieldSpecified;
-            }
-            set
-            {
-                this.clientIdFieldSpecified = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true, Order=3)]
-        public string clientRefCode
-        {
-            get
-            {
-                return this.clientRefCodeField;
-            }
-            set
-            {
-                this.clientRefCodeField = value;
             }
         }
     }
@@ -6987,6 +6862,150 @@ namespace RSM
             set
             {
                 this.workerTypeField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://v3_4.webservices.intime.ipfour.com/xsd")]
+    public partial class Consultant : User
+    {
+        
+        private System.Nullable<int> roleLevelField;
+        
+        private bool roleLevelFieldSpecified;
+        
+        private string teamField;
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true, Order=0)]
+        public System.Nullable<int> roleLevel
+        {
+            get
+            {
+                return this.roleLevelField;
+            }
+            set
+            {
+                this.roleLevelField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool roleLevelSpecified
+        {
+            get
+            {
+                return this.roleLevelFieldSpecified;
+            }
+            set
+            {
+                this.roleLevelFieldSpecified = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true, Order=1)]
+        public string team
+        {
+            get
+            {
+                return this.teamField;
+            }
+            set
+            {
+                this.teamField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://v3_4.webservices.intime.ipfour.com/xsd")]
+    public partial class Manager : User
+    {
+        
+        private Client clientField;
+        
+        private string clientExternalIdField;
+        
+        private System.Nullable<long> clientIdField;
+        
+        private bool clientIdFieldSpecified;
+        
+        private string clientRefCodeField;
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true, Order=0)]
+        public Client client
+        {
+            get
+            {
+                return this.clientField;
+            }
+            set
+            {
+                this.clientField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true, Order=1)]
+        public string clientExternalId
+        {
+            get
+            {
+                return this.clientExternalIdField;
+            }
+            set
+            {
+                this.clientExternalIdField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true, Order=2)]
+        public System.Nullable<long> clientId
+        {
+            get
+            {
+                return this.clientIdField;
+            }
+            set
+            {
+                this.clientIdField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool clientIdSpecified
+        {
+            get
+            {
+                return this.clientIdFieldSpecified;
+            }
+            set
+            {
+                this.clientIdFieldSpecified = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true, Order=3)]
+        public string clientRefCode
+        {
+            get
+            {
+                return this.clientRefCodeField;
+            }
+            set
+            {
+                this.clientRefCodeField = value;
             }
         }
     }
@@ -11916,6 +11935,125 @@ namespace RSM
         }
         
         public getInvoicesForClientResponse(RSM.InvoiceInfo[] @return)
+        {
+            this.@return = @return;
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://v3_4.webservices.intime.ipfour.com/xsd")]
+    public partial class FileAttachment
+    {
+        
+        private string fileBase64Field;
+        
+        private string fileNameField;
+        
+        private string refCodeField;
+        
+        private string typeField;
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true, Order=0)]
+        public string fileBase64
+        {
+            get
+            {
+                return this.fileBase64Field;
+            }
+            set
+            {
+                this.fileBase64Field = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true, Order=1)]
+        public string fileName
+        {
+            get
+            {
+                return this.fileNameField;
+            }
+            set
+            {
+                this.fileNameField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true, Order=2)]
+        public string refCode
+        {
+            get
+            {
+                return this.refCodeField;
+            }
+            set
+            {
+                this.refCodeField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true, Order=3)]
+        public string type
+        {
+            get
+            {
+                return this.typeField;
+            }
+            set
+            {
+                this.typeField = value;
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(WrapperName="readFiles", WrapperNamespace="http://in-time.co.uk/xsd", IsWrapped=true)]
+    public partial class readFilesRequest
+    {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://in-time.co.uk/xsd", Order=0)]
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
+        public string token;
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://in-time.co.uk/xsd", Order=1)]
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
+        public string refCode;
+        
+        public readFilesRequest()
+        {
+        }
+        
+        public readFilesRequest(string token, string refCode)
+        {
+            this.token = token;
+            this.refCode = refCode;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(WrapperName="readFilesResponse", WrapperNamespace="http://in-time.co.uk/xsd", IsWrapped=true)]
+    public partial class readFilesResponse
+    {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://in-time.co.uk/xsd", Order=0)]
+        [System.Xml.Serialization.XmlElementAttribute("return", IsNullable=true)]
+        public RSM.FileAttachment[] @return;
+        
+        public readFilesResponse()
+        {
+        }
+        
+        public readFilesResponse(RSM.FileAttachment[] @return)
         {
             this.@return = @return;
         }
@@ -20394,6 +20532,797 @@ namespace RSM
         }
     }
     
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://v3_4.webservices.intime.ipfour.com/xsd")]
+    public partial class HolidayClaimSearchCriteria
+    {
+        
+        private string approverExternalIdField;
+        
+        private string approverFirstNameField;
+        
+        private string approverLastNameField;
+        
+        private string approverRefCodeField;
+        
+        private string claimStatusField;
+        
+        private string exporterExternalIdField;
+        
+        private string exporterFirstNameField;
+        
+        private string exporterLastNameField;
+        
+        private string exporterRefCodeField;
+        
+        private string firstNameField;
+        
+        private System.Nullable<System.DateTime> fromApprovedDateField;
+        
+        private bool fromApprovedDateFieldSpecified;
+        
+        private System.Nullable<System.DateTime> fromClaimDateField;
+        
+        private bool fromClaimDateFieldSpecified;
+        
+        private System.Nullable<long> fromClaimIdField;
+        
+        private bool fromClaimIdFieldSpecified;
+        
+        private System.Nullable<System.DateTime> fromCreatedDateField;
+        
+        private bool fromCreatedDateFieldSpecified;
+        
+        private System.Nullable<System.DateTime> fromExportedDateField;
+        
+        private bool fromExportedDateFieldSpecified;
+        
+        private System.Nullable<System.DateTime> fromModifiedDateField;
+        
+        private bool fromModifiedDateFieldSpecified;
+        
+        private System.Nullable<System.DateTime> fromSubmittedDateField;
+        
+        private bool fromSubmittedDateFieldSpecified;
+        
+        private string lastNameField;
+        
+        private string recordstatusField;
+        
+        private string submitterExternalIdField;
+        
+        private string submitterFirstNameField;
+        
+        private string submitterLastNameField;
+        
+        private string submitterRefCodeField;
+        
+        private System.Nullable<System.DateTime> toApprovedDateField;
+        
+        private bool toApprovedDateFieldSpecified;
+        
+        private System.Nullable<System.DateTime> toClaimDateField;
+        
+        private bool toClaimDateFieldSpecified;
+        
+        private System.Nullable<long> toClaimIdField;
+        
+        private bool toClaimIdFieldSpecified;
+        
+        private System.Nullable<System.DateTime> toCreatedDateField;
+        
+        private bool toCreatedDateFieldSpecified;
+        
+        private System.Nullable<System.DateTime> toExportedDateField;
+        
+        private bool toExportedDateFieldSpecified;
+        
+        private System.Nullable<System.DateTime> toModifiedDateField;
+        
+        private bool toModifiedDateFieldSpecified;
+        
+        private System.Nullable<System.DateTime> toSubmittedDateField;
+        
+        private bool toSubmittedDateFieldSpecified;
+        
+        private string workerExternalIdField;
+        
+        private string workerRefCodeField;
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true, Order=0)]
+        public string approverExternalId
+        {
+            get
+            {
+                return this.approverExternalIdField;
+            }
+            set
+            {
+                this.approverExternalIdField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true, Order=1)]
+        public string approverFirstName
+        {
+            get
+            {
+                return this.approverFirstNameField;
+            }
+            set
+            {
+                this.approverFirstNameField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true, Order=2)]
+        public string approverLastName
+        {
+            get
+            {
+                return this.approverLastNameField;
+            }
+            set
+            {
+                this.approverLastNameField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true, Order=3)]
+        public string approverRefCode
+        {
+            get
+            {
+                return this.approverRefCodeField;
+            }
+            set
+            {
+                this.approverRefCodeField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true, Order=4)]
+        public string claimStatus
+        {
+            get
+            {
+                return this.claimStatusField;
+            }
+            set
+            {
+                this.claimStatusField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true, Order=5)]
+        public string exporterExternalId
+        {
+            get
+            {
+                return this.exporterExternalIdField;
+            }
+            set
+            {
+                this.exporterExternalIdField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true, Order=6)]
+        public string exporterFirstName
+        {
+            get
+            {
+                return this.exporterFirstNameField;
+            }
+            set
+            {
+                this.exporterFirstNameField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true, Order=7)]
+        public string exporterLastName
+        {
+            get
+            {
+                return this.exporterLastNameField;
+            }
+            set
+            {
+                this.exporterLastNameField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true, Order=8)]
+        public string exporterRefCode
+        {
+            get
+            {
+                return this.exporterRefCodeField;
+            }
+            set
+            {
+                this.exporterRefCodeField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true, Order=9)]
+        public string firstName
+        {
+            get
+            {
+                return this.firstNameField;
+            }
+            set
+            {
+                this.firstNameField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true, Order=10)]
+        public System.Nullable<System.DateTime> fromApprovedDate
+        {
+            get
+            {
+                return this.fromApprovedDateField;
+            }
+            set
+            {
+                this.fromApprovedDateField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool fromApprovedDateSpecified
+        {
+            get
+            {
+                return this.fromApprovedDateFieldSpecified;
+            }
+            set
+            {
+                this.fromApprovedDateFieldSpecified = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true, Order=11)]
+        public System.Nullable<System.DateTime> fromClaimDate
+        {
+            get
+            {
+                return this.fromClaimDateField;
+            }
+            set
+            {
+                this.fromClaimDateField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool fromClaimDateSpecified
+        {
+            get
+            {
+                return this.fromClaimDateFieldSpecified;
+            }
+            set
+            {
+                this.fromClaimDateFieldSpecified = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true, Order=12)]
+        public System.Nullable<long> fromClaimId
+        {
+            get
+            {
+                return this.fromClaimIdField;
+            }
+            set
+            {
+                this.fromClaimIdField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool fromClaimIdSpecified
+        {
+            get
+            {
+                return this.fromClaimIdFieldSpecified;
+            }
+            set
+            {
+                this.fromClaimIdFieldSpecified = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true, Order=13)]
+        public System.Nullable<System.DateTime> fromCreatedDate
+        {
+            get
+            {
+                return this.fromCreatedDateField;
+            }
+            set
+            {
+                this.fromCreatedDateField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool fromCreatedDateSpecified
+        {
+            get
+            {
+                return this.fromCreatedDateFieldSpecified;
+            }
+            set
+            {
+                this.fromCreatedDateFieldSpecified = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true, Order=14)]
+        public System.Nullable<System.DateTime> fromExportedDate
+        {
+            get
+            {
+                return this.fromExportedDateField;
+            }
+            set
+            {
+                this.fromExportedDateField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool fromExportedDateSpecified
+        {
+            get
+            {
+                return this.fromExportedDateFieldSpecified;
+            }
+            set
+            {
+                this.fromExportedDateFieldSpecified = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true, Order=15)]
+        public System.Nullable<System.DateTime> fromModifiedDate
+        {
+            get
+            {
+                return this.fromModifiedDateField;
+            }
+            set
+            {
+                this.fromModifiedDateField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool fromModifiedDateSpecified
+        {
+            get
+            {
+                return this.fromModifiedDateFieldSpecified;
+            }
+            set
+            {
+                this.fromModifiedDateFieldSpecified = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true, Order=16)]
+        public System.Nullable<System.DateTime> fromSubmittedDate
+        {
+            get
+            {
+                return this.fromSubmittedDateField;
+            }
+            set
+            {
+                this.fromSubmittedDateField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool fromSubmittedDateSpecified
+        {
+            get
+            {
+                return this.fromSubmittedDateFieldSpecified;
+            }
+            set
+            {
+                this.fromSubmittedDateFieldSpecified = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true, Order=17)]
+        public string lastName
+        {
+            get
+            {
+                return this.lastNameField;
+            }
+            set
+            {
+                this.lastNameField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true, Order=18)]
+        public string recordstatus
+        {
+            get
+            {
+                return this.recordstatusField;
+            }
+            set
+            {
+                this.recordstatusField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true, Order=19)]
+        public string submitterExternalId
+        {
+            get
+            {
+                return this.submitterExternalIdField;
+            }
+            set
+            {
+                this.submitterExternalIdField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true, Order=20)]
+        public string submitterFirstName
+        {
+            get
+            {
+                return this.submitterFirstNameField;
+            }
+            set
+            {
+                this.submitterFirstNameField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true, Order=21)]
+        public string submitterLastName
+        {
+            get
+            {
+                return this.submitterLastNameField;
+            }
+            set
+            {
+                this.submitterLastNameField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true, Order=22)]
+        public string submitterRefCode
+        {
+            get
+            {
+                return this.submitterRefCodeField;
+            }
+            set
+            {
+                this.submitterRefCodeField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true, Order=23)]
+        public System.Nullable<System.DateTime> toApprovedDate
+        {
+            get
+            {
+                return this.toApprovedDateField;
+            }
+            set
+            {
+                this.toApprovedDateField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool toApprovedDateSpecified
+        {
+            get
+            {
+                return this.toApprovedDateFieldSpecified;
+            }
+            set
+            {
+                this.toApprovedDateFieldSpecified = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true, Order=24)]
+        public System.Nullable<System.DateTime> toClaimDate
+        {
+            get
+            {
+                return this.toClaimDateField;
+            }
+            set
+            {
+                this.toClaimDateField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool toClaimDateSpecified
+        {
+            get
+            {
+                return this.toClaimDateFieldSpecified;
+            }
+            set
+            {
+                this.toClaimDateFieldSpecified = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true, Order=25)]
+        public System.Nullable<long> toClaimId
+        {
+            get
+            {
+                return this.toClaimIdField;
+            }
+            set
+            {
+                this.toClaimIdField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool toClaimIdSpecified
+        {
+            get
+            {
+                return this.toClaimIdFieldSpecified;
+            }
+            set
+            {
+                this.toClaimIdFieldSpecified = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true, Order=26)]
+        public System.Nullable<System.DateTime> toCreatedDate
+        {
+            get
+            {
+                return this.toCreatedDateField;
+            }
+            set
+            {
+                this.toCreatedDateField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool toCreatedDateSpecified
+        {
+            get
+            {
+                return this.toCreatedDateFieldSpecified;
+            }
+            set
+            {
+                this.toCreatedDateFieldSpecified = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true, Order=27)]
+        public System.Nullable<System.DateTime> toExportedDate
+        {
+            get
+            {
+                return this.toExportedDateField;
+            }
+            set
+            {
+                this.toExportedDateField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool toExportedDateSpecified
+        {
+            get
+            {
+                return this.toExportedDateFieldSpecified;
+            }
+            set
+            {
+                this.toExportedDateFieldSpecified = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true, Order=28)]
+        public System.Nullable<System.DateTime> toModifiedDate
+        {
+            get
+            {
+                return this.toModifiedDateField;
+            }
+            set
+            {
+                this.toModifiedDateField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool toModifiedDateSpecified
+        {
+            get
+            {
+                return this.toModifiedDateFieldSpecified;
+            }
+            set
+            {
+                this.toModifiedDateFieldSpecified = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true, Order=29)]
+        public System.Nullable<System.DateTime> toSubmittedDate
+        {
+            get
+            {
+                return this.toSubmittedDateField;
+            }
+            set
+            {
+                this.toSubmittedDateField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool toSubmittedDateSpecified
+        {
+            get
+            {
+                return this.toSubmittedDateFieldSpecified;
+            }
+            set
+            {
+                this.toSubmittedDateFieldSpecified = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true, Order=30)]
+        public string workerExternalId
+        {
+            get
+            {
+                return this.workerExternalIdField;
+            }
+            set
+            {
+                this.workerExternalIdField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true, Order=31)]
+        public string workerRefCode
+        {
+            get
+            {
+                return this.workerRefCodeField;
+            }
+            set
+            {
+                this.workerRefCodeField = value;
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(WrapperName="searchHolidayClaimRefCodes", WrapperNamespace="http://in-time.co.uk/xsd", IsWrapped=true)]
+    public partial class searchHolidayClaimRefCodesRequest
+    {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://in-time.co.uk/xsd", Order=0)]
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
+        public string token;
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://in-time.co.uk/xsd", Order=1)]
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
+        public RSM.HolidayClaimSearchCriteria searchCriteria;
+        
+        public searchHolidayClaimRefCodesRequest()
+        {
+        }
+        
+        public searchHolidayClaimRefCodesRequest(string token, RSM.HolidayClaimSearchCriteria searchCriteria)
+        {
+            this.token = token;
+            this.searchCriteria = searchCriteria;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(WrapperName="searchHolidayClaimRefCodesResponse", WrapperNamespace="http://in-time.co.uk/xsd", IsWrapped=true)]
+    public partial class searchHolidayClaimRefCodesResponse
+    {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://in-time.co.uk/xsd", Order=0)]
+        [System.Xml.Serialization.XmlElementAttribute("return", IsNullable=true)]
+        public string[] @return;
+        
+        public searchHolidayClaimRefCodesResponse()
+        {
+        }
+        
+        public searchHolidayClaimRefCodesResponse(string[] @return)
+        {
+            this.@return = @return;
+        }
+    }
+    
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
@@ -21428,51 +22357,6 @@ namespace RSM
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.ServiceModel.MessageContractAttribute(WrapperName="submitExpenseClaim", WrapperNamespace="http://in-time.co.uk/xsd", IsWrapped=true)]
-    public partial class submitExpenseClaimRequest
-    {
-        
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://in-time.co.uk/xsd", Order=0)]
-        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
-        public string token;
-        
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://in-time.co.uk/xsd", Order=1)]
-        public long expenseClaimId;
-        
-        public submitExpenseClaimRequest()
-        {
-        }
-        
-        public submitExpenseClaimRequest(string token, long expenseClaimId)
-        {
-            this.token = token;
-            this.expenseClaimId = expenseClaimId;
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.ServiceModel.MessageContractAttribute(WrapperName="submitExpenseClaimResponse", WrapperNamespace="http://in-time.co.uk/xsd", IsWrapped=true)]
-    public partial class submitExpenseClaimResponse
-    {
-        
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://in-time.co.uk/xsd", Order=0)]
-        public long @return;
-        
-        public submitExpenseClaimResponse()
-        {
-        }
-        
-        public submitExpenseClaimResponse(long @return)
-        {
-            this.@return = @return;
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(WrapperName="markTimesheetAndExpenseAsExported", WrapperNamespace="http://in-time.co.uk/xsd", IsWrapped=true)]
     public partial class markTimesheetAndExpenseAsExportedRequest
     {
@@ -21511,6 +22395,51 @@ namespace RSM
         }
         
         public markTimesheetAndExpenseAsExportedResponse(bool @return)
+        {
+            this.@return = @return;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(WrapperName="submitExpenseClaim", WrapperNamespace="http://in-time.co.uk/xsd", IsWrapped=true)]
+    public partial class submitExpenseClaimRequest
+    {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://in-time.co.uk/xsd", Order=0)]
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
+        public string token;
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://in-time.co.uk/xsd", Order=1)]
+        public long expenseClaimId;
+        
+        public submitExpenseClaimRequest()
+        {
+        }
+        
+        public submitExpenseClaimRequest(string token, long expenseClaimId)
+        {
+            this.token = token;
+            this.expenseClaimId = expenseClaimId;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(WrapperName="submitExpenseClaimResponse", WrapperNamespace="http://in-time.co.uk/xsd", IsWrapped=true)]
+    public partial class submitExpenseClaimResponse
+    {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://in-time.co.uk/xsd", Order=0)]
+        public long @return;
+        
+        public submitExpenseClaimResponse()
+        {
+        }
+        
+        public submitExpenseClaimResponse(long @return)
         {
             this.@return = @return;
         }
@@ -21780,6 +22709,52 @@ namespace RSM
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(WrapperName="getInvoicesForWorker", WrapperNamespace="http://in-time.co.uk/xsd", IsWrapped=true)]
+    public partial class getInvoicesForWorkerRequest
+    {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://in-time.co.uk/xsd", Order=0)]
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
+        public string token;
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://in-time.co.uk/xsd", Order=1)]
+        public long workerId;
+        
+        public getInvoicesForWorkerRequest()
+        {
+        }
+        
+        public getInvoicesForWorkerRequest(string token, long workerId)
+        {
+            this.token = token;
+            this.workerId = workerId;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(WrapperName="getInvoicesForWorkerResponse", WrapperNamespace="http://in-time.co.uk/xsd", IsWrapped=true)]
+    public partial class getInvoicesForWorkerResponse
+    {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://in-time.co.uk/xsd", Order=0)]
+        [System.Xml.Serialization.XmlElementAttribute("return", IsNullable=true)]
+        public RSM.InvoiceInfo[] @return;
+        
+        public getInvoicesForWorkerResponse()
+        {
+        }
+        
+        public getInvoicesForWorkerResponse(RSM.InvoiceInfo[] @return)
+        {
+            this.@return = @return;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(WrapperName="createOrUpdatePlacement", WrapperNamespace="http://in-time.co.uk/xsd", IsWrapped=true)]
     public partial class createOrUpdatePlacementRequest
     {
@@ -21822,52 +22797,6 @@ namespace RSM
         }
         
         public createOrUpdatePlacementResponse(long @return)
-        {
-            this.@return = @return;
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.ServiceModel.MessageContractAttribute(WrapperName="getInvoicesForWorker", WrapperNamespace="http://in-time.co.uk/xsd", IsWrapped=true)]
-    public partial class getInvoicesForWorkerRequest
-    {
-        
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://in-time.co.uk/xsd", Order=0)]
-        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
-        public string token;
-        
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://in-time.co.uk/xsd", Order=1)]
-        public long workerId;
-        
-        public getInvoicesForWorkerRequest()
-        {
-        }
-        
-        public getInvoicesForWorkerRequest(string token, long workerId)
-        {
-            this.token = token;
-            this.workerId = workerId;
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.ServiceModel.MessageContractAttribute(WrapperName="getInvoicesForWorkerResponse", WrapperNamespace="http://in-time.co.uk/xsd", IsWrapped=true)]
-    public partial class getInvoicesForWorkerResponse
-    {
-        
-        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://in-time.co.uk/xsd", Order=0)]
-        [System.Xml.Serialization.XmlElementAttribute("return", IsNullable=true)]
-        public RSM.InvoiceInfo[] @return;
-        
-        public getInvoicesForWorkerResponse()
-        {
-        }
-        
-        public getInvoicesForWorkerResponse(RSM.InvoiceInfo[] @return)
         {
             this.@return = @return;
         }
@@ -22875,6 +23804,47 @@ namespace RSM
         }
         
         public getAllInvoicingTermsResponse(RSM.InvoicingTerm[] @return)
+        {
+            this.@return = @return;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(WrapperName="getElapsedTime", WrapperNamespace="http://in-time.co.uk/xsd", IsWrapped=true)]
+    public partial class getElapsedTimeRequest
+    {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://in-time.co.uk/xsd", Order=0)]
+        public long startTime;
+        
+        public getElapsedTimeRequest()
+        {
+        }
+        
+        public getElapsedTimeRequest(long startTime)
+        {
+            this.startTime = startTime;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(WrapperName="getElapsedTimeResponse", WrapperNamespace="http://in-time.co.uk/xsd", IsWrapped=true)]
+    public partial class getElapsedTimeResponse
+    {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://in-time.co.uk/xsd", Order=0)]
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
+        public string @return;
+        
+        public getElapsedTimeResponse()
+        {
+        }
+        
+        public getElapsedTimeResponse(string @return)
         {
             this.@return = @return;
         }
@@ -25145,78 +26115,6 @@ namespace RSM
         }
     }
     
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://v3_4.webservices.intime.ipfour.com/xsd")]
-    public partial class FileAttachment
-    {
-        
-        private string fileBase64Field;
-        
-        private string fileNameField;
-        
-        private string refCodeField;
-        
-        private string typeField;
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true, Order=0)]
-        public string fileBase64
-        {
-            get
-            {
-                return this.fileBase64Field;
-            }
-            set
-            {
-                this.fileBase64Field = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true, Order=1)]
-        public string fileName
-        {
-            get
-            {
-                return this.fileNameField;
-            }
-            set
-            {
-                this.fileNameField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true, Order=2)]
-        public string refCode
-        {
-            get
-            {
-                return this.refCodeField;
-            }
-            set
-            {
-                this.refCodeField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true, Order=3)]
-        public string type
-        {
-            get
-            {
-                return this.typeField;
-            }
-            set
-            {
-                this.typeField = value;
-            }
-        }
-    }
-    
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
@@ -26967,6 +27865,53 @@ namespace RSM
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(WrapperName="getHolidayClaimsByRefCodes", WrapperNamespace="http://in-time.co.uk/xsd", IsWrapped=true)]
+    public partial class getHolidayClaimsByRefCodesRequest
+    {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://in-time.co.uk/xsd", Order=0)]
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
+        public string token;
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://in-time.co.uk/xsd", Order=1)]
+        [System.Xml.Serialization.XmlElementAttribute("holidayClaimRefCodes", IsNullable=true)]
+        public string[] holidayClaimRefCodes;
+        
+        public getHolidayClaimsByRefCodesRequest()
+        {
+        }
+        
+        public getHolidayClaimsByRefCodesRequest(string token, string[] holidayClaimRefCodes)
+        {
+            this.token = token;
+            this.holidayClaimRefCodes = holidayClaimRefCodes;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(WrapperName="getHolidayClaimsByRefCodesResponse", WrapperNamespace="http://in-time.co.uk/xsd", IsWrapped=true)]
+    public partial class getHolidayClaimsByRefCodesResponse
+    {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://in-time.co.uk/xsd", Order=0)]
+        [System.Xml.Serialization.XmlElementAttribute("return", IsNullable=true)]
+        public RSM.HolidayClaim[] @return;
+        
+        public getHolidayClaimsByRefCodesResponse()
+        {
+        }
+        
+        public getHolidayClaimsByRefCodesResponse(RSM.HolidayClaim[] @return)
+        {
+            this.@return = @return;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.3")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(WrapperName="getAllApprovalRoutes", WrapperNamespace="http://in-time.co.uk/xsd", IsWrapped=true)]
     public partial class getAllApprovalRoutesRequest
     {
@@ -28190,6 +29135,20 @@ namespace RSM
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        System.Threading.Tasks.Task<RSM.readFilesResponse> RSM.IntimeServiceV3_4PortType.readFilesAsync(RSM.readFilesRequest request)
+        {
+            return base.Channel.readFilesAsync(request);
+        }
+        
+        public System.Threading.Tasks.Task<RSM.readFilesResponse> readFilesAsync(string token, string refCode)
+        {
+            RSM.readFilesRequest inValue = new RSM.readFilesRequest();
+            inValue.token = token;
+            inValue.refCode = refCode;
+            return ((RSM.IntimeServiceV3_4PortType)(this)).readFilesAsync(inValue);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
         System.Threading.Tasks.Task<RSM.getPaymentBatchByRefCodeResponse> RSM.IntimeServiceV3_4PortType.getPaymentBatchByRefCodeAsync(RSM.getPaymentBatchByRefCodeRequest request)
         {
             return base.Channel.getPaymentBatchByRefCodeAsync(request);
@@ -28395,6 +29354,20 @@ namespace RSM
             inValue.token = token;
             inValue.providerId = providerId;
             return ((RSM.IntimeServiceV3_4PortType)(this)).getInvoicesForProviderAsync(inValue);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        System.Threading.Tasks.Task<RSM.searchHolidayClaimRefCodesResponse> RSM.IntimeServiceV3_4PortType.searchHolidayClaimRefCodesAsync(RSM.searchHolidayClaimRefCodesRequest request)
+        {
+            return base.Channel.searchHolidayClaimRefCodesAsync(request);
+        }
+        
+        public System.Threading.Tasks.Task<RSM.searchHolidayClaimRefCodesResponse> searchHolidayClaimRefCodesAsync(string token, RSM.HolidayClaimSearchCriteria searchCriteria)
+        {
+            RSM.searchHolidayClaimRefCodesRequest inValue = new RSM.searchHolidayClaimRefCodesRequest();
+            inValue.token = token;
+            inValue.searchCriteria = searchCriteria;
+            return ((RSM.IntimeServiceV3_4PortType)(this)).searchHolidayClaimRefCodesAsync(inValue);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
@@ -28673,20 +29646,6 @@ namespace RSM
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.Threading.Tasks.Task<RSM.submitExpenseClaimResponse> RSM.IntimeServiceV3_4PortType.submitExpenseClaimAsync(RSM.submitExpenseClaimRequest request)
-        {
-            return base.Channel.submitExpenseClaimAsync(request);
-        }
-        
-        public System.Threading.Tasks.Task<RSM.submitExpenseClaimResponse> submitExpenseClaimAsync(string token, long expenseClaimId)
-        {
-            RSM.submitExpenseClaimRequest inValue = new RSM.submitExpenseClaimRequest();
-            inValue.token = token;
-            inValue.expenseClaimId = expenseClaimId;
-            return ((RSM.IntimeServiceV3_4PortType)(this)).submitExpenseClaimAsync(inValue);
-        }
-        
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
         System.Threading.Tasks.Task<RSM.markTimesheetAndExpenseAsExportedResponse> RSM.IntimeServiceV3_4PortType.markTimesheetAndExpenseAsExportedAsync(RSM.markTimesheetAndExpenseAsExportedRequest request)
         {
             return base.Channel.markTimesheetAndExpenseAsExportedAsync(request);
@@ -28698,6 +29657,20 @@ namespace RSM
             inValue.token = token;
             inValue.sheetRefCode = sheetRefCode;
             return ((RSM.IntimeServiceV3_4PortType)(this)).markTimesheetAndExpenseAsExportedAsync(inValue);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        System.Threading.Tasks.Task<RSM.submitExpenseClaimResponse> RSM.IntimeServiceV3_4PortType.submitExpenseClaimAsync(RSM.submitExpenseClaimRequest request)
+        {
+            return base.Channel.submitExpenseClaimAsync(request);
+        }
+        
+        public System.Threading.Tasks.Task<RSM.submitExpenseClaimResponse> submitExpenseClaimAsync(string token, long expenseClaimId)
+        {
+            RSM.submitExpenseClaimRequest inValue = new RSM.submitExpenseClaimRequest();
+            inValue.token = token;
+            inValue.expenseClaimId = expenseClaimId;
+            return ((RSM.IntimeServiceV3_4PortType)(this)).submitExpenseClaimAsync(inValue);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
@@ -28729,6 +29702,20 @@ namespace RSM
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        System.Threading.Tasks.Task<RSM.getInvoicesForWorkerResponse> RSM.IntimeServiceV3_4PortType.getInvoicesForWorkerAsync(RSM.getInvoicesForWorkerRequest request)
+        {
+            return base.Channel.getInvoicesForWorkerAsync(request);
+        }
+        
+        public System.Threading.Tasks.Task<RSM.getInvoicesForWorkerResponse> getInvoicesForWorkerAsync(string token, long workerId)
+        {
+            RSM.getInvoicesForWorkerRequest inValue = new RSM.getInvoicesForWorkerRequest();
+            inValue.token = token;
+            inValue.workerId = workerId;
+            return ((RSM.IntimeServiceV3_4PortType)(this)).getInvoicesForWorkerAsync(inValue);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
         System.Threading.Tasks.Task<RSM.createOrUpdatePlacementResponse> RSM.IntimeServiceV3_4PortType.createOrUpdatePlacementAsync(RSM.createOrUpdatePlacementRequest request)
         {
             return base.Channel.createOrUpdatePlacementAsync(request);
@@ -28741,20 +29728,6 @@ namespace RSM
             inValue.placement = placement;
             inValue.updateParticipants = updateParticipants;
             return ((RSM.IntimeServiceV3_4PortType)(this)).createOrUpdatePlacementAsync(inValue);
-        }
-        
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.Threading.Tasks.Task<RSM.getInvoicesForWorkerResponse> RSM.IntimeServiceV3_4PortType.getInvoicesForWorkerAsync(RSM.getInvoicesForWorkerRequest request)
-        {
-            return base.Channel.getInvoicesForWorkerAsync(request);
-        }
-        
-        public System.Threading.Tasks.Task<RSM.getInvoicesForWorkerResponse> getInvoicesForWorkerAsync(string token, long workerId)
-        {
-            RSM.getInvoicesForWorkerRequest inValue = new RSM.getInvoicesForWorkerRequest();
-            inValue.token = token;
-            inValue.workerId = workerId;
-            return ((RSM.IntimeServiceV3_4PortType)(this)).getInvoicesForWorkerAsync(inValue);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
@@ -28854,6 +29827,19 @@ namespace RSM
             RSM.getAllInvoicingTermsRequest inValue = new RSM.getAllInvoicingTermsRequest();
             inValue.token = token;
             return ((RSM.IntimeServiceV3_4PortType)(this)).getAllInvoicingTermsAsync(inValue);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        System.Threading.Tasks.Task<RSM.getElapsedTimeResponse> RSM.IntimeServiceV3_4PortType.getElapsedTimeAsync(RSM.getElapsedTimeRequest request)
+        {
+            return base.Channel.getElapsedTimeAsync(request);
+        }
+        
+        public System.Threading.Tasks.Task<RSM.getElapsedTimeResponse> getElapsedTimeAsync(long startTime)
+        {
+            RSM.getElapsedTimeRequest inValue = new RSM.getElapsedTimeRequest();
+            inValue.startTime = startTime;
+            return ((RSM.IntimeServiceV3_4PortType)(this)).getElapsedTimeAsync(inValue);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
@@ -29654,6 +30640,20 @@ namespace RSM
             inValue.token = token;
             inValue.id = id;
             return ((RSM.IntimeServiceV3_4PortType)(this)).getLtdCoUsersByExternalIdAsync(inValue);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        System.Threading.Tasks.Task<RSM.getHolidayClaimsByRefCodesResponse> RSM.IntimeServiceV3_4PortType.getHolidayClaimsByRefCodesAsync(RSM.getHolidayClaimsByRefCodesRequest request)
+        {
+            return base.Channel.getHolidayClaimsByRefCodesAsync(request);
+        }
+        
+        public System.Threading.Tasks.Task<RSM.getHolidayClaimsByRefCodesResponse> getHolidayClaimsByRefCodesAsync(string token, string[] holidayClaimRefCodes)
+        {
+            RSM.getHolidayClaimsByRefCodesRequest inValue = new RSM.getHolidayClaimsByRefCodesRequest();
+            inValue.token = token;
+            inValue.holidayClaimRefCodes = holidayClaimRefCodes;
+            return ((RSM.IntimeServiceV3_4PortType)(this)).getHolidayClaimsByRefCodesAsync(inValue);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]

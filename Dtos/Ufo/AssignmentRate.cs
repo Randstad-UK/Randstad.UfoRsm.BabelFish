@@ -14,7 +14,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
     {
         public string FeeRef { get; set; }
         public string FeeName { get; set; }
- 
+
         public string StartDate { get; set; }
 
         public string ExpenseType { get; set; }
@@ -59,7 +59,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             rate.ExternalAssignmentRef = Assignment.AssignmentRef;
             rate.frontendRef = FeeRef;
             rate.backendRef = Assignment.AssignmentRef;
-            SetRateType(rate, rateCodes,false);
+            SetRateType(rate, rateCodes, false);
 
 
             postRate = new RSM.Rate();
@@ -77,15 +77,15 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             postRate.name = FeeName;
             postRate.payableSpecified = false;
             postRate.ExternalAssignmentRef = Assignment.AssignmentRef;
-            postRate.frontendRef = FeeRef+"-AWR";
+            postRate.frontendRef = FeeRef + "-AWR";
             postRate.backendRef = Assignment.AssignmentRef;
             SetRateType(postRate, rateCodes, true);
 
 
             return rate;
         }
-        
-        
+
+
         private void SetRateType(RSM.Rate rate, Dictionary<string, string> rateCodes, bool isPostParity)
         {
             rate.proRataSpecified = false;
@@ -110,150 +110,157 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             switch (RateType)
             {
                 case "Basic Rate":
-                {
-                    //Concat  the mapname to be Basic Hours or Basic Days
-                    var mapName = "Basic ";
-
-                    rate.timesheetFields = "Hours";
-
-                    if (PayUnit == "Hourly")
                     {
-                        mapName += "Hours";
-                        rate.periodDuration = 60;
-                        rate.periodDurationSpecified = true;
+                        //Concat  the mapname to be Basic Hours or Basic Days
+                        var mapName = "Basic ";
 
-                        rate.timesheetFields = "START_FINISH_BREAK";
-                        rate.period = "Hourly";
-                     }
-
-                    if (PayUnit == "Daily")
-                    {
-                        mapName += "Days";
-                        rate.periodDuration = 480;
-
-                        rate.timesheetFields = "DECIMAL";
-                        rate.period = "Fixed";
-                        
-                    }
-
-                    rate.payElementCode = rateCodes[mapName];
-
-                    if (PayRateCurrency != null && !isPostParity)
-                    {
-                        rate.pay = (decimal) PayRateCurrency;
-                        rate.paySpecified = true;
-                    }
-
-                    if (ChargeRateCurrency != null && !isPostParity)
-                    {
-                        rate.charge = (decimal) ChargeRateCurrency;
-                        rate.chargeSpecified = true;
-                    }
-
-                    //for post parity if the postparity payrate is set use it, otherwise use payrate
-                    if (PayRateCurrency != null && isPostParity)
-                    {
-                        if (PostParityPayRateCurrency != null)
-                        {
-                            rate.pay = (decimal) PostParityPayRateCurrency;
-                        }
-                        else
-                        {
-                            rate.pay = (decimal)PayRateCurrency;
-                        }
-
-                        rate.paySpecified = true;
-                    }
-
-                    //for post parity if the postparity chargerate is set use it, otherwise use chargerate
-                    if (ChargeRateCurrency != null && isPostParity)
-                    {
-
-                        if (PostParityChargeRateCurrency != null)
-                        {
-                            rate.charge = (decimal) PostParityChargeRateCurrency;
-                        }
-                        else
-                        {
-                            rate.charge = (decimal)ChargeRateCurrency;
-                        }
-
-                        rate.chargeSpecified = true;
-                    }
-
-                    rate.name = mapName;
-
-                    break;
-                }
-                case "Other Rate":
-                {
-                    rate.payElementCode = rateCodes[OvertimeType];
-                    rate.periodDurationSpecified = true;
-
-                    rate.timesheetFields = "HOURS";
-
-                    if (PayRateCurrency != null && !isPostParity)
-                    {
-                        rate.pay = (decimal) PayRateCurrency;
-                        rate.paySpecified = true;
-                    }
-
-                    if (ChargeRateCurrency != null && !isPostParity)
-                    {
-                        rate.charge = (decimal) ChargeRateCurrency;
-                        rate.chargeSpecified = true;
-                    }
-
-                    //for post parity if the postparity payrate is set use it, otherwise use payrate
-                        if (PayRateCurrency != null && isPostParity)
-                    {
-                        if (PostParityPayRateCurrency != null)
-                        {
-                            rate.pay = (decimal)PostParityPayRateCurrency;
-                        }
-                        else
-                        {
-                            rate.pay = (decimal)PayRateCurrency;
-                        }
-
-                        rate.paySpecified = true;
-                    }
-
-                    //for post parity if the postparity chargerate is set use it, otherwise use charge rate
-                    if (ChargeRateCurrency != null && isPostParity)
-                    {
-
-                        if (PostParityChargeRateCurrency != null)
-                        {
-                            rate.charge = (decimal) PostParityChargeRateCurrency;
-                        }
-                        else
-                        {
-                            rate.charge = (decimal) ChargeRateCurrency;
-                        }
-
-                        rate.chargeSpecified = true;
-                    }
+                        rate.timesheetFields = "Hours";
 
                         if (PayUnit == "Hourly")
+                        {
+                            mapName += "Hours";
+
+                            //for multistudent support need to pick rate that does not validate minimum wage in RSM
+                            if (Assignment.MultiStudentSupport)
+                            {
+                                mapName = "Basic Hours non NMW";
+                            }
+
+                            rate.periodDuration = 60;
+                            rate.periodDurationSpecified = true;
+
+                            rate.timesheetFields = "START_FINISH_BREAK";
+                            rate.period = "Hourly";
+                        }
+
+                        if (PayUnit == "Daily")
+                        {
+                            mapName += "Days";
+                            rate.periodDuration = 480;
+
+                            rate.timesheetFields = "DECIMAL";
+                            rate.period = "Fixed";
+
+                        }
+
+                        rate.payElementCode = rateCodes[mapName];
+
+                        if (PayRateCurrency != null && !isPostParity)
+                        {
+                            rate.pay = (decimal)PayRateCurrency;
+                            rate.paySpecified = true;
+                        }
+
+                        if (ChargeRateCurrency != null && !isPostParity)
+                        {
+                            rate.charge = (decimal)ChargeRateCurrency;
+                            rate.chargeSpecified = true;
+                        }
+
+                        //for post parity if the postparity payrate is set use it, otherwise use payrate
+                        if (PayRateCurrency != null && isPostParity)
+                        {
+                            if (PostParityPayRateCurrency != null)
+                            {
+                                rate.pay = (decimal)PostParityPayRateCurrency;
+                            }
+                            else
+                            {
+                                rate.pay = (decimal)PayRateCurrency;
+                            }
+
+                            rate.paySpecified = true;
+                        }
+
+                        //for post parity if the postparity chargerate is set use it, otherwise use chargerate
+                        if (ChargeRateCurrency != null && isPostParity)
+                        {
+
+                            if (PostParityChargeRateCurrency != null)
+                            {
+                                rate.charge = (decimal)PostParityChargeRateCurrency;
+                            }
+                            else
+                            {
+                                rate.charge = (decimal)ChargeRateCurrency;
+                            }
+
+                            rate.chargeSpecified = true;
+                        }
+
+                        rate.name = mapName;
+
+                        break;
+                    }
+                case "Other Rate":
                     {
-                        rate.periodDuration = 60;
+                        rate.payElementCode = rateCodes[OvertimeType];
                         rate.periodDurationSpecified = true;
 
-                        rate.timesheetFields = "START_FINISH_BREAK";
-                        rate.period = "Hourly";
-                    }
+                        rate.timesheetFields = "HOURS";
 
-                    if (PayUnit == "Daily")
-                    {
-                        rate.periodDuration = 480;
-                        rate.timesheetFields = "DECIMAL";
-                        rate.period = "Fixed";
-                    }
+                        if (PayRateCurrency != null && !isPostParity)
+                        {
+                            rate.pay = (decimal)PayRateCurrency;
+                            rate.paySpecified = true;
+                        }
 
-                    rate.name = FeeName;
-                    break;
-                }
+                        if (ChargeRateCurrency != null && !isPostParity)
+                        {
+                            rate.charge = (decimal)ChargeRateCurrency;
+                            rate.chargeSpecified = true;
+                        }
+
+                        //for post parity if the postparity payrate is set use it, otherwise use payrate
+                        if (PayRateCurrency != null && isPostParity)
+                        {
+                            if (PostParityPayRateCurrency != null)
+                            {
+                                rate.pay = (decimal)PostParityPayRateCurrency;
+                            }
+                            else
+                            {
+                                rate.pay = (decimal)PayRateCurrency;
+                            }
+
+                            rate.paySpecified = true;
+                        }
+
+                        //for post parity if the postparity chargerate is set use it, otherwise use charge rate
+                        if (ChargeRateCurrency != null && isPostParity)
+                        {
+
+                            if (PostParityChargeRateCurrency != null)
+                            {
+                                rate.charge = (decimal)PostParityChargeRateCurrency;
+                            }
+                            else
+                            {
+                                rate.charge = (decimal)ChargeRateCurrency;
+                            }
+
+                            rate.chargeSpecified = true;
+                        }
+
+                        if (PayUnit == "Hourly")
+                        {
+                            rate.periodDuration = 60;
+                            rate.periodDurationSpecified = true;
+
+                            rate.timesheetFields = "START_FINISH_BREAK";
+                            rate.period = "Hourly";
+                        }
+
+                        if (PayUnit == "Daily")
+                        {
+                            rate.periodDuration = 480;
+                            rate.timesheetFields = "DECIMAL";
+                            rate.period = "Fixed";
+                        }
+
+                        rate.name = FeeName;
+                        break;
+                    }
                 case "Expense Rate":
                     {
                         rate.payElementCode = rateCodes[ExpenseType];
@@ -284,17 +291,17 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                 switch (Assignment.SendRatesFormat)
                 {
                     case "Send Hourly Rates as DECIMAL":
-                    {
-                        rate.timesheetFields = "DECIMAL";
-                        rate.period = "Fixed";
-                        break;
-                    }
-                    case "Send Hourly Rates as HOURS":
-                    {
-                        rate.timesheetFields = "HOURS";
-                        rate.period = "Hourly";
+                        {
+                            rate.timesheetFields = "DECIMAL";
+                            rate.period = "Fixed";
                             break;
-                    }
+                        }
+                    case "Send Hourly Rates as HOURS":
+                        {
+                            rate.timesheetFields = "HOURS";
+                            rate.period = "Hourly";
+                            break;
+                        }
                 }
             }
         }

@@ -8,7 +8,7 @@
     <Version>1.0.0</Version>
     <Deterministic>false</Deterministic>
     <AssemblyVersion>1.0.*</AssemblyVersion>
-    <FileVersion>1.0.0.37</FileVersion>
+    <FileVersion>1.0.0.38</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Live|AnyCPU'">
@@ -28,10 +28,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Dtos\Ufo\CandidateDivision.cs" />
     <Compile Remove="Dtos\Ufo\ClientContactRelationship.cs" />
-    <Compile Remove="Dtos\Ufo\Division.cs" />
-    <Compile Remove="Dtos\Ufo\Job.cs" />
+    <Compile Remove="Translators\ClientContactTranslation.cs" />
     <Compile Remove="Translators\InvoiceAddressTranslation.cs" />
   </ItemGroup>
 

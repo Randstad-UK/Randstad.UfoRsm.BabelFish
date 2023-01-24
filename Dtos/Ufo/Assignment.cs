@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Runtime.Serialization.Formatters;
 using System.Text;
@@ -48,26 +49,26 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
         public Candidate Candidate { get; set; }
         public ClientContact ClientContact { get; set; }
         public string SendRatesFormat { get; set; }
+        public string StudentFirstname { get; set; }
+        public string StudentLastname { get; set; }
+        public DateTime StudentDob { get; set; }
+        public string StudentCrn { get; set; }
+        public Client FundingBody { get; set; }
+        public bool MultiStudentSupport { get; set; }
 
         public Dtos.RsmInherited.Placement MapAssignment(ILogger logger, Dictionary<string, string> rateCodes, Guid correlationId, List<DivisionCode> divisionCodes)
         {
 
             var placement = new Dtos.RsmInherited.Placement();
             placement.PAYEDeductionsOnLtdSpecified = true;
-            placement.PAYEDeductionsOnLtd = IR35;
+            placement.PAYEDeductionsOnLtd = false;
+
             placement.holidayAccrualRatePostAWRSpecified = false;
             placement.holidayAccrualRateSpecified = false;
-
-            placement.agencyOnlySpecified = true;
-            placement.agencyOnly = true;
-
-            placement.bulkEntrySpecified = false;
 
             //TODO: Assignment CIS needs to be pulled once UFO solution specced
             placement.cisApplicableSpecified = true;
             placement.cisApplicable = false;
-
-
 
             placement.client = Client.MapClient(divisionCodes);
             placement.consultant = Owner.MapConsultant();
@@ -75,7 +76,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             placement.contractedHoursSpecified = true;
             placement.contractedHours = 40;
 
-            
+
 
             if (!string.IsNullOrEmpty(EndDate))
             {
@@ -99,16 +100,8 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             placement.faxbackEnabled = false;
 
             placement.invoiceRequiresPOSpecified = false;
-            
-            placement.invoiceContactOverride = InvoicePerson.MapContact();
-            
-            //billing requested no name
-            placement.invoiceContactOverride.firstname = string.Empty;
-            placement.invoiceContactOverride.lastname = string.Empty;
 
             var invoiceEmailList = new List<string>();
-
-
 
             if (!string.IsNullOrEmpty(Client.InvoiceEmail))
             {
@@ -126,20 +119,33 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
             }
 
-            placement.invoiceContactOverride.email = string.Empty;
             foreach (var email in invoiceEmailList)
             {
+                if (placement.invoiceContactOverride == null)
+                {
+                    placement.invoiceContactOverride = new Contact();
+                }
+
                 placement.invoiceContactOverride.email = placement.invoiceContactOverride.email + email + "; ";
             }
 
-            if (!string.IsNullOrEmpty(placement.invoiceContactOverride.email) && placement.invoiceContactOverride.email.EndsWith("; "))
+            //clear last semi colon if invoice email set
+            if (placement.invoiceContactOverride != null && !string.IsNullOrEmpty(placement.invoiceContactOverride.email) && placement.invoiceContactOverride.email.EndsWith("; "))
             {
                 placement.invoiceContactOverride.email = placement.invoiceContactOverride.email.Remove(placement.invoiceContactOverride.email.LastIndexOf(";"));
             }
 
 
+            if (InvoiceAddress != null)
+            {
+                if (placement.invoiceContactOverride == null)
+                {
+                    placement.invoiceContactOverride = new Contact();
+                }
 
-            placement.invoiceContactOverride.address = InvoiceAddress.MapAddress();
+                placement.invoiceContactOverride.address = InvoiceAddress.MapAddress();
+
+            }
 
             placement.jobTitle = string.IsNullOrEmpty(PositionName) ? "Not Stated" : PositionName;
 
@@ -152,10 +158,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             placement.purchaseBranch = Unit.Name;
             placement.purchaseCostCentre = Unit.FinanceCode;
 
-            //ToDo: remove once fix confirmed
-            //placement.purchaseDivision = OpCo.Name;
-
-            placement.purchaseDivision = divisionCodes.SingleOrDefault(x=>x.Code==Unit.FinanceCode)?.Division;
+            placement.purchaseDivision = divisionCodes.SingleOrDefault(x => x.Code == Unit.FinanceCode)?.Division;
 
             if (!string.IsNullOrEmpty(PoNumber))
             {
@@ -172,8 +175,6 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             placement.siteAddress = WorkAddress.GetAddress();
 
             MapConsultantSplit(placement);
-
-            
 
             if (!string.IsNullOrEmpty(StartDate))
             {
@@ -230,11 +231,6 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             placement.customText5 = Candidate.Name + " " + Candidate.Surname;
 
             placement.clientSite = Client.ClientName;
-            //max length in RSM is 90 characters
-            if (placement.clientSite.Length > 80)
-            {
-                placement.clientSite = placement.clientSite.Substring(0, 79);
-            }
 
             MapRates(rateCodes, placement);
 
@@ -246,6 +242,73 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             placement.roundToNearestMinSpecified = true;
             placement.roundToNearestMin = 1;
             MapPayeValues(placement);
+            MapLtdValues(placement);
+
+            //Most of the business uses client ref for both client ref and invoice to client
+            if (Division.Name == "Tuition Services" || Division.Name == "Student Support")
+            {
+
+                invoiceEmailList = new List<string>();
+
+                if (!string.IsNullOrEmpty(FundingBody.InvoiceEmail))
+                {
+                    invoiceEmailList.Add(FundingBody.InvoiceEmail);
+                }
+
+                if (!string.IsNullOrEmpty(FundingBody.InvoiceEmail2))
+                {
+                    invoiceEmailList.Add(FundingBody.InvoiceEmail2);
+                }
+
+                if (!string.IsNullOrEmpty(FundingBody.InvoiceEmail3))
+                {
+                    invoiceEmailList.Add(FundingBody.InvoiceEmail3);
+                }
+
+                //if the contact override is already populated then ensure email is wiped out.
+                if (placement.invoiceContactOverride != null)
+                {
+                    placement.invoiceContactOverride.email = string.Empty;
+                    placement.invoiceContactOverride.firstname = string.Empty;
+                    placement.invoiceContactOverride.lastname = string.Empty;
+                }
+
+                foreach (var email in invoiceEmailList)
+                {
+                    if (placement.invoiceContactOverride == null)
+                    {
+                        placement.invoiceContactOverride = new Contact();
+                    }
+
+                    placement.invoiceContactOverride.email = placement.invoiceContactOverride.email + email + "; ";
+                }
+
+                //remove trailing semi colon
+                if (placement.invoiceContactOverride != null && !string.IsNullOrEmpty(placement.invoiceContactOverride.email) && placement.invoiceContactOverride.email.EndsWith("; "))
+                {
+                    placement.invoiceContactOverride.email = placement.invoiceContactOverride.email.Remove(placement.invoiceContactOverride.email.LastIndexOf(";"));
+                }
+
+                placement.client = FundingBody.MapClient(divisionCodes);
+                placement.customText2 = FundingBody.ClientRef;
+                placement.customText4 = Client.ClientName;
+                placement.customText5 = StudentFirstname + " | " + StudentLastname + " | " + StudentDob.ToString("dd/MM/yyyy") + " | " + StudentCrn;
+                placement.clientSite = FundingBody.ClientName;
+
+                if (Unit.Name == "NTP Tuition Pillar")
+                {
+                    placement.client = Client.MapClient(divisionCodes);
+                    placement.clientSite = Client.ClientName;
+                    placement.customText2 = Client.ClientRef;
+                }
+
+            }
+
+            //max length in RSM is 90 characters
+            if (placement.clientSite.Length > 80)
+            {
+                placement.clientSite = placement.clientSite.Substring(0, 79);
+            }
 
 
             return placement;
@@ -287,23 +350,23 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                     placement.holidayAccrualRate = PostAwrHolidayPercentage / 100;
 
                     placement.holidayAccrualRatePostAWRSpecified = true;
-                    placement.holidayAccrualRatePostAWR = PostAwrHolidayPercentage /100;
+                    placement.holidayAccrualRatePostAWR = PostAwrHolidayPercentage / 100;
                     return;
                 }
             }
 
-            if (!string.IsNullOrEmpty(HolidayPay) && HolidayPay.ToLower() == "accrue holiday pay")
+            if (HolidayPay.ToLower() == "accrue holiday pay")
             {
                 if (PreAwrHolidayPercentage != null)
                 {
                     placement.holidayAccrualRateSpecified = true;
-                    placement.holidayAccrualRate = PreAwrHolidayPercentage/100;
+                    placement.holidayAccrualRate = PreAwrHolidayPercentage / 100;
                 }
 
                 if (PostAwrHolidayPercentage != null)
                 {
                     placement.holidayAccrualRatePostAWRSpecified = true;
-                    placement.holidayAccrualRatePostAWR = PostAwrHolidayPercentage/100;
+                    placement.holidayAccrualRatePostAWR = PostAwrHolidayPercentage / 100;
                 }
 
                 if (EnhancedHolidayDays != null)
@@ -315,19 +378,27 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             }
         }
 
+        private void MapLtdValues(Dtos.RsmInherited.Placement placement)
+        {
+            if (Candidate.PayType != PaymentTypes.LTD) return;
+
+            placement.PAYEDeductionsOnLtdSpecified = true;
+            placement.PAYEDeductionsOnLtd = IR35;
+        }
+
 
         private void MapConsultantSplit(Dtos.RsmInherited.Placement placement)
         {
             if (ConsultantSplits == null) return;
 
             placement.splitCommissions = new SplitCommission[ConsultantSplits.Count];
-            
+
             for (int i = 0; i < ConsultantSplits.Count; i++)
             {
                 var split = new Dtos.RsmInherited.ConsultantSplit();
-                split.ExternalUserId = "UFO"+ConsultantSplits[i].Consultant.EmployeeRef;
+                split.ExternalUserId = "UFO" + ConsultantSplits[i].Consultant.EmployeeRef;
                 split.weightSpecified = true;
-                split.weight = ConsultantSplits[i].Split/100;
+                split.weight = ConsultantSplits[i].Split / 100;
                 placement.splitCommissions[i] = split;
             }
 
@@ -337,13 +408,15 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
         {
             if (Rates == null) return;
 
-            var noExpenses = Rates.Where(x => x.RateType != "Expense Rate" || x.FeeName=="Bonus" || x.FeeName== "Back Pay - Non WTR" || x.FeeName== "Back Pay - WTR").ToList();
+            var noExpenses = Rates.Where(x => x.RateType != "Expense Rate" || x.FeeName == "Bonus" || x.FeeName == "Back Pay - Non WTR" || x.FeeName == "Back Pay - WTR").ToList();
 
             if (noExpenses == null || noExpenses.Count() == 0) return;
 
             var rateList = new List<RSM.Rate>();
 
             var priorityOrder = 1;
+
+
 
             foreach (var rate in noExpenses)
             {
@@ -358,7 +431,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                 {
                     rsmRate.priorityOrder = 0;
                 }
-                
+
                 priorityOrder++;
                 rateList.Add(rsmRate);
                 if (postRate != null)
@@ -366,6 +439,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                     rateList.Add(postRate);
                 }
             }
+
 
             placement.rates = rateList.ToArray();
         }

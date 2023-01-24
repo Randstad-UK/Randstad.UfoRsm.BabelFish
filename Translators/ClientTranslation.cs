@@ -44,6 +44,31 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                     return;
                 }
 
+                _logger.Debug("Received Routing Key: " + entity.ReceivedOnRoutingKey, entity.CorrelationId, entity, client.ClientRef, null, null);
+                if (entity.ReceivedOnRoutingKeyNodes != null && entity.ReceivedOnRoutingKeyNodes.Length == 9)
+                {
+                    if (client.IsCheckedIn == null)
+                    {
+                        _logger.Warn($"Client {client.ClientRef} is not checked in" + entity.ReceivedOnRoutingKey, entity.CorrelationId, entity, client.ClientRef, null, null);
+                    }
+                    else
+                    {
+                        if ((bool)client.IsCheckedIn && entity.ReceivedOnRoutingKeyNodes[8] != "startchecked")
+                        {
+                            _logger.Warn($"Client {client.ClientRef} is check in but there is no startchecked on the routing key" + entity.ReceivedOnRoutingKey, entity.CorrelationId, entity, client.ClientRef, null, null);
+                        }
+
+                        if ((bool)client.IsCheckedIn && entity.ReceivedOnRoutingKeyNodes[8] == "startchecked")
+                        {
+                            _logger.Debug($"Received Routing has startchecked and client {client.ClientRef} is live in payroll", entity.CorrelationId, entity, client.ClientRef, null, null);
+                        }
+                    }
+                }
+                else
+                {
+                    _logger.Warn($"Client {client.ClientRef} has no startchecked flag on routing key " + entity.ReceivedOnRoutingKey, entity.CorrelationId, entity, client.ClientRef, null, null);
+                }
+
             }
             catch (Exception exp)
             {
@@ -76,9 +101,18 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                 throw new Exception($"Problem mapping Client from UFO {entity.ObjectId} - {exp.Message}");
             }
 
+            if (client.Division.Name == "Tuition Services" || client.Division.Name == "Student Support")
+            {
+                SendToRsm(JsonConvert.SerializeObject(rsmClient), "sws", "Client", entity.CorrelationId, (bool)client.IsCheckedIn);
+                _logger.Success($"Successfully mapped Client {client.ClientRef} and Sent To SWS RSM", entity.CorrelationId, rsmClient, client.ClientRef, "Dtos.Ufo.Client", null, null, "RSM.Client");
+            }
+            else
+            {
+                SendToRsm(JsonConvert.SerializeObject(rsmClient), Mappers.MapOpCoFromName(client.OpCo.Name.ToLower()).ToString(), "Client", entity.CorrelationId, (bool)client.IsCheckedIn);
+                _logger.Success($"Successfully mapped Client {client.ClientRef} and Sent To RSM", entity.CorrelationId, rsmClient, client.ClientRef, "Dtos.Ufo.Client", null, null, "RSM.Client");
+            }
 
-            SendToRsm(JsonConvert.SerializeObject(rsmClient), Mappers.MapOpCoFromName(client.OpCo.Name.ToLower()).ToString(), "Client", entity.CorrelationId, (bool)client.IsCheckedIn);
-            _logger.Success($"Successfully mapped Client {client.ClientRef} and Sent To RSM", entity.CorrelationId, rsmClient, client.ClientRef, "Dtos.Ufo.Client", null, null, "RSM.Client");
+
             entity.ExportSuccess = true;
 
         }

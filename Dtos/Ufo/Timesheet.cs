@@ -29,19 +29,25 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
         public bool Cancelled { get; set; }
         public string PoNumber { get; set; }
         public string TimesheetRef { get; set; }
-        public string PeriodStartDate { get; set; }
-        public string PeriodEndDate { get; set; }
+        public string StartDate { get; set; }
+        public string EndDate { get; set; }
         public string ExternalTimesheetId { get; set; }
 
         public Team OpCo { get; set; }
+        public Team Division { get; set; }
 
-    
+
         public List<TimesheetLine> TimesheetLines { get; set; }
         public List<Expense> Expenses { get; set; }
         public string ApprovalStatus { get; set; }
         public string ApprovedBy { get; set; }
         public string ApprovedDateTime { get; set; }
         public bool? ProcessAdjustments { get; set; }
+
+        //Student Support
+        public string StudentFirstName { get; set; }
+        public string StudentSurname { get; set; }
+
 
         private void AddExpenseTypeLines(List<RSM.Shift> shifts)
         {
@@ -68,59 +74,13 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
                     shift.rateName = exp.ExpenseType;
                     shift.daySpecified = true;
-                    shift.day = PeriodEndDate.GetDateTimeMilliseconds();
+                    shift.day = EndDate.GetDateTimeMilliseconds();
                     shift.rateName = exp.Rate.FeeName;
-                    shift.@decimal = (decimal) exp.Quantity;
+                    shift.@decimal = (decimal)exp.Quantity;
                     shift.decimalSpecified = true;
                     shifts.Add(shift);
                 }
             }
-  
-        }
-
-
-        private List<IGrouping<string, Expense>> GetConsolidatedExpenses(out List<Expense> consolidatedExpenses)
-        {
-            consolidatedExpenses = null;
-
-            if (Expenses == null) return null;
-            
-            var expenses = Expenses.GroupBy(x => x.ExpenseType).ToList();
-
-            if (!expenses.Any())
-            {
-                consolidatedExpenses = null;
-                return null;
-            }
-
-            consolidatedExpenses = new List<Expense>();
-            foreach (var a in expenses)
-            {
-                var expenseLines = a.AsEnumerable().ToList();
-                var expenseConsolidated = JsonConvert.DeserializeObject<Expense>(JsonConvert.SerializeObject(expenseLines.FirstOrDefault()));
-                
-                if (expenseConsolidated.ExpenseType=="Bonus") continue;
-                if (expenseConsolidated != null && expenseConsolidated.ExpenseType == "Mileage" || !expenseConsolidated.ExpenseType.Contains("Back Pay"))
-                {
-
-                    for (var i = 0; i < expenseLines.Count(); i++)
-                    {
-                        if (expenseLines[i].ExpenseType.ToLower() == "mileage")
-                        {
-                            expenseConsolidated.Quantity = expenseConsolidated.Quantity + expenseLines[i].Quantity;
-                        }
-                        else
-                        {
-                            expenseConsolidated.Quantity = 1;
-                            expenseConsolidated.Amount = expenseConsolidated.Amount + expenseLines[i].Amount;
-                        }
-                    }
-
-                    consolidatedExpenses.Add(expenseConsolidated);
-                }
-            }
-
-            return expenses;
 
         }
 
@@ -134,7 +94,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             TimesheetRef = TimesheetRef;
 
             var timesheet = MapBasicTimesheet();
-            
+
 
             var shiftList = new List<Shift>();
 
@@ -142,10 +102,17 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             AddExpenseTypeLines(shiftList);
             if (TimesheetLines != null && TimesheetLines.Any())
             {
-                //timesheet.shifts = new Shift[TimesheetLines.Count];
                 timesheet.shifts = new Shift[0];
                 var shiftIndex = 0;
-                
+
+
+                //removed as no longer needed
+                /*
+                if ((Division.Name == "Tuition Services" || Division.Name == "Student Support") && Unit.Name=="NTP Tuition Pillar")
+                {
+                    TimesheetLines.Add(GetDeduction(30, "DFE Subsidy - 70%"));
+                }*/
+
                 //Map all the time values
                 foreach (var line in TimesheetLines)
                 {
@@ -165,7 +132,6 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                     shift.payInvoiceRequiredSpecified = false;
                     shift.salesOnCostValueSpecified = false;
                     shift.rateIdSpecified = false;
-
 
                     if (line.Rate != null && line.Rate.RateType.ToLower() == "basic rate")
                     {
@@ -200,14 +166,20 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                     shift.daySpecified = true;
                     shift.rateName = rateName;
 
+                    if (Division.Name == "Tuition Services" || Division.Name == "Student Support")
+                    {
+                        shift.comment = StudentFirstName + " " + StudentSurname;
+                    }
+
+
                     //Hourly rate
-                    if (line.DaysReported == null && line.TotalHours > 0)
+                    if (line.DaysReported == null && (line.TotalHours > 0 || line.TotalHours < 0))
                     {
                         shift.hours = Convert.ToInt64(line.TotalHours * 60 * 60 * 1000);
                         shift.hoursSpecified = true;
 
                         shift.startTimeSpecified = true;
-                        
+
                         shift.startTime = line.StartDateTime.GetDateTimeMilliseconds();
 
                         shift.finishTimeSpecified = true;
@@ -236,7 +208,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                     if (line.DaysReported != null && line.DaysReported > 0)
                     {
 
-                        shift.@decimal = (decimal) line.DaysReported;
+                        shift.@decimal = (decimal)line.DaysReported;
                         shift.decimalSpecified = true;
                         shiftList.Add(shift);
                         shiftIndex++;
@@ -254,7 +226,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             if (Expenses != null && Expenses.Any())
             {
                 claim = new RSM.ExpenseClaim();
-                
+
                 claim.description = TimesheetRef;
                 claim.placementExternalId = AssignmentRef;
                 claim.placementIdSpecified = true;
@@ -264,7 +236,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                 foreach (var expense in Expenses)
                 {
                     if (expense.ExpenseType == "Bonus" || expense.ExpenseType == "Back Pay - Non WTR" || expense.ExpenseType == "Back Pay - WTR") continue;
-                    
+
                     var expenseItem = new RSM.ExpenseItem();
                     expenseItem.description = expense.Rate.ExpenseType;
 
@@ -273,15 +245,28 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                     expenseItem.grossValueSpecified = false;
                     expenseItem.exportedSpecified = false;
                     expenseItem.netValueSpecified = false;
-                    
+
                     expenseItem.receiptDateSpecified = true;
 
-                    expenseItem.receiptDate = DateTime.Parse(PeriodEndDate).Date;
+                    if (EndDate != null)
+                    {
+                        expenseItem.receiptDate = DateTime.Parse(EndDate).Date;
+                    }
+                    else
+                    {
+                        expenseItem.receiptDate = DateTime.Parse(ApprovedDateTime).Date;
+                    }
+
+                    if (Division.Name == "Tuition Services" || Division.Name == "Student Support")
+                    {
+                        expenseItem.freehandRef = StudentFirstName + " " + StudentSurname;
+                    }
 
                     if (TimesheetRef.StartsWith("NT"))
                     {
                         expenseItem.freehandRef = ExternalTimesheetId;
                     }
+
 
                     expenseItem.payrollRef = TimesheetRef;
 
@@ -329,8 +314,8 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                 }
             }
 
-            
-            
+
+
             return timesheetList;
         }
 
@@ -339,20 +324,20 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             var timesheet = new RSM.Timesheet();
 
             timesheet.periodEndDateSpecified = false;
-            if (PeriodEndDate != null)
+            if (EndDate != null)
             {
                 timesheet.periodEndDateSpecified = true;
 
-                DateTime periodEnd = DateTime.Parse(PeriodEndDate);
+                DateTime periodEnd = DateTime.Parse(EndDate);
                 timesheet.periodEndDate = periodEnd.Date;
             }
 
             timesheet.periodStartDateSpecified = false;
-            if (PeriodStartDate != null)
+            if (StartDate != null)
             {
                 timesheet.periodStartDateSpecified = true;
 
-                DateTime periodStart = DateTime.Parse(PeriodStartDate);
+                DateTime periodStart = DateTime.Parse(StartDate);
                 timesheet.periodStartDate = periodStart.Date;
             }
 
@@ -364,7 +349,11 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             timesheet.salesWrittenOffSpecified = true;
             timesheet.salesWrittenOff = false;
 
-            timesheet.freehandRef = TimesheetRef;
+            if (Division.Name == "Tuition Services" || Division.Name == "Student Support")
+            {
+                timesheet.freehandRef = StudentFirstName + " " + StudentSurname;
+            }
+
             if (TimesheetRef.StartsWith("NT"))
             {
                 timesheet.freehandRef = ExternalTimesheetId;
@@ -380,8 +369,47 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
             DateTime approvedOn = DateTime.Parse(ApprovedDateTime);
             timesheet.comment = "Approved by: " + ApprovedBy + " on " + approvedOn.ToString("dd/MM/yyyy hh:ss");
-            
+
+
             return timesheet;
+        }
+
+        private TimesheetLine GetDeduction(decimal percentageDeduction, string feeName)
+        {
+            var basic = TimesheetLines.Where(x => x.Rate.RateType.ToLower() == "basic rate").ToList();
+
+            if (basic == null) return null;
+
+            var deduction = new TimesheetLine();
+            deduction.StartDateTime = basic[0].StartDateTime;
+            deduction.EndDateTime = basic[0].EndDateTime;
+            deduction.StartDateTime = basic[0].StartDateTime;
+            deduction.EndDateTime = basic[0].EndDateTime;
+            deduction.HoursType = basic[0].HoursType;
+            deduction.PoNumber = basic[0].PoNumber;
+            deduction.TotalHours = 0;
+            foreach (var line in basic)
+            {
+                deduction.TotalHours = deduction.TotalHours + line.TotalHours;
+
+            }
+
+            deduction.TotalHours = deduction.TotalHours * -1;
+
+            deduction.Rate = new AssignmentRate();
+            deduction.Rate.FeeName = feeName; //"DFE Subsidy -70%";
+            deduction.Rate.OvertimeType = feeName;
+            deduction.Rate.PayRateCurrency = 0;
+            deduction.Rate.PayUnit = basic[0].Rate.PayUnit;
+            deduction.Rate.StartDate = AssignmentStart.ToString();
+
+            var charge = (decimal)basic[0].Rate.ChargeRateCurrency;
+            var percentage = percentageDeduction / 100;
+            charge = charge - (charge * percentage);
+            deduction.Rate.ChargeRateCurrency = Math.Round(charge, 2, MidpointRounding.AwayFromZero);
+            deduction.Rate.RateType = "Other Rate";
+            return deduction;
+
         }
 
 

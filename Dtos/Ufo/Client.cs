@@ -39,13 +39,15 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
         public Team Unit { get; set; }
 
         public Client HleClient { get; set; }
+        public Client RsmClient { get; set; }
+
         public string PoRequired { get; set; }
         public string SendRatesFormat { get; set; }
 
         public RSM.Client MapClient(List<DivisionCode> divisionCodes)
         {
             var client = new RSM.Client();
-            
+
             client.accountsRef = ClientRef;
 
             client.customText1 = HleClient != null ? HleClient.ClientRef : ClientRef;
@@ -125,7 +127,19 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
             client.paperOnInvoicesSpecified = true;
             client.paperOnInvoices = 7;
-            
+
+            client.termsDaysSpecified = true;
+            client.termsDays = 14;
+
+            //client name in RSM has a max length of 90 characters so truncate it
+            if (client.name.Length > 80)
+            {
+                client.name = client.name.Substring(0, 79);
+            }
+
+            client.paperOnInvoicesSpecified = true;
+            client.paperOnInvoices = 7;
+
             client.termsDaysSpecified = true;
             client.termsDays = 14;
 
@@ -136,10 +150,14 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             }
             else
             {
+
                 //is parent child client relationship 
-                if (ClientRef != HleClient.ClientRef)
+                if (HleClient != null)
                 {
-                    client.termsTemplateName = "Parent Child";
+                    if (ClientRef != HleClient.ClientRef)
+                    {
+                        client.termsTemplateName = "Parent Child";
+                    }
                 }
 
                 //check division to see if it has an invoice template if it has one then use that
@@ -175,7 +193,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             }
 
             client.termsType = "Days From Invoice Date";
-            
+
             client.timesheetsOnInvoicesSpecified = true;
             client.timesheetsOnInvoices = 0;
 
@@ -191,8 +209,6 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             {
                 client.primaryContact.address = WorkAddress.GetAddress();
             }
-
-
 
             return client;
         }

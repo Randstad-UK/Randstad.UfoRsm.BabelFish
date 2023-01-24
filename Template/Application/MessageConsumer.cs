@@ -105,40 +105,40 @@ namespace Randstad.UfoRsm.BabelFish.Template.Application
             cancellationToken.Register(() => _logger.Info($"{_serviceName} has been cancelled.", _correlationId, null, null, null, null));
 
             await Task.Run(async () =>
-              {
-                  while (!cancellationToken.IsCancellationRequested)
-                  {
-                      try
-                      {
-                          await ProcessMessages(cancellationToken);
+            {
+                while (!cancellationToken.IsCancellationRequested)
+                {
+                    try
+                    {
+                        await ProcessMessages(cancellationToken);
 
-                          await Task.Delay(TimeSpan.FromSeconds(_delay), cancellationToken);
-                          SetPollingInterval();
-                          _errorHandler.ResetKnownErrorsCount();
-                      }
-                      catch (Exception ex)
-                      {
-                          if (_errorHandler.Handle(ex, _correlationId))
-                          {
-                              _logger.Debug($"Handle known error {ex.Message}.", _correlationId, null, null, null, null);
-                              _consumerService.AcknowledgeMessage();
-                              continue;
-                          }
+                        await Task.Delay(TimeSpan.FromSeconds(_delay), cancellationToken);
+                        SetPollingInterval();
+                        _errorHandler.ResetKnownErrorsCount();
+                    }
+                    catch (Exception ex)
+                    {
+                        if (_errorHandler.Handle(ex, _correlationId))
+                        {
+                            _logger.Debug($"Handle known error {ex.Message}.", _correlationId, null, null, null, null);
+                            _consumerService.AcknowledgeMessage();
+                            continue;
+                        }
 
-                          if (_nextMessage != null)
-                          {
-                              _consumerService.RejectMessage(true);
-                          }
+                        if (_nextMessage != null)
+                        {
+                            _consumerService.RejectMessage(true);
+                        }
 
-                          _removeFromSd = false;
-                          _logger.Fatal($"{_serviceName}: {ex.Message}", _correlationId, null, null, null, null, ex);
-                          await StopAsync(cancellationToken);
-                      }
-                  }
+                        _removeFromSd = false;
+                        _logger.Fatal($"{_serviceName}: {ex.Message}", _correlationId, null, null, null, null, ex);
+                        await StopAsync(cancellationToken);
+                    }
+                }
 
-                  _hostApplicationLifetime.StopApplication();
+                _hostApplicationLifetime.StopApplication();
 
-              }, cancellationToken);
+            }, cancellationToken);
         }
 
         /// <summary>

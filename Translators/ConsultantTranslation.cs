@@ -72,7 +72,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
             SendToRsm(JsonConvert.SerializeObject(rsmConsultant), opco, "consultant", entity.CorrelationId, true);
             _logger.Success($"Successfully sent consultant {consultant.EmployeeRef} to RSM", entity.CorrelationId, rsmConsultant, consultant.EmployeeRef, "Dtos.Ufo.Consultant", null, null, "RSM.Consultant");
 
-        
+
             entity.ExportSuccess = true;
         }
     }

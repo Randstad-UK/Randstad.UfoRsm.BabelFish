@@ -10,10 +10,16 @@ namespace Randstad.UfRsm.BabelFish.Dtos.Ufo
 {
     public class HolidayRequest
     {
+        public string HolidayRequestId { get; set; }
+        public string HolidayRequestRef { get; set; }
         public Candidate Candidate { get; set; }
+        public DateTime HolidayRequestDate { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-        public string HolidayRequestRef { get; set; }
+        public DateTime SubmittedOn { get; set; }
+        public DateTime ApprovedOn { get; set; }
+        public DateTime DeclinedOn { get; set; }
+        public string Notes { get; set; }
         public Decimal Hours { get; set; }
         public string ApproverExternalId { get; set; }
 
@@ -27,7 +33,15 @@ namespace Randstad.UfRsm.BabelFish.Dtos.Ufo
 
             hr.daysClaimedSpecified = true;
             hr.daysClaimed = Hours;
-            
+            hr.submittedSpecified = true;
+            hr.submitted = SubmittedOn;
+            hr.approvedSpecified = true;
+            hr.approved = ApprovedOn;
+            hr.approver = new User();
+            hr.approver.externalId = "UFO" + ApproverExternalId;
+            hr.submitter = new User();
+            hr.submitter.externalId = "UFO" + ApproverExternalId;
+
             hr.periodStartDateSpecified = true;
             hr.periodStartDate = StartDate;
 
@@ -35,15 +49,10 @@ namespace Randstad.UfRsm.BabelFish.Dtos.Ufo
             hr.periodEndDate = EndDate;
             hr.showIn = "hours";
             hr.showInString = "hours";
-            
-            hr.submittedSpecified = true;
-            hr.submitter = new User(){externalId = Candidate.CandidateRef};
 
-            hr.approver = new User();
-            hr.approver.externalId = ApproverExternalId;
             hr.comment = HolidayRequestRef;
             hr.recordStatus = "Approved";
-            
+
             return hr;
         }
     }

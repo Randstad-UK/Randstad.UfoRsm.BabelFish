@@ -2,55 +2,12 @@
 using System.Collections.Generic;
 using System.Text;
 using Randstad.OperatingCompanies;
-using RSM;
 
 namespace Randstad.UfoRsm.BabelFish.Helpers
 {
     public static class Mappers
     {
-        /*
-        public static  TrueFalse MapTrueFalse(string value)
-        {
-            switch (value)
-            {
-                case "Yes":
-                    return TrueFalse.T;
-                case "No":
-                    return TrueFalse.F;
-                default:
-                    throw new Exception("Unknown Yes No type");
-            }
-        }
-
-
-        public static YesNo MapYesNo(string value)
-        {
-
-            switch (value)
-            {
-                case "Yes":
-                    return YesNo.Y;
-                case "No":
-                    return YesNo.N;
-                default:
-                    throw new Exception("Unknown yes no value");
-            }
-        }
-
-        public static OperatingCompany MapOpCo(string value)
-        {
-            switch (value)
-            {
-                case "CPE":
-                    return OperatingCompany.CPE;
-                case "BS":
-                    return OperatingCompany.BS;
-                case "PS":
-                    return OperatingCompany.CARE;
-                default: return OperatingCompany.Unknown;
-            }
-        }
-        */
+       
 
         public static bool MapBool(string value)
         {
@@ -110,21 +67,21 @@ namespace Randstad.UfoRsm.BabelFish.Helpers
             switch (value.ToLower())
             {
                 case "electronic":
-                {
-                    return 1;
-                }
+                    {
+                        return 1;
+                    }
                 case "paper":
-                {
-                    return 0;
-                }
+                    {
+                        return 0;
+                    }
                 case "self bill":
-                {
-                    return 3;
-                }
+                    {
+                        return 3;
+                    }
                 default:
-                {
-                    return defaultValue;
-                }
+                    {
+                        return defaultValue;
+                    }
             }
         }
 
@@ -136,22 +93,22 @@ namespace Randstad.UfoRsm.BabelFish.Helpers
             switch (value.ToLower())
             {
                 case "male":
-                {
-                    return "M";
-                }
+                    {
+                        return "M";
+                    }
                 case "female":
-                {
-                    return "F";
-                }
+                    {
+                        return "F";
+                    }
                 default:
-                {
-                    return "M";
-                    //throw new Exception("Unknown gender recieved");
-                }
+                    {
+                        return "M";
+                        //throw new Exception("Unknown gender recieved");
+                    }
             }
         }
 
 
-        
+
     }
 }

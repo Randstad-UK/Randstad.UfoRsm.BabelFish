@@ -66,7 +66,7 @@ namespace Randstad.UfoRsm.BabelFish
                         applicationSettings.ServiceName,
                         serviceDiscoverySettings.ServiceDetails.HostServer,
                         applicationSettings.Environment,
-                        RequiredConfigurationGroupNames: new List<string>(){applicationSettings.ConfigGroup},
+                        RequiredConfigurationGroupNames: new List<string>() { applicationSettings.ConfigGroup },
                         serviceDetailsSettings.IsApi,
                         serviceDetailsSettings.BaseUrl,
                         serviceDetailsSettings.AllowMonitorRestart);
@@ -112,7 +112,7 @@ namespace Randstad.UfoRsm.BabelFish
                         monitorConsumerService.CreateQueueAndBindings();
                     }
 
-                    
+
 
                     var producerSettings = new Dictionary<string, string>
                     {
@@ -127,7 +127,7 @@ namespace Randstad.UfoRsm.BabelFish
 
                     services.AddSingleton<IProducerService>(_ => producer);
                     services.AddSingleton<IErrorHandler, ErrorHandler>();
-                    
+
 
                     var rateMap = JsonConvert.DeserializeObject<Dictionary<string, string>>(sdClient.GetConfigurationGroup(applicationSettings.ConfigGroup)["RateMap"]);
                     var employerRefs = JsonConvert.DeserializeObject<Dictionary<string, string>>(sdClient.GetConfigurationGroup(applicationSettings.ConfigGroup)["EmpRefs"]);
@@ -157,7 +157,7 @@ namespace Randstad.UfoRsm.BabelFish
                     };
 
                     services.AddSingleton(translators);
-                    
+
                     services.AddSingleton<IMessageProcessor, MessageProcessor>();
 
                     logger.Info("ConfigureServices done.", Guid.NewGuid(), null, null, null, null);

@@ -35,18 +35,18 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
         public ClientContact InvoicePerson { get; set; }
         public ClientContact ClientContact { get; set; }
 
-        public Client RsmClient { get; set; }
+        public Client Client { get; set; }
         public Client Hle { get; set; }
 
         public List<ConsultantSplit> ConsultantSplits { get; set; }
 
-        public Dtos.RsmInherited.Placement MapPlacement( ILogger logger, Guid correlationId, List<DivisionCode> divisionCodes)
+        public Dtos.RsmInherited.Placement MapPlacement(ILogger logger, Guid correlationId, List<DivisionCode> divisionCodes)
         {
 
             var placement = new Dtos.RsmInherited.Placement();
             placement.holidayAccrualRateSpecified = false;
             placement.invoiceRequiresPOSpecified = false;
-            placement.bulkEntrySpecified = false;
+
             placement.holidayAccrualRatePostAWRSpecified = false;
             placement.startSpecified = true;
             placement.start = StartDate.ToLocalTime();
@@ -58,23 +58,20 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             placement.PAYEDeductionsOnLtdSpecified = true;
             placement.PAYEDeductionsOnLtd = false;
 
-            placement.agencyOnlySpecified = true;
-            placement.agencyOnly = true;
-
             placement.cisApplicableSpecified = true;
             placement.cisApplicable = false;
 
             placement.client = Hle.MapClient(divisionCodes);
 
-            placement.clientSite = RsmClient.ClientName;
+            placement.clientSite = Client.ClientName;
             if (placement.clientSite.Length > 80)
             {
                 placement.clientSite = placement.clientSite.Substring(0, 79);
             }
 
             placement.consultant = Owner.MapConsultant();
-            placement.customText2 = RsmClient.ClientRef;
-            placement.customText3 = RsmClient.WorkAddress.GetConcatenatedAddress();
+            placement.customText2 = Client.ClientRef;
+            placement.customText3 = Client.WorkAddress.GetConcatenatedAddress();
 
             placement.endSpecified = true;
             placement.end = DateTime.Now;
@@ -97,23 +94,19 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             placement.customText4 = CostCentre;
             placement.customText5 = CandidateFirstName + " " + CandidateLastName;
 
-            var placementStartDate = (DateTime) StartDate;
-            
+            var placementStartDate = (DateTime)StartDate;
+
             //TODO: Remove this once fix confirmed
             //placement.chargeTermsExtraTextOverride = $"For the permanent placement of {CandidateFirstName} {CandidateLastName}, {PlacementJobTitle}, {placementStartDate.ToString("dd/MM/yyyy")}, placement reference {PlacementRef}";
 
-            
+
 
             placement.invoiceRequiresPOSpecified = false;
             if (PoRequired != null)
             {
                 placement.invoiceRequiresPOSpecified = true;
                 placement.invoiceRequiresPO = Mappers.MapBool(PoRequired);
-
-                if (!string.IsNullOrEmpty(PoNumber))
-                {
-                    placement.purchaseOrderNum = PoNumber.Trim();
-                }
+                placement.purchaseOrderNum = PoNumber;
             }
 
             placement.invoiceContactOverride = InvoicePerson.MapContact();
@@ -132,20 +125,16 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
             placement.purchaseBranch = Unit.Name;
             placement.purchaseCostCentre = Unit.FinanceCode;
-            
+
             //ToDo: Remove this when confirmed fix is right
             //placement.purchaseDivision = OpCo.Name;
 
-            placement.purchaseDivision = divisionCodes.SingleOrDefault(x=>x.Code==Unit.FinanceCode)?.Division;
+            placement.purchaseDivision = divisionCodes.SingleOrDefault(x => x.Code == Unit.FinanceCode).Division;
 
-            if (!string.IsNullOrEmpty(PoNumber))
-            {
-                placement.purchaseOrderNum = PoNumber.Trim();
-            }
-
+            placement.purchaseOrderNum = PoNumber;
             placement.roundToNearestMinSpecified = true;
             placement.roundToNearestMin = 1;
-            placement.siteAddress = RsmClient.WorkAddress.GetAddress();
+            placement.siteAddress = Client.WorkAddress.GetAddress();
 
             placement.salesDivision = placement.purchaseDivision;
             placement.salesBranch = placement.purchaseBranch;
@@ -158,7 +147,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
             if (ClientContact != null)
             {
-                placement.manager = ClientContact.MapContactManager(RsmClient);
+                placement.manager = ClientContact.MapContactManager(Client);
             }
 
             placement.timesheetApprovalRoute = "Auto Approval Route";
@@ -180,7 +169,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             rate.effectiveFromSpecified = true;
             rate.effectiveFrom = StartDate.ToLocalTime();
             rate.frontendRef = PlacementRef;
-            
+
             //TODO: remove once confirmed that fix is working.
             //rate.name = "Perm Placement Fee";
 
@@ -209,9 +198,9 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             for (int i = 0; i < ConsultantSplits.Count; i++)
             {
                 var split = new Dtos.RsmInherited.ConsultantSplit();
-                split.ExternalUserId = "UFO"+ConsultantSplits[i].Consultant.EmployeeRef;
+                split.ExternalUserId = "UFO" + ConsultantSplits[i].Consultant.EmployeeRef;
                 split.weightSpecified = true;
-                split.weight = ConsultantSplits[i].Split / 100; 
+                split.weight = ConsultantSplits[i].Split / 100;
                 placement.splitCommissions[i] = split;
             }
 
