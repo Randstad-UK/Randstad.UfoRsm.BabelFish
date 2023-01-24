@@ -101,15 +101,6 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
             placement.invoiceRequiresPOSpecified = false;
 
-            if (InvoicePerson != null)
-            {
-                placement.invoiceContactOverride = InvoicePerson.MapContact();
-
-                //billing requested no name
-                placement.invoiceContactOverride.firstname = string.Empty;
-                placement.invoiceContactOverride.lastname = string.Empty;
-            }
-
             var invoiceEmailList = new List<string>();
 
             if (!string.IsNullOrEmpty(Client.InvoiceEmail))
@@ -142,20 +133,6 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             if (placement.invoiceContactOverride!=null && !string.IsNullOrEmpty(placement.invoiceContactOverride.email) && placement.invoiceContactOverride.email.EndsWith("; "))
             {
                 placement.invoiceContactOverride.email = placement.invoiceContactOverride.email.Remove(placement.invoiceContactOverride.email.LastIndexOf(";"));
-            }
-
-            if (ClientContact != null)
-            {
-                if (placement.invoiceContactOverride == null)
-                {
-                    placement.invoiceContactOverride = new Contact();
-                }
-
-                if (ClientContact != null)
-                {
-                    placement.invoiceContactOverride.firstname = ClientContact.Forename;
-                    placement.invoiceContactOverride.lastname = ClientContact.Surname;
-                }
             }
 
 
@@ -298,6 +275,11 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
                 foreach (var email in invoiceEmailList)
                 {
+                    if (placement.invoiceContactOverride == null)
+                    {
+                        placement.invoiceContactOverride=new Contact();
+                    }
+
                     placement.invoiceContactOverride.email = placement.invoiceContactOverride.email + email + "; ";
                 }
 
