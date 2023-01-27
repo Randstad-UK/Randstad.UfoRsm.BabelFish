@@ -216,7 +216,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                 }
             }
 
-            if (shiftList.Any())
+            if (TimesheetRef.StartsWith("NT") || shiftList.Any())
             {
                 timesheet.shifts = shiftList.ToArray();
                 timesheetList.Add(timesheet);
@@ -292,6 +292,14 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
                         expenseItem.unitSpecified = true;
                         expenseItem.unit = expense.Quantity;
+                    }
+
+                    if (expense.Rate.NonChargeableToClient)
+                    {
+                        expenseItem.chargeableGross = 0;
+                        expenseItem.chargeableGrossSpecified = true;
+                        expenseItem.chargeableNet = 0;
+                        expenseItem.chargeableNetSpecified = true;
                     }
 
                     try

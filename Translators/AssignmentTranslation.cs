@@ -170,11 +170,6 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                 SendToRsm(JsonConvert.SerializeObject(assignment), "sws", "Assignment", entity.CorrelationId, Helpers.Mappers.MapCheckin(assign.CheckIn));
                 _logger.Success($"Successfully mapped Assignment {assign.AssignmentRef} and sent to SWS RSM", entity.CorrelationId, assignment, assign.AssignmentRef, "Dtos.Ufo.Assignment", null, null, "Dtos.Sti.Assignment");
             }
-            else if (assign.OpCo.Name == "Customer Success")
-            {
-                SendToRsm(JsonConvert.SerializeObject(assignment), "ris", "Assignment", entity.CorrelationId, Helpers.Mappers.MapCheckin(assign.CheckIn));
-                _logger.Success($"Successfully mapped Assignment {assign.AssignmentRef} and sent to RIS RSM", entity.CorrelationId, assignment, assign.AssignmentRef, "Dtos.Ufo.Assignment", null, null, "Dtos.Sti.Assignment");
-            }
             else
             {
                 SendToRsm(JsonConvert.SerializeObject(assignment), Mappers.MapOpCoFromName(assign.OpCo.Name).ToString(), "Assignment", entity.CorrelationId, Helpers.Mappers.MapCheckin(assign.CheckIn));
