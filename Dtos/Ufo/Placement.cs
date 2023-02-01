@@ -92,6 +92,8 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                 CostCentre = "";
             }
             placement.customText4 = CostCentre;
+            placement.salesDepartment = CostCentre;
+
             placement.customText5 = CandidateFirstName + " " + CandidateLastName;
 
             var placementStartDate = (DateTime)StartDate;

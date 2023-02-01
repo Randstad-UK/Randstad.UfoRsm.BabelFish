@@ -95,6 +95,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                 CostCentre = "";
             }
             placement.customText4 = CostCentre;
+            placement.salesDepartment = CostCentre;
 
             placement.faxbackEnabledSpecified = true;
             placement.faxbackEnabled = false;
