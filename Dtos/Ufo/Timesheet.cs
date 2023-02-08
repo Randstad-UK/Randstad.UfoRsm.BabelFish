@@ -294,17 +294,15 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                         expenseItem.unit = expense.Quantity;
                     }
 
-                    if (expense.Rate.NonChargeableToClient)
-                    {
-                        expenseItem.chargeableGross = 0;
-                        expenseItem.chargeableGrossSpecified = true;
-                        expenseItem.chargeableNet = 0;
-                        expenseItem.chargeableNetSpecified = true;
-                    }
-
                     try
                     {
                         expenseItem.payElementCode = rateCodes[expense.ExpenseType];
+
+                        if (expense.Rate.NonChargeableToClient)
+                        {
+                            expenseItem.payElementCode = expenseItem.payElementCode + "NC";
+                            expenseItem.description = expense.Rate.ExpenseType +" NC";
+                        }
                     }
                     catch (Exception exp)
                     {

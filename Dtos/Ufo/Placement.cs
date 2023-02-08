@@ -116,8 +116,9 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             //Billing team do not want the name values
             placement.invoiceContactOverride.firstname = string.Empty;
             placement.invoiceContactOverride.lastname = string.Empty;
+            placement.invoiceContactOverride.email = string.Empty;
 
-            placement.invoiceContactOverride.address = InvoiceAddress.MapAddress();
+
             placement.jobDescription = PlacementJobTitle;
             placement.jobTitle = PlacementJobTitle;
 
@@ -156,6 +157,52 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
             placement.timesheetEmailApprovalSpecified = true;
             placement.timesheetEmailApproval = false;
+
+            
+            var invoiceEmailList = new List<string>();
+
+            if (!string.IsNullOrEmpty(Client.InvoiceEmail))
+            {
+                invoiceEmailList.Add(Client.InvoiceEmail);
+            }
+
+            if (!string.IsNullOrEmpty(Client.InvoiceEmail2))
+            {
+                invoiceEmailList.Add(Client.InvoiceEmail2);
+            }
+
+            if (!string.IsNullOrEmpty(Client.InvoiceEmail3))
+            {
+                invoiceEmailList.Add(Client.InvoiceEmail3);
+
+            }
+
+            foreach (var email in invoiceEmailList)
+            {
+                if (placement.invoiceContactOverride == null)
+                {
+                    placement.invoiceContactOverride = new Contact();
+                }
+
+                placement.invoiceContactOverride.email = placement.invoiceContactOverride.email + email + "; ";
+            }
+
+            //clear last semi colon if invoice email set
+            if (placement.invoiceContactOverride != null && !string.IsNullOrEmpty(placement.invoiceContactOverride.email) && placement.invoiceContactOverride.email.EndsWith("; "))
+            {
+                placement.invoiceContactOverride.email = placement.invoiceContactOverride.email.Remove(placement.invoiceContactOverride.email.LastIndexOf(";"));
+            }
+
+            if (InvoiceAddress != null)
+            {
+                if (placement.invoiceContactOverride == null)
+                {
+                    placement.invoiceContactOverride = new Contact();
+                }
+
+                placement.invoiceContactOverride.address = InvoiceAddress.MapAddress();
+
+            }
 
             placement.rates = new RSM.Rate[1];
 

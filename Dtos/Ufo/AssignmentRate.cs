@@ -191,12 +191,6 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
                         rate.name = mapName;
 
-                        if (NonChargeableToClient)
-                        {
-                            rate.charge = 0;
-                            rate.chargeSpecified = true;
-                        }
-
                         break;
                     }
                 case "Other Rate":
@@ -265,12 +259,6 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                             rate.period = "Fixed";
                         }
 
-                        if (NonChargeableToClient)
-                        {
-                            rate.charge = 0;
-                            rate.chargeSpecified = true;
-                        }
-
                         rate.name = FeeName;
                         break;
                     }
@@ -293,14 +281,14 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                             rate.chargeSpecified = true;
                         }
 
+                        rate.name = FeeName;
+
                         if (NonChargeableToClient)
                         {
-                            rate.charge = 0;
-                            rate.chargeSpecified = true;
-
+                            rate.payElementCode = rate.payElementCode + "NC";
+                            rate.name = rate.name + " NC";
                         }
 
-                        rate.name = FeeName;
                         break;
                     }
 

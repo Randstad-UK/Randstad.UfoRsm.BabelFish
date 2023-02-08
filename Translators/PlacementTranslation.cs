@@ -53,6 +53,13 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                     return;
                 }
 
+                if(placement.InvoiceAddress== null) 
+                {
+                    _logger.Warn($"Placement {placement.PlacementRef} does not have an invoice address", entity.CorrelationId, entity, placement.PlacementRef, "Dtos.Ufo.ExportedEntity", null);
+                    entity.ExportSuccess = false;
+                    return;
+                }
+
                 _logger.Debug("Received Routing Key: " + entity.ReceivedOnRoutingKey, entity.CorrelationId, entity, placement.PlacementRef, null, null);
                 if (entity.ReceivedOnRoutingKeyNodes != null && entity.ReceivedOnRoutingKeyNodes.Length == 9)
                 {
