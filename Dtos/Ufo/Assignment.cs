@@ -320,7 +320,6 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             if (Candidate.PayType != PaymentTypes.PAYE) return;
 
 
-
             if (!string.IsNullOrEmpty(HolidayPay) && HolidayPay.ToLower() == "rolled up holiday pay")
             {
                 placement.holidayAccrualRateSpecified = true;

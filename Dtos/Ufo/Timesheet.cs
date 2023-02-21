@@ -241,7 +241,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                     expenseItem.description = expense.Rate.ExpenseType;
 
                     expenseItem.placementExternalId = AssignmentRef;
-                    expenseItem.type = "Expenses";
+                    expenseItem.type = expense.Rate.ExpenseType;
                     expenseItem.grossValueSpecified = false;
                     expenseItem.exportedSpecified = false;
                     expenseItem.netValueSpecified = false;
@@ -276,6 +276,9 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                         expenseItem.netValueSpecified = true;
                         expenseItem.netValue = expense.Quantity * expense.Rate.PayRateCurrency;
 
+                        expenseItem.grossValueSpecified = true;
+                        expenseItem.grossValue = expenseItem.netValue;
+
                         expenseItem.unitNetSpecified = true;
                         expenseItem.unitNet = expense.Rate.PayRateCurrency;
 
@@ -286,6 +289,9 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                     {
                         expenseItem.netValueSpecified = true;
                         expenseItem.netValue = expense.Quantity * expense.Amount;
+
+                        expenseItem.grossValueSpecified = true;
+                        expenseItem.grossValue = expenseItem.netValue;
 
                         expenseItem.unitNetSpecified = true;
                         expenseItem.unitNet = expense.Amount;
@@ -301,7 +307,8 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                         if (expense.Rate.NonChargeableToClient)
                         {
                             expenseItem.payElementCode = expenseItem.payElementCode + "NC";
-                            expenseItem.description = expense.Rate.ExpenseType +" NC";
+                            expenseItem.type = expense.Rate.ExpenseType +" NC";
+                            expenseItem.description = expenseItem.type;
                         }
                     }
                     catch (Exception exp)
