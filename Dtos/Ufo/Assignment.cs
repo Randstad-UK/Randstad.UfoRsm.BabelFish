@@ -165,6 +165,10 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             {
                 placement.purchaseOrderNum = PoNumber.Trim();
             }
+            else
+            {
+                placement.purchaseOrderNum = "";
+            }
 
             placement.roundToNearestMinSpecified = true;
             placement.roundToNearestMin = 1;

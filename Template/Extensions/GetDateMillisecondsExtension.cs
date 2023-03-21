@@ -17,6 +17,7 @@ namespace Randstad.UfoRsm.BabelFish.Template.Extensions
         public static long GetDateTimeMilliseconds(this string date)
         {
             var d = DateTime.Parse(date);
+            d = d.AddSeconds(-d.Second);
             long eTicks = (long)d.ToUniversalTime().Subtract(DateTime.UnixEpoch).TotalMilliseconds;
             return eTicks;
         }
