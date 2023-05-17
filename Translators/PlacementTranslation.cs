@@ -127,12 +127,12 @@ namespace Randstad.UfoRsm.BabelFish.Translators
 
             if (placement.Division.Name == "Tuition Services" || placement.Division.Name == "Student Support")
             {
-                SendToRsm(JsonConvert.SerializeObject(mappedPlacement), "sws", "Placement", entity.CorrelationId, Mappers.MapCheckin(placement.CheckIn));
+                SendToRsm(JsonConvert.SerializeObject(mappedPlacement), "sws", "Placement", entity.CorrelationId, Mappers.MapCheckin(placement.CheckIn), false, entity.EventType);
                 _logger.Success($"Successfully mapped Placement {placement.PlacementRef} and sent to SWS RSM", entity.CorrelationId, mappedPlacement, placement.PlacementRef, "Dtos.Ufo.Placement", null, null, "Dtos.Sti.Placement");
             }
             else
             {
-                SendToRsm(JsonConvert.SerializeObject(mappedPlacement), Mappers.MapOpCoFromName(placement.OpCo.Name).ToString(), "Placement", entity.CorrelationId, Mappers.MapCheckin(placement.CheckIn));
+                SendToRsm(JsonConvert.SerializeObject(mappedPlacement), Mappers.MapOpCoFromName(placement.OpCo.Name).ToString(), "Placement", entity.CorrelationId, Mappers.MapCheckin(placement.CheckIn), false, entity.EventType);
                 _logger.Success($"Successfully mapped Placement {placement.PlacementRef} and sent to RSM", entity.CorrelationId, mappedPlacement, placement.PlacementRef, "Dtos.Ufo.Placement", null, null, "Dtos.Sti.Placement");
             }
 

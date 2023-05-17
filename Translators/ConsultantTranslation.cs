@@ -69,7 +69,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
             var opco = Mappers.MapOpCoFromName(consultant.OpCo.Name).ToString();
 
             //send the consultant
-            SendToRsm(JsonConvert.SerializeObject(rsmConsultant), opco, "consultant", entity.CorrelationId, true);
+            SendToRsm(JsonConvert.SerializeObject(rsmConsultant), opco, "consultant", entity.CorrelationId, true, false, entity.EventType);
             _logger.Success($"Successfully sent consultant {consultant.EmployeeRef} to RSM", entity.CorrelationId, rsmConsultant, consultant.EmployeeRef, "Dtos.Ufo.Consultant", null, null, "RSM.Consultant");
 
 

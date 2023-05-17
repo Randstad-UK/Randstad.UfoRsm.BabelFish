@@ -103,12 +103,12 @@ namespace Randstad.UfoRsm.BabelFish.Translators
 
             if (client.Division.Name == "Tuition Services" || client.Division.Name == "Student Support")
             {
-                SendToRsm(JsonConvert.SerializeObject(rsmClient), "sws", "Client", entity.CorrelationId, (bool)client.IsCheckedIn);
+                SendToRsm(JsonConvert.SerializeObject(rsmClient), "sws", "Client", entity.CorrelationId, (bool)client.IsCheckedIn, false, entity.EventType);
                 _logger.Success($"Successfully mapped Client {client.ClientRef} and Sent To SWS RSM", entity.CorrelationId, rsmClient, client.ClientRef, "Dtos.Ufo.Client", null, null, "RSM.Client");
             }
             else
             {
-                SendToRsm(JsonConvert.SerializeObject(rsmClient), Mappers.MapOpCoFromName(client.OpCo.Name.ToLower()).ToString(), "Client", entity.CorrelationId, (bool)client.IsCheckedIn);
+                SendToRsm(JsonConvert.SerializeObject(rsmClient), Mappers.MapOpCoFromName(client.OpCo.Name.ToLower()).ToString(), "Client", entity.CorrelationId, (bool)client.IsCheckedIn, false, entity.EventType);
                 _logger.Success($"Successfully mapped Client {client.ClientRef} and Sent To RSM", entity.CorrelationId, rsmClient, client.ClientRef, "Dtos.Ufo.Client", null, null, "RSM.Client");
             }
 

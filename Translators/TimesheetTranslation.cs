@@ -107,7 +107,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                 {
                     if (timesheet.Division.Name == "Tuition Services" || timesheet.Division.Name == "Student Support")
                     {
-                        SendToRsm(JsonConvert.SerializeObject(ts), "sws", "Timesheet", entity.CorrelationId, true);
+                        SendToRsm(JsonConvert.SerializeObject(ts), "sws", "Timesheet", entity.CorrelationId, true, false, "Create");
 
                         _logger.Success($"Successfully mapped Timesheet {timesheet.TimesheetRef} and sent to SWS RSM",
                             entity.CorrelationId, ts, timesheet.TimesheetRef, "Dtos.Ufo.Timesheet", null, null,
@@ -115,7 +115,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                     }
                     else
                     {
-                        SendToRsm(JsonConvert.SerializeObject(ts), Mappers.MapOpCoFromName(timesheet.OpCo.Name.ToLower()).ToString(), "Timesheet", entity.CorrelationId, true);
+                        SendToRsm(JsonConvert.SerializeObject(ts), Mappers.MapOpCoFromName(timesheet.OpCo.Name.ToLower()).ToString(), "Timesheet", entity.CorrelationId, true, false, "Create");
 
                         _logger.Success($"Successfully mapped Timesheet {timesheet.TimesheetRef} and sent to RSM",
                             entity.CorrelationId, ts, timesheet.TimesheetRef, "Dtos.Ufo.Timesheet", null, null,
@@ -143,14 +143,14 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                 {
                     if (timesheet.Division.Name == "Tuition Services" || timesheet.Division.Name == "Student Support")
                     {
-                        SendToRsm(JsonConvert.SerializeObject(claim), "sws", "ExpenseClaim", entity.CorrelationId, true);
+                        SendToRsm(JsonConvert.SerializeObject(claim), "sws", "ExpenseClaim", entity.CorrelationId, true, false, "Create");
                         _logger.Success($"Successfully mapped expenses for {timesheet.TimesheetRef} and sent to SWS RSM",
                             entity.CorrelationId, claim, timesheet.TimesheetRef, "Dtos.Ufo.Timesheet", null, null,
                             "RSM.ExpenseClaim");
                     }
                     else
                     {
-                        SendToRsm(JsonConvert.SerializeObject(claim), Mappers.MapOpCoFromName(timesheet.OpCo.Name.ToLower()).ToString(), "ExpenseClaim", entity.CorrelationId, true);
+                        SendToRsm(JsonConvert.SerializeObject(claim), Mappers.MapOpCoFromName(timesheet.OpCo.Name.ToLower()).ToString(), "ExpenseClaim", entity.CorrelationId, true, false, "Create");
                         _logger.Success($"Successfully mapped expenses for {timesheet.TimesheetRef} and sent to RSM",
                             entity.CorrelationId, claim, timesheet.TimesheetRef, "Dtos.Ufo.Timesheet", null, null,
                             "RSM.ExpenseClaim");
@@ -162,7 +162,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                 //Netive timesheets go directly to 
                 if (timesheet.TimesheetRef.StartsWith("NT"))
                 {
-                    SendToRsm(JsonConvert.SerializeObject(claim), Mappers.MapOpCoFromName(timesheet.OpCo.Name.ToLower()).ToString(), "ExpenseClaim", entity.CorrelationId, true, true);
+                    SendToRsm(JsonConvert.SerializeObject(claim), Mappers.MapOpCoFromName(timesheet.OpCo.Name.ToLower()).ToString(), "ExpenseClaim", entity.CorrelationId, true, true, entity.EventType);
                     _logger.Success($"Successfully mapped expenses for {timesheet.TimesheetRef} and sent to Adjustment Service", entity.CorrelationId, claim, timesheet.TimesheetRef, "Dtos.Ufo.Timesheet", null, null, "RSM.ExpenseClaim");
                 }
             }

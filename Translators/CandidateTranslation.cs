@@ -153,12 +153,12 @@ namespace Randstad.UfoRsm.BabelFish.Translators
 
             if (candidate.Division.Name == "Tuition Services" || candidate.Division.Name == "Student Support")
             {
-                SendToRsm(JsonConvert.SerializeObject(rmsWorker), "sws", "Worker", entity.CorrelationId, liveInPayroll);
+                SendToRsm(JsonConvert.SerializeObject(rmsWorker), "sws", "Worker", entity.CorrelationId, liveInPayroll, false, entity.EventType);
                 _logger.Success($"Successfully mapped Candidate {candidate.CandidateRef} and sent to SWS RSM", entity.CorrelationId, rmsWorker, candidate.CandidateRef, "Dtos.Ufo.Candidate", null, null, "RSM.Worker");
             }
             else
             {
-                SendToRsm(JsonConvert.SerializeObject(rmsWorker), Mappers.MapOpCoFromName(candidate.OperatingCo.Name.ToLower()).ToString(), "Worker", entity.CorrelationId, liveInPayroll);
+                SendToRsm(JsonConvert.SerializeObject(rmsWorker), Mappers.MapOpCoFromName(candidate.OperatingCo.Name.ToLower()).ToString(), "Worker", entity.CorrelationId, liveInPayroll, false, entity.EventType);
                 _logger.Success($"Successfully mapped Candidate {candidate.CandidateRef} and sent to RSM", entity.CorrelationId, rmsWorker, candidate.CandidateRef, "Dtos.Ufo.Candidate", null, null, "RSM.Worker");
             }
 

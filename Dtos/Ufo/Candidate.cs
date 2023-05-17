@@ -179,6 +179,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             }
 
             worker.customText5 = "";
+
             if (Paye.PAI == "Opt In" && (OperatingCo.Name == "Business Solutions" || OperatingCo.Name == "Customer Success"))
             {
                 worker.customText5 = "PAI";
@@ -205,10 +206,13 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                 worker.isCISSpecified = true;
             }
 
+            worker.customText5 = "";
+            //TODO: removed because finance asked for it to be removed
+            /*
             if (LtdCompany.PLIOptOut == "Yes")
             {
                 worker.customText5 = "PLI";
-            }
+            }*/
 
             worker.limitedCompany = new RSM.Company();
 

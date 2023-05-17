@@ -159,6 +159,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             placement.purchaseBranch = Unit.Name;
             placement.purchaseCostCentre = Unit.FinanceCode;
 
+
             placement.purchaseDivision = divisionCodes.SingleOrDefault(x => x.Code == Unit.FinanceCode)?.Division;
 
             if (!string.IsNullOrEmpty(PoNumber))

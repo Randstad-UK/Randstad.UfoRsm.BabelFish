@@ -165,14 +165,20 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                 return;
             }
 
+            var eventType = "Update";
+            if (entity.EventType == "CheckIn")
+            {
+                eventType = "Create";
+            }
+
             if (assign.Division.Name == "Tuition Services" || assign.Division.Name == "Student Support")
             {
-                SendToRsm(JsonConvert.SerializeObject(assignment), "sws", "Assignment", entity.CorrelationId, Helpers.Mappers.MapCheckin(assign.CheckIn));
+                SendToRsm(JsonConvert.SerializeObject(assignment), "sws", "Assignment", entity.CorrelationId, Helpers.Mappers.MapCheckin(assign.CheckIn), false, eventType);
                 _logger.Success($"Successfully mapped Assignment {assign.AssignmentRef} and sent to SWS RSM", entity.CorrelationId, assignment, assign.AssignmentRef, "Dtos.Ufo.Assignment", null, null, "Dtos.Sti.Assignment");
             }
             else
             {
-                SendToRsm(JsonConvert.SerializeObject(assignment), Mappers.MapOpCoFromName(assign.OpCo.Name).ToString(), "Assignment", entity.CorrelationId, Helpers.Mappers.MapCheckin(assign.CheckIn));
+                SendToRsm(JsonConvert.SerializeObject(assignment), Mappers.MapOpCoFromName(assign.OpCo.Name).ToString(), "Assignment", entity.CorrelationId, Helpers.Mappers.MapCheckin(assign.CheckIn), false, eventType);
                 _logger.Success($"Successfully mapped Assignment {assign.AssignmentRef} and sent to RSM", entity.CorrelationId, assignment, assign.AssignmentRef, "Dtos.Ufo.Assignment", null, null, "Dtos.Sti.Assignment");
             }
 

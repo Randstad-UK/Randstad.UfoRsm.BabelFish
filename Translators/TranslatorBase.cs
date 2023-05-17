@@ -27,27 +27,35 @@ namespace Randstad.UfoRsm.BabelFish.Translators
             _allowBlockByDivision = allowBlockByDivision;
         }
 
-        protected void SendToRsm(string body, string opCo, string obj, Guid correlationId, bool isCheckedIn, bool? processAdjustment = null)
+        protected void SendToRsm(string body, string opCo, string obj, Guid correlationId, bool isCheckedIn, bool? processAdjustment = null, string action=null)
         {
             try
             {
                 var routingKey = _routingKeyBase.Replace("{opco}", opCo.ToLower());
 
-                if (isCheckedIn && processAdjustment == null)
+                if (isCheckedIn && (processAdjustment == null || processAdjustment == false))
                 {
-                    routingKey = routingKey.Replace("{rule}", ".startchecked");
+                    routingKey = routingKey.Replace("{rule}", $".startchecked.{action}");
+                }
+
+                if (!isCheckedIn && (processAdjustment == null || processAdjustment == false))
+                {
+                    routingKey = routingKey.Replace("{rule}", $".ignore.{action}");
                 }
 
                 if (processAdjustment == true)
-                {
-                    routingKey = routingKey.Replace("{rule}", ".startchecked.adjustment");
+                { 
+                    routingKey = routingKey.Replace("{rule}", $".startchecked.adjustment");
                 }
-                else
-                {
-                    routingKey = routingKey.Replace("{rule}", string.Empty);
-                }
+                
+
 
                 routingKey = routingKey.Replace("{object}", obj);
+
+                if (routingKey.EndsWith("."))
+                {
+                    routingKey = routingKey.Remove(routingKey.LastIndexOf('.'));
+                }
 
                 routingKey = routingKey.ToLower();
 

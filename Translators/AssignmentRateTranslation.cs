@@ -40,8 +40,8 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                     if (string.IsNullOrEmpty(rate.Assignment.CheckIn))
                     {
                         _logger.Warn(
-                            $"Assignment {rate.Assignment.AssignmentRef} is not checked in " +
-                            entity.ReceivedOnRoutingKey, entity.CorrelationId, entity, rate.Assignment.AssignmentRef,
+                            $"Rate {rate.FeeRef}, assignment {rate.Assignment.AssignmentRef} is not checked in " +
+                            entity.ReceivedOnRoutingKey, entity.CorrelationId, entity, rate.FeeName,
                             null, null);
                         entity.ExportSuccess = false;
                         return;
@@ -51,49 +51,49 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                         entity.ReceivedOnRoutingKeyNodes[8] != "startchecked")
                     {
                         _logger.Warn(
-                            $"Assignment {rate.Assignment.AssignmentRef} is checked in but there is no startchecked on the Routing Key  " +
+                            $"Rate {rate.FeeRef}, assignment {rate.Assignment.AssignmentRef} is checked in but there is no startchecked on the Routing Key  " +
                             entity.ReceivedOnRoutingKey, entity.CorrelationId, entity,
-                            rate.Assignment.AssignmentRef, null, null);
+                            rate.FeeName, null, null);
                     }
 
                     if (rate.Assignment.CheckIn.ToLower() == "checked in" &&
                         entity.ReceivedOnRoutingKeyNodes[8] == "startchecked")
                     {
                         _logger.Debug(
-                            $"Received Routing has startchecked and assignment {rate.Assignment.AssignmentRef} is checked in",
-                            entity.CorrelationId, entity, rate.Assignment.AssignmentRef, null, null);
+                            $"Rate {rate.FeeRef}, received Routing has startchecked and assignment {rate.Assignment.AssignmentRef} is checked in",
+                            entity.CorrelationId, entity, rate.FeeName, null, null);
                     }
 
                 }
                 else
                 {
-                    _logger.Warn($"Assignment {rate.Assignment.AssignmentRef} has no startchecked flag on routing key " + entity.ReceivedOnRoutingKey, entity.CorrelationId, entity, rate.Assignment.AssignmentRef, null, null);
+                    _logger.Warn($"Rate {rate.FeeRef}, Assignment {rate.Assignment.AssignmentRef} has no startchecked flag on routing key " + entity.ReceivedOnRoutingKey, entity.CorrelationId, entity, rate.FeeName, null, null);
                 }
 
                 if (rate.Assignment.OpCo == null || rate.Assignment.Division == null)
                 {
-                    _logger.Warn($"Assignment OpCo and Division not populated for assignment {rate.Assignment.AssignmentRef}", entity.CorrelationId, entity, rate.FeeRef, "Dtos.Ufo.ExportedEntity", null);
+                    _logger.Warn($"Rate {rate.FeeRef}, aAssignment OpCo and Division not populated for assignment {rate.Assignment.AssignmentRef}", entity.CorrelationId, entity, rate.FeeRef, "Dtos.Ufo.ExportedEntity", null);
                     entity.ExportSuccess = false;
                     return;
                 }
 
                 if (BlockExport(Mappers.MapOpCoFromName(rate.Assignment.OpCo.Name)))
                 {
-                    _logger.Warn($"Assignment OpCo not live in RSM for assignment {rate.Assignment.AssignmentRef} {rate.Assignment.OpCo.Name}", entity.CorrelationId, entity, rate.FeeRef, "Dtos.Ufo.ExportedEntity", null);
+                    _logger.Warn($"Rate {rate.FeeRef}, assignment OpCo not live in RSM for assignment {rate.Assignment.AssignmentRef} {rate.Assignment.OpCo.Name}", entity.CorrelationId, entity, rate.FeeRef, "Dtos.Ufo.ExportedEntity", null);
                     entity.ExportSuccess = false;
                     return;
                 }
 
                 if (BlockExportByDivision(rate.Assignment.Division.Name))
                 {
-                    _logger.Warn($"Assignment Division not live in RSM for assignment {rate.Assignment.AssignmentRef} {rate.Assignment.Division.Name}", entity.CorrelationId, entity, rate.FeeRef, "Dtos.Ufo.ExportedEntity", null);
+                    _logger.Warn($"Rate {rate.FeeRef}, assignment Division not live in RSM for assignment {rate.Assignment.AssignmentRef} {rate.Assignment.Division.Name}", entity.CorrelationId, entity, rate.FeeRef, "Dtos.Ufo.ExportedEntity", null);
                     entity.ExportSuccess = false;
                     return;
                 }
 
                 if (string.IsNullOrEmpty(rate.Assignment.OpCo.FinanceCode))
                 {
-                    _logger.Warn($"No Finance Code On {rate.FeeRef} Opco", entity.CorrelationId, entity, rate.FeeRef, "Dtos.Ufo.ExportedEntity", null);
+                    _logger.Warn($"Rate {rate.FeeRef}, No Finance Code On {rate.FeeRef} Opco", entity.CorrelationId, entity, rate.FeeRef, "Dtos.Ufo.ExportedEntity", null);
                     entity.ExportSuccess = false;
                     return;
                 }
@@ -152,12 +152,12 @@ namespace Randstad.UfoRsm.BabelFish.Translators
 
             if (rate.Assignment.Division.Name == "Tuition Services" || rate.Assignment.Division.Name == "Student Support")
             {
-                SendToRsm(JsonConvert.SerializeObject(mappedRate), "sws", "Rate", entity.CorrelationId, entity.IsCheckedIn);
+                SendToRsm(JsonConvert.SerializeObject(mappedRate), "sws", "Rate", entity.CorrelationId, Helpers.Mappers.MapCheckin(rate.Assignment.CheckIn), false, entity.EventType);
                 _logger.Success($"Successfully sent mapped Assignment Rate {rate.FeeRef} to SWS RSM", entity.CorrelationId, mappedRate, rate.FeeRef, "Dtos.Ufo.AssignmentRate", null, null, "Dtos.Sti.AssignmentRate");
             }
             else
             {
-                SendToRsm(JsonConvert.SerializeObject(mappedRate), Mappers.MapOpCoFromName(rate.Assignment.OpCo.Name).ToString(), "Rate", entity.CorrelationId, entity.IsCheckedIn);
+                SendToRsm(JsonConvert.SerializeObject(mappedRate), Mappers.MapOpCoFromName(rate.Assignment.OpCo.Name).ToString(), "Rate", entity.CorrelationId, Helpers.Mappers.MapCheckin(rate.Assignment.CheckIn), false, entity.EventType);
                 _logger.Success($"Successfully sent mapped Assignment Rate {rate.FeeRef} to RSM", entity.CorrelationId, mappedRate, rate.FeeRef, "Dtos.Ufo.AssignmentRate", null, null, "Dtos.Sti.AssignmentRate");
             }
 
@@ -168,12 +168,12 @@ namespace Randstad.UfoRsm.BabelFish.Translators
             {
                 if (rate.Assignment.Division.Name == "Tuition Services" || rate.Assignment.Division.Name == "Student Support")
                 {
-                    SendToRsm(JsonConvert.SerializeObject(mappedPostRate), "sws", "Rate", entity.CorrelationId, entity.IsCheckedIn);
+                    SendToRsm(JsonConvert.SerializeObject(mappedPostRate), "sws", "Rate", entity.CorrelationId, Helpers.Mappers.MapCheckin(rate.Assignment.CheckIn), false, entity.EventType);
                     _logger.Success($"Successfully sent mapped post parity Assignment Rate {rate.FeeRef} to SWS RSM", entity.CorrelationId, mappedPostRate, rate.FeeRef, "Dtos.Ufo.AssignmentRate", null, null, "Dtos.Sti.AssignmentRate");
                 }
                 else
                 {
-                    SendToRsm(JsonConvert.SerializeObject(mappedPostRate), Mappers.MapOpCoFromName(rate.Assignment.OpCo.Name).ToString(), "Rate", entity.CorrelationId, entity.IsCheckedIn);
+                    SendToRsm(JsonConvert.SerializeObject(mappedPostRate), Mappers.MapOpCoFromName(rate.Assignment.OpCo.Name).ToString(), "Rate", entity.CorrelationId, Helpers.Mappers.MapCheckin(rate.Assignment.CheckIn), false, entity.EventType);
                     _logger.Success($"Successfully sent mapped post parity Assignment Rate {rate.FeeRef} to RSM", entity.CorrelationId, mappedPostRate, rate.FeeRef, "Dtos.Ufo.AssignmentRate", null, null, "Dtos.Sti.AssignmentRate");
                 }
 
