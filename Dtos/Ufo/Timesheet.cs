@@ -355,7 +355,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             }
 
             timesheet.placementExternalRef = AssignmentRef;
-
+            
             timesheet.purchaseWrittenOffSpecified = true;
             timesheet.purchaseWrittenOff = false;
 

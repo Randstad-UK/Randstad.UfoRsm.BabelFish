@@ -77,6 +77,19 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                         entity.ExportSuccess = false;
                         return;
                     }
+
+                    //var zeroDays = timesheet.TimesheetLines.Where(x => x.DaysReported == 0 && x.TotalHours!=null);
+
+                    //if (zeroDays.Any())
+                    //{
+                    //    _logger.Warn($"Timesheet contains lines with 0 in the days reported {timesheet.TimesheetRef}",
+                    //        entity.CorrelationId, entity, timesheet.TimesheetRef, "Dtos.Ufo.ExportedEntity", null);
+
+                    //    foreach(var cl in zeroDays)
+                    //    {
+                    //        cl.DaysReported = null;
+                    //    }
+                    //}
                 }
 
             }

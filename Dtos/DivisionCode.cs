@@ -9,5 +9,6 @@ namespace Randstad.UfoRsm.BabelFish.Dtos
         public string Code { get; set; }
         public string Division { get; set; }
         public string InvoiceTemplate { get; set; }
+        public string TimeSheetDuration { get; set; }
     }
 }

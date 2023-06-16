@@ -160,7 +160,13 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             placement.purchaseCostCentre = Unit.FinanceCode;
 
 
-            placement.purchaseDivision = divisionCodes.SingleOrDefault(x => x.Code == Unit.FinanceCode)?.Division;
+            var division = divisionCodes.SingleOrDefault(x => x.Code == Unit.FinanceCode);
+
+            placement.purchaseDivision = division.Division;
+            if (!string.IsNullOrEmpty(division.TimeSheetDuration))
+            {
+                placement.timesheetDateCalculatorName = division.TimeSheetDuration;
+            }
 
             if (!string.IsNullOrEmpty(PoNumber))
             {
@@ -198,7 +204,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
             placement.customText1 = ExternalRef;
             placement.customText2 = Hle.ClientRef;
-
+            
             if (ClientContact != null)
             {
                 placement.manager = ClientContact.MapContactManager(Client);
