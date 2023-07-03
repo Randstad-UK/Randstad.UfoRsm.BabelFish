@@ -103,6 +103,14 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                     return;
                 }
 
+                var division = _divisionCodes.SingleOrDefault(x => x.Code == assign.Unit.FinanceCode);
+                if (division == null)
+                {
+                    _logger.Warn($"Assignment {assign.AssignmentRef} unit finance code {assign.Unit.FinanceCode} not found in service divisions mapping", entity.CorrelationId, entity, assign.AssignmentRef, "Dtos.Ufo.ExportedEntity", null);
+                    entity.ExportSuccess = false;
+                    return;
+                }
+
                 if (assign.Hle.Unit == null || string.IsNullOrEmpty(assign.Hle.Unit.FinanceCode))
                 {
                     _logger.Warn($"HLE for Assignment {assign.AssignmentRef} has no owning team or finance code is not set", entity.CorrelationId, entity, assign.AssignmentRef, "Dtos.Ufo.ExportedEntity", null);
@@ -117,12 +125,13 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                     return;
                 }
 
-                //if (assign.Candidate.LiveInPayroll == null || assign.Candidate.LiveInPayroll == false) 
-                //{
-                //    _logger.Warn($"Candidate {assign.Candidate.CandidateRef} on Assignment {assign.AssignmentRef} is not live in Payroll or has no live in payroll set (probably because the candidate was created before employee file generated)", entity.CorrelationId, entity, candidate.CandidateRef, "Dtos.Ufo.Candidate", null);
-                //    entity.ExportSuccess = true;
-                //    return;
-                //}
+                //added back in 30/06/2023 for CPE go live. Suspect it was removed previously as it was stopping assignments being ended in RSM
+                if (assign.Candidate.LiveInPayroll == null || assign.Candidate.LiveInPayroll == false)
+                {
+                    _logger.Warn($"Candidate {assign.Candidate.CandidateRef} on Assignment {assign.AssignmentRef} is not live in Payroll or has no live in payroll set (probably because the candidate was created before employee file generated)", entity.CorrelationId, entity, assign.Candidate.CandidateRef, "Dtos.Ufo.Candidate", null);
+                    entity.ExportSuccess = true;
+                    return;
+                }
 
             }
             catch (Exception exp)
