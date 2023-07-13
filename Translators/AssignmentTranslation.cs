@@ -68,6 +68,13 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                     _logger.Warn($"Assignment {assign.AssignmentRef} has no startchecked flag on routing key " + entity.ReceivedOnRoutingKey, entity.CorrelationId, entity, assign.AssignmentRef, null, null);
                 }
 
+                if (assign.OpCo.Name.ToLower().Contains("pareto"))
+                {
+                    _logger.Warn($"Pareto Assignments not live in RSM {assign.AssignmentRef}", entity.CorrelationId, entity, assign.AssignmentRef, "Dtos.Ufo.ExportedEntity", null);
+                    entity.ExportSuccess = false;
+                    return;
+                }
+
                 if (BlockExport(Mappers.MapOpCoFromName(assign.OpCo.Name)))
                 {
                     _logger.Warn($"Assignment OpCo not live in RSM {assign.AssignmentRef} {assign.OpCo.Name}", entity.CorrelationId, entity, assign.AssignmentRef, "Dtos.Ufo.ExportedEntity", null);
@@ -99,6 +106,13 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                 if (assign.InvoiceAddress == null)
                 {
                     _logger.Warn($"Assignment {assign.AssignmentRef} does not have an invoice address set", entity.CorrelationId, entity, assign.AssignmentRef, "Dtos.Ufo.ExportedEntity", null);
+                    entity.ExportSuccess = false;
+                    return;
+                }
+
+                if(assign.Candidate.PayType == PaymentTypes.PAYE && string.IsNullOrEmpty(assign.HolidayPay))
+                {
+                    _logger.Warn($"Assignment {assign.AssignmentRef} candidate is PAYE but Holiday Pay is not set", entity.CorrelationId, entity, assign.AssignmentRef, "Dtos.Ufo.ExportedEntity", null);
                     entity.ExportSuccess = false;
                     return;
                 }

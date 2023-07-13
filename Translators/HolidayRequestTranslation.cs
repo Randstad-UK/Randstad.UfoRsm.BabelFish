@@ -10,6 +10,7 @@ using Randstad.UfoRsm.BabelFish.Dtos.Ufo;
 using Randstad.UfoRsm.BabelFish.Helpers;
 using Randstad.UfoRsm.BabelFish.Translators;
 using RandstadMessageExchange;
+using RSM;
 
 namespace Randstad.UfoRsm.BabelFish.Translators
 {
@@ -48,6 +49,13 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                 else
                 {
                     _logger.Warn($"Candidate {holidayRequest.Candidate.CandidateRef} on Holiday Request {holidayRequest.HolidayRequestRef} has no startchecked flag on routing key " + entity.ReceivedOnRoutingKey, entity.CorrelationId, entity, holidayRequest.HolidayRequestRef, null, null);
+                }
+
+                if (holidayRequest.Candidate.OperatingCo.Name.ToLower().Contains("pareto"))
+                {
+                    _logger.Warn($"Pareto Candidates not live in RSM {holidayRequest.HolidayRequestRef}", entity.CorrelationId, entity, holidayRequest.HolidayRequestRef, "Dtos.Ufo.ExportedEntity", null);
+                    entity.ExportSuccess = false;
+                    return;
                 }
 
                 if (BlockExport(Mappers.MapOpCoFromName(holidayRequest.Candidate.OperatingCo.Name)))

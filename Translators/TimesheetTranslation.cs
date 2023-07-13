@@ -9,6 +9,7 @@ using Randstad.UfoRsm.BabelFish;
 using Randstad.UfoRsm.BabelFish.Dtos.Ufo;
 using Randstad.UfoRsm.BabelFish.Helpers;
 using Randstad.UfoRsm.BabelFish.Translators;
+using Randstad.UfRsm.BabelFish.Dtos.Ufo;
 using RandstadMessageExchange;
 
 namespace Randstad.UfoRsm.BabelFish.Translators
@@ -37,6 +38,13 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                 timesheet = JsonConvert.DeserializeObject<Timesheet>(entity.Payload);
 
                 _logger.Success($"Received Timesheet {timesheet.TimesheetRef}", entity.CorrelationId, timesheet, timesheet.TimesheetRef, "Dtos.Ufo.Timesheet", null);
+
+                if (timesheet.OpCo.Name.ToLower().Contains("pareto"))
+                {
+                    _logger.Warn($"Pareto Timesheets not live in RSM {timesheet.TimesheetRef}", entity.CorrelationId, entity, timesheet.TimesheetRef, "Dtos.Ufo.ExportedEntity", null);
+                    entity.ExportSuccess = false;
+                    return;
+                }
 
                 if (BlockExport(Mappers.MapOpCoFromName(timesheet.OpCo.Name)))
                 {

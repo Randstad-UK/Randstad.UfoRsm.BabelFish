@@ -8,6 +8,7 @@ using Randstad.Logging;
 using Randstad.UfoRsm.BabelFish.Dtos.Ufo;
 using Randstad.UfoRsm.BabelFish.Helpers;
 using RandstadMessageExchange;
+using RSM;
 
 namespace Randstad.UfoRsm.BabelFish.Translators
 {
@@ -31,6 +32,13 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                 if (consultant.OpCo == null)
                 {
                     _logger.Warn($"Consultant not correctly set up in UFO (Probably no primary unit) {consultant.EmployeeRef}", entity.CorrelationId, entity, consultant.EmployeeRef, "Dtos.Ufo.ExportedEntity", null);
+                    entity.ExportSuccess = false;
+                    return;
+                }
+
+                if (consultant.OpCo.Name.ToLower().Contains("pareto"))
+                {
+                    _logger.Warn($"Pareto Consultants not live in RSM {consultant.EmployeeRef}", entity.CorrelationId, entity, consultant.EmployeeRef, "Dtos.Ufo.ExportedEntity", null);
                     entity.ExportSuccess = false;
                     return;
                 }

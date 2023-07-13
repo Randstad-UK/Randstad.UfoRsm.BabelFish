@@ -9,6 +9,7 @@ using Randstad.UfoRsm.BabelFish.Dtos;
 using Randstad.UfoRsm.BabelFish.Dtos.Ufo;
 using Randstad.UfoRsm.BabelFish.Helpers;
 using RandstadMessageExchange;
+using RSM;
 
 namespace Randstad.UfoRsm.BabelFish.Translators
 {
@@ -40,6 +41,13 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                 if (string.IsNullOrEmpty(client.Unit.FinanceCode))
                 {
                     _logger.Warn($"No Finance Code On {client.ClientRef} Unit", entity.CorrelationId, entity, client.ClientRef, "Dtos.Ufo.ExportedEntity", null);
+                    entity.ExportSuccess = false;
+                    return;
+                }
+
+                if (client.OpCo.Name.ToLower().Contains("pareto"))
+                {
+                    _logger.Warn($"Pareto Clients not live in RSM {client.ClientRef}", entity.CorrelationId, entity, client.ClientRef, "Dtos.Ufo.ExportedEntity", null);
                     entity.ExportSuccess = false;
                     return;
                 }

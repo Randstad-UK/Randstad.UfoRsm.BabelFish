@@ -9,6 +9,7 @@ using Randstad.UfoRsm.BabelFish.Dtos;
 using Randstad.UfoRsm.BabelFish.Dtos.Ufo;
 using Randstad.UfoRsm.BabelFish.Helpers;
 using Randstad.UfoRsm.BabelFish.Translators;
+using Randstad.UfRsm.BabelFish.Dtos.Ufo;
 using RandstadMessageExchange;
 
 namespace Randstad.UfoRsm.BabelFish.Translators
@@ -38,6 +39,12 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                 //entity.ExportSuccess = false;
                 //return;
 
+                if (placement.OpCo.Name.ToLower().Contains("pareto"))
+                {
+                    _logger.Warn($"Pareto Placements not live in RSM {placement.PlacementRef}", entity.CorrelationId, entity, placement.PlacementRef, "Dtos.Ufo.ExportedEntity", null);
+                    entity.ExportSuccess = false;
+                    return;
+                }
 
                 if (BlockExport(Mappers.MapOpCoFromName(placement.OpCo.Name)))
                 {

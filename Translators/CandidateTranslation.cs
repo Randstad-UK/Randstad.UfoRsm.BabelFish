@@ -59,7 +59,12 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                     _logger.Warn($"Candidate {candidate.CandidateRef} has no startchecked flag on routing key " + entity.ReceivedOnRoutingKey, entity.CorrelationId, entity, candidate.CandidateRef, null, null);
                 }
 
-
+                if (candidate.OperatingCo.Name.ToLower().Contains("pareto"))
+                {
+                    _logger.Warn($"Pareto Candidates not live in RSM {candidate.CandidateRef}", entity.CorrelationId, entity, candidate.CandidateRef, "Dtos.Ufo.ExportedEntity", null);
+                    entity.ExportSuccess = false;
+                    return;
+                }
 
                 liveInPayroll = (bool)candidate.LiveInPayroll;
                 if (BlockExport(Mappers.MapOpCoFromName(candidate.OperatingCo.Name)))

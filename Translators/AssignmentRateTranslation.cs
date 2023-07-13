@@ -70,6 +70,13 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                     _logger.Warn($"Rate {rate.FeeRef}, Assignment {rate.Assignment.AssignmentRef} has no startchecked flag on routing key " + entity.ReceivedOnRoutingKey, entity.CorrelationId, entity, rate.FeeName, null, null);
                 }
 
+                if (rate.Assignment.OpCo.Name.ToLower().Contains("pareto"))
+                {
+                    _logger.Warn($"Pareto Assignments not live in RSM {rate.Assignment.AssignmentRef}", entity.CorrelationId, entity, rate.Assignment.AssignmentRef, "Dtos.Ufo.ExportedEntity", null);
+                    entity.ExportSuccess = false;
+                    return;
+                }
+
                 if (rate.Assignment.OpCo == null || rate.Assignment.Division == null)
                 {
                     _logger.Warn($"Rate {rate.FeeRef}, aAssignment OpCo and Division not populated for assignment {rate.Assignment.AssignmentRef}", entity.CorrelationId, entity, rate.FeeRef, "Dtos.Ufo.ExportedEntity", null);

@@ -61,7 +61,8 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             placement.cisApplicableSpecified = true;
             placement.cisApplicable = false;
 
-            placement.client = Hle.MapClient(divisionCodes);
+            //changed to map from client rather than HLE per Finance request 13/07/2023
+            placement.client = Client.MapClient(divisionCodes);
 
             placement.clientSite = Client.ClientName;
             if (placement.clientSite.Length > 80)
@@ -100,8 +101,6 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
             //TODO: Remove this once fix confirmed
             //placement.chargeTermsExtraTextOverride = $"For the permanent placement of {CandidateFirstName} {CandidateLastName}, {PlacementJobTitle}, {placementStartDate.ToString("dd/MM/yyyy")}, placement reference {PlacementRef}";
-
-
 
             placement.invoiceRequiresPOSpecified = false;
             if (PoRequired != null)
