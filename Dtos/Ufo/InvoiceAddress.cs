@@ -27,49 +27,64 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             var address = new RSM.Address();
             var addressLines = new List<string>();
 
-            addressLines.AddRange(TruncateField(Fao));
-            addressLines.AddRange(TruncateField(Street));
-            addressLines.AddRange(TruncateField(City));
-            addressLines.AddRange(TruncateField(County));
-            addressLines.AddRange(TruncateField(Country));
 
-            var country = string.Empty;
-            for (var x = 0; x < addressLines.Count; x++)
+            //map as per UFO
+            address.line1 = Fao ?? string.Empty;
+            address.line2 = Street ?? string.Empty;
+            address.town = City ?? string.Empty;
+            address.county = County ?? string.Empty;
+            address.country = Country ?? string.Empty;
+            address.postcode = PostCode ?? string.Empty;
+
+            if (address.line1.Length > 35 || address.line2.Length > 35 || address.town.Length>35  || address.county.Length > 35 || address.country.Length>35 || address.postcode.Length > 35)
             {
-                switch (x)
+
+                addressLines.AddRange(TruncateField(Fao));
+                addressLines.AddRange(TruncateField(Street));
+                addressLines.AddRange(TruncateField(City));
+                addressLines.AddRange(TruncateField(County));
+                addressLines.AddRange(TruncateField(Country));
+
+                var country = string.Empty;
+                for (var x = 0; x < addressLines.Count; x++)
                 {
-                    case 0:
-                        {
-                            address.line1 = addressLines[x];
-                            break;
-                        }
-                    case 1:
-                        {
-                            address.line2 = addressLines[x];
-                            break;
-                        }
-                    case 2:
-                        {
-                            address.town = addressLines[x];
-                            break;
-                        }
-                    case 3:
-                        {
-                            address.county = addressLines[x];
-                            break;
-                        }
-                    default:
-                        {
-                            country = country + addressLines[x] + ", ";
-                            break;
-                        }
+                    switch (x)
+                    {
+                        case 0:
+                            {
+                                address.line1 = addressLines[x];
+                                break;
+                            }
+                        case 1:
+                            {
+                                address.line2 = addressLines[x];
+                                break;
+                            }
+                        case 2:
+                            {
+                                address.town = addressLines[x];
+                                break;
+                            }
+                        case 3:
+                            {
+                                address.county = addressLines[x];
+                                break;
+                            }
+                        default:
+                            {
+                                country = country + addressLines[x] + ", ";
+                                break;
+                            }
+                    }
+                }
+
+                if (country != string.Empty)
+                {
+                    address.country = country.Remove(country.LastIndexOf(","));
                 }
             }
 
-            if (country != string.Empty)
-            {
-                address.country = country.Remove(country.LastIndexOf(","));
-            }
+
 
             address.postcode = PostCode;
             return address;

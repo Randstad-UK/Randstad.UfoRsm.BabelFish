@@ -19,6 +19,9 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
         public string PlacementRef { get; set; }
         public string PoNumber { get; set; }
         public string PoRequired { get; set; }
+        public string SecondTier { get; set; }
+        public decimal SecondTierFee { get; set; }
+
         public DateTime StartDate { get; set; }
         public string PlacementJobTitle { get; set; }
 
@@ -34,6 +37,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
         public InvoiceAddress InvoiceAddress { get; set; }
         public ClientContact InvoicePerson { get; set; }
         public ClientContact ClientContact { get; set; }
+        public Candidate RsmCandidate { get; set; }
 
         public Client Client { get; set; }
         public Client Hle { get; set; }
@@ -157,7 +161,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             placement.timesheetEmailApprovalSpecified = true;
             placement.timesheetEmailApproval = false;
 
-            
+
             var invoiceEmailList = new List<string>();
 
             if (!string.IsNullOrEmpty(Client.InvoiceEmail))
@@ -203,6 +207,12 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
             }
 
+            //for 2nd tier placements
+            if (SecondTier == "Yes")
+            {
+                placement.worker = RsmCandidate.MapWorker(divisionCodes, logger, correlationId);
+            }
+
             placement.rates = new RSM.Rate[1];
 
             var rate = new RSM.Rate();
@@ -212,7 +222,14 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             rate.chargeSpecified = true;
             rate.charge = Fee;
             rate.paySpecified = true;
+
+            //pay sent through as 0 unless 2nd tier is set in finch case use fee from UFO
             rate.pay = 0;
+            if (SecondTier == "Yes")
+            {
+                rate.pay = SecondTierFee;
+            }
+
             rate.ExternalAssignmentRef = PlacementRef;
             rate.effectiveFromSpecified = true;
             rate.effectiveFrom = StartDate.ToLocalTime();
