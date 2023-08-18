@@ -90,7 +90,8 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             if (client.companyNo == null)
                 client.companyNo = "";
 
-            client.customText2 = HleClient != null ? "" : CreditLimit.ToString();
+            //only HLE should have credit limit so blank out any client that has a credit limit
+            client.customText2 = HleClient.ClientRef == ClientRef ? CreditLimit.ToString() : "";
 
             if (client.customText2 == null)
                 client.customText2 = "";

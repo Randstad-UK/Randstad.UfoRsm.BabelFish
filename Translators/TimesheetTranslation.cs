@@ -157,7 +157,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                 }
             }
 
-            if(!mappedTimesheetList.Any() && timesheet.TimesheetLines.Any())
+            if(!mappedTimesheetList.Any() && timesheet.TimesheetLines == null)
             {
                 _logger.Warn($"Timesheet {timesheet.TimesheetRef} has clock entries but these were not valid for RSM e.g. contained 0 hours and 0 days", entity.CorrelationId, timesheet, timesheet.TimesheetRef, "Dtos.Ufo.Timesheet", null);
             }
