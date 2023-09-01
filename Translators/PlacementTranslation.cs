@@ -74,7 +74,7 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                     return;
                 }
 
-                if (placement.SecondTier == "Yes" && (placement.RsmCandidate.LiveInPayroll==null || (bool)placement.RsmCandidate.LiveInPayroll))
+                if (placement.SecondTier == "Yes" && (placement.RsmCandidate.LiveInPayroll==null || !(bool)placement.RsmCandidate.LiveInPayroll))
                 {
                     _logger.Warn($"2nd Tier Placement {placement.PlacementRef} candidate {placement.RsmCandidate.CandidateRef} must be live in payroll ", entity.CorrelationId, entity, placement.PlacementRef, "Dtos.Ufo.ExportedEntity", null);
                     entity.ExportSuccess = false;

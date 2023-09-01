@@ -102,11 +102,20 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
             client.externalId = ClientRef;
             client.invoiceDeliveryMethodSpecified = true;
+
+            //invoice method defaulted to paper because email would require an email which may not be supplied
             client.invoiceDeliveryMethod = 0;
 
-            if (!string.IsNullOrEmpty(InvoiceDeliveryMethod))
+            //if HLE is the same as the client then use the invoice method specified
+            if (HleClient!=null && HleClient.ClientRef == ClientRef && !string.IsNullOrEmpty(InvoiceDeliveryMethod))
             {
                 client.invoiceDeliveryMethod = Mappers.MapInvoiceDeliveryMethod(InvoiceDeliveryMethod);
+            }
+
+            //if child client then use the invoice method on the HLE
+            if(HleClient!=null && HleClient.ClientRef!=ClientRef && !string.IsNullOrEmpty(HleClient.InvoiceDeliveryMethod))
+            {
+                client.invoiceDeliveryMethod = Mappers.MapInvoiceDeliveryMethod(HleClient.InvoiceDeliveryMethod);
             }
 
             client.invoicePeriodSpecified = true;
