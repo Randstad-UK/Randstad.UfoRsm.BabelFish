@@ -74,6 +74,7 @@ namespace Randstad.UfoRsm.BabelFish.Helpers
                     {
                         return 0;
                     }
+                case "billing controlled":
                 case "self bill":
                     {
                         return 3;
