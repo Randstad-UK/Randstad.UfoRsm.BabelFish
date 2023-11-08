@@ -30,6 +30,8 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
         public string InvoiceEmail2 { get; set; }
         public string InvoiceEmail3 { get; set; }
 
+        public string EnablePlaymentApplications { get; set; }
+
         public bool? IsCheckedIn { get; set; }
 
         public Address WorkAddress { get; set; }
@@ -106,16 +108,56 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             //invoice method defaulted to paper because email would require an email which may not be supplied
             client.invoiceDeliveryMethod = 0;
 
-            //if HLE is the same as the client then use the invoice method specified
-            if (HleClient!=null && HleClient.ClientRef == ClientRef && !string.IsNullOrEmpty(InvoiceDeliveryMethod))
+            //default to use invoice method on client
+            if (!string.IsNullOrEmpty(InvoiceDeliveryMethod))
             {
                 client.invoiceDeliveryMethod = Mappers.MapInvoiceDeliveryMethod(InvoiceDeliveryMethod);
             }
-
-            //if child client then use the invoice method on the HLE
-            if(HleClient!=null && HleClient.ClientRef!=ClientRef && !string.IsNullOrEmpty(HleClient.InvoiceDeliveryMethod))
+            else
             {
-                client.invoiceDeliveryMethod = Mappers.MapInvoiceDeliveryMethod(HleClient.InvoiceDeliveryMethod);
+                //if child client then use the invoice method on the HLE
+                if (HleClient != null && HleClient.ClientRef != ClientRef && !string.IsNullOrEmpty(HleClient.InvoiceDeliveryMethod))
+                {
+                    client.invoiceDeliveryMethod = Mappers.MapInvoiceDeliveryMethod(HleClient.InvoiceDeliveryMethod);
+                }
+            }
+
+            client.usesApplicationForPaymentSpecified = false;
+            if (!string.IsNullOrEmpty(EnablePlaymentApplications))
+            {
+                switch (EnablePlaymentApplications)
+                {
+                    case "Yes":
+                        {
+                            client.usesApplicationForPaymentSpecified = true;
+                            client.usesApplicationForPayment = true;
+                            break;
+                        }
+                    default:
+                        {
+                            client.usesApplicationForPaymentSpecified = true;
+                            client.usesApplicationForPayment = false;
+                            break;
+                        }
+                }
+            }
+            else if(HleClient!=null && HleClient.ClientRef != ClientRef)
+            {
+                switch (HleClient.EnablePlaymentApplications)
+                {
+                    case "Yes":
+                        {
+                            client.usesApplicationForPaymentSpecified = true;
+                            client.usesApplicationForPayment = true;
+                            break;
+                        }
+                    default:
+                        {
+                            client.usesApplicationForPaymentSpecified = true;
+                            client.usesApplicationForPayment = false;
+                            break;
+                        }
+                }
             }
 
             client.invoicePeriodSpecified = true;

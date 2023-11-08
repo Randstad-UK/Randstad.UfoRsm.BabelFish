@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.Eventing.Reader;
+using System.Diagnostics.Metrics;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Runtime.Serialization.Formatters;
 using System.Text;
 using Randstad.Logging;
@@ -104,6 +107,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
             var invoiceEmailList = new List<string>();
 
+            
             if (!string.IsNullOrEmpty(Client.InvoiceEmail))
             {
                 invoiceEmailList.Add(Client.InvoiceEmail);
@@ -117,27 +121,27 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             if (!string.IsNullOrEmpty(Client.InvoiceEmail3))
             {
                 invoiceEmailList.Add(Client.InvoiceEmail3);
-
             }
 
-            foreach (var email in invoiceEmailList)
+            if (Client.HleClient != null)
             {
-                if (placement.invoiceContactOverride == null)
+                if (!string.IsNullOrEmpty(Client.HleClient.InvoiceEmail))
                 {
-                    placement.invoiceContactOverride = new Contact();
+                    invoiceEmailList.Add(Client.HleClient.InvoiceEmail);
                 }
 
-                placement.invoiceContactOverride.email = placement.invoiceContactOverride.email + email + "; ";
+                if (!string.IsNullOrEmpty(Client.HleClient.InvoiceEmail2))
+                {
+                    invoiceEmailList.Add(Client.HleClient.InvoiceEmail2);
+                }
+
+                if (!string.IsNullOrEmpty(Client.HleClient.InvoiceEmail3))
+                {
+                    invoiceEmailList.Add(Client.HleClient.InvoiceEmail3);
+                }
             }
 
-            //clear last semi colon if invoice email set
-            if (placement.invoiceContactOverride != null && !string.IsNullOrEmpty(placement.invoiceContactOverride.email) && placement.invoiceContactOverride.email.EndsWith("; "))
-            {
-                placement.invoiceContactOverride.email = placement.invoiceContactOverride.email.Remove(placement.invoiceContactOverride.email.LastIndexOf(";"));
-            }
-
-
-            if (InvoiceAddress != null)
+            if (InvoiceAddress != null && Client.InvoiceDeliveryMethod=="Post" || (Client.HleClient!=null && Client.HleClient.InvoiceDeliveryMethod=="Post"))
             {
                 if (placement.invoiceContactOverride == null)
                 {
@@ -145,8 +149,41 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                 }
 
                 placement.invoiceContactOverride.address = InvoiceAddress.MapAddress();
-
             }
+
+            if (!string.IsNullOrEmpty(Client.InvoiceDeliveryMethod) || Client.HleClient!=null && !string.IsNullOrEmpty(Client.HleClient.InvoiceDeliveryMethod))
+            {
+                if (Client.InvoiceDeliveryMethod == "Self Bill" || (Client.HleClient!=null && Client.HleClient.InvoiceDeliveryMethod == "Self Bill"))
+                {
+                    placement.invoiceContactOverride.address = new RSM.Address()
+                    {
+                        line1 = "450 Capability Green",
+                        town = "Luton",
+                        postcode = "LU1 3LU"
+                    };
+                }
+
+                if(Client.InvoiceDeliveryMethod=="Billing Controlled" || Client.HleClient!=null && Client.HleClient.InvoiceDeliveryMethod=="Billing Controlled")
+                {
+                    foreach (var email in invoiceEmailList)
+                    {
+                        if (placement.invoiceContactOverride == null)
+                        {
+                            placement.invoiceContactOverride = new Contact();
+                        }
+
+                        placement.invoiceContactOverride.email = placement.invoiceContactOverride.email + email + "; ";
+                    }
+
+                    //clear last semi colon if invoice email set
+                    if (placement.invoiceContactOverride != null && !string.IsNullOrEmpty(placement.invoiceContactOverride.email) && placement.invoiceContactOverride.email.EndsWith("; "))
+                    {
+                        placement.invoiceContactOverride.email = placement.invoiceContactOverride.email.Remove(placement.invoiceContactOverride.email.LastIndexOf(";"));
+                    }
+                }
+            }
+
+
 
             placement.jobTitle = string.IsNullOrEmpty(PositionName) ? "Not Stated" : PositionName;
 

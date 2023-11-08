@@ -36,6 +36,13 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                     return;
                 }
 
+                if (consultant.OpCo  == null || string.IsNullOrEmpty(consultant.OpCo.Name))
+                {
+                    _logger.Warn($"No opco set on consultant {consultant.EmployeeRef}", entity.CorrelationId, entity, consultant.EmployeeRef, "Dtos.Ufo.ExportedEntity", null);
+                    entity.ExportSuccess = false;
+                    return;
+                }
+
                 if (consultant.OpCo.Name.ToLower().Contains("pareto"))
                 {
                     _logger.Warn($"Pareto Consultants not live in RSM {consultant.EmployeeRef}", entity.CorrelationId, entity, consultant.EmployeeRef, "Dtos.Ufo.ExportedEntity", null);
