@@ -103,12 +103,12 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                     return;
                 }
 
-                if (assign.InvoiceAddress == null)
-                {
-                    _logger.Warn($"Assignment {assign.AssignmentRef} does not have an invoice address set", entity.CorrelationId, entity, assign.AssignmentRef, "Dtos.Ufo.ExportedEntity", null);
-                    entity.ExportSuccess = false;
-                    return;
-                }
+                //if (assign.InvoiceAddress == null)
+                //{
+                //    _logger.Warn($"Assignment {assign.AssignmentRef} does not have an invoice address set", entity.CorrelationId, entity, assign.AssignmentRef, "Dtos.Ufo.ExportedEntity", null);
+                //    entity.ExportSuccess = false;
+                //    return;
+                //}
 
                 if(assign.Candidate.PayType == PaymentTypes.PAYE && string.IsNullOrEmpty(assign.HolidayPay))
                 {

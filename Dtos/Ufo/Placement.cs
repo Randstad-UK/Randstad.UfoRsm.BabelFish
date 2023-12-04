@@ -32,6 +32,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
         public string CheckIn { get; set; }
         public bool IR35 { get; set; }
         public string CostCentre { get; set; }
+        public bool? Historic { get; set; }
 
         public Owner Owner { get; set; }
         public InvoiceAddress InvoiceAddress { get; set; }
@@ -114,13 +115,6 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                 placement.purchaseOrderNum = PoNumber;
             }
 
-            placement.invoiceContactOverride = InvoicePerson.MapContact();
-
-            //Billing team do not want the name values
-            placement.invoiceContactOverride.firstname = string.Empty;
-            placement.invoiceContactOverride.lastname = string.Empty;
-            placement.invoiceContactOverride.email = string.Empty;
-
 
             placement.jobDescription = PlacementJobTitle;
             placement.jobTitle = PlacementJobTitle;
@@ -160,52 +154,6 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
             placement.timesheetEmailApprovalSpecified = true;
             placement.timesheetEmailApproval = false;
-
-
-            var invoiceEmailList = new List<string>();
-
-            if (!string.IsNullOrEmpty(Client.InvoiceEmail))
-            {
-                invoiceEmailList.Add(Client.InvoiceEmail);
-            }
-
-            if (!string.IsNullOrEmpty(Client.InvoiceEmail2))
-            {
-                invoiceEmailList.Add(Client.InvoiceEmail2);
-            }
-
-            if (!string.IsNullOrEmpty(Client.InvoiceEmail3))
-            {
-                invoiceEmailList.Add(Client.InvoiceEmail3);
-
-            }
-
-            foreach (var email in invoiceEmailList)
-            {
-                if (placement.invoiceContactOverride == null)
-                {
-                    placement.invoiceContactOverride = new Contact();
-                }
-
-                placement.invoiceContactOverride.email = placement.invoiceContactOverride.email + email + "; ";
-            }
-
-            //clear last semi colon if invoice email set
-            if (placement.invoiceContactOverride != null && !string.IsNullOrEmpty(placement.invoiceContactOverride.email) && placement.invoiceContactOverride.email.EndsWith("; "))
-            {
-                placement.invoiceContactOverride.email = placement.invoiceContactOverride.email.Remove(placement.invoiceContactOverride.email.LastIndexOf(";"));
-            }
-
-            if (InvoiceAddress != null)
-            {
-                if (placement.invoiceContactOverride == null)
-                {
-                    placement.invoiceContactOverride = new Contact();
-                }
-
-                placement.invoiceContactOverride.address = InvoiceAddress.MapAddress();
-
-            }
 
             //for 2nd tier placements
             if (SecondTier == "Yes")
@@ -251,6 +199,9 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             rate.timesheetFields = "DAY";
             placement.rates[0] = rate;
 
+            SetFromHle(placement);
+            SetFromClient(placement);
+
             return placement;
         }
 
@@ -269,6 +220,152 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                 placement.splitCommissions[i] = split;
             }
 
+        }
+
+        private List<string> GetInvoiceContactOverrideEmails(Client client)
+        {
+            var invoiceEmailList = new List<string>();
+
+            if (!string.IsNullOrEmpty(client.InvoiceEmail))
+            {
+                invoiceEmailList.Add(client.InvoiceEmail);
+            }
+
+            if (!string.IsNullOrEmpty(client.InvoiceEmail2))
+            {
+                invoiceEmailList.Add(client.InvoiceEmail2);
+            }
+
+            if (!string.IsNullOrEmpty(client.InvoiceEmail3))
+            {
+                invoiceEmailList.Add(client.InvoiceEmail3);
+            }
+
+            return invoiceEmailList;
+        }
+
+        private void SetBillingControlled(RSM.Placement placement, Client client)
+        {
+            if (client.InvoiceDeliveryMethod != "Billing Controlled") return;
+
+            if (placement.invoiceContactOverride == null)
+            {
+                placement.invoiceContactOverride = new Contact();
+            }
+
+            placement.invoiceContactOverride.address = InvoiceAddress.MapAddress();
+
+
+            var invoiceEmailList = GetInvoiceContactOverrideEmails(client);
+
+            if (!invoiceEmailList.Any()) return;
+
+            foreach (var email in invoiceEmailList)
+            {
+                if (placement.invoiceContactOverride == null)
+                {
+                    placement.invoiceContactOverride = new Contact();
+                }
+
+                placement.invoiceContactOverride.email = placement.invoiceContactOverride.email + email + "; ";
+            }
+
+            //clear last semi colon if invoice email set
+            if (placement.invoiceContactOverride != null && !string.IsNullOrEmpty(placement.invoiceContactOverride.email) && placement.invoiceContactOverride.email.EndsWith("; "))
+            {
+                placement.invoiceContactOverride.email = placement.invoiceContactOverride.email.Remove(placement.invoiceContactOverride.email.LastIndexOf(";"));
+            }
+
+            placement.invoiceContactOverride.address = InvoiceAddress.MapAddress();
+
+        }
+
+        private void SetElectronic(RSM.Placement placement, Client client)
+        {
+            if (client.InvoiceDeliveryMethod != "Electronic") return;
+
+            if (client.CentralInvoiceing == "Yes")
+            {
+                var invoiceEmailList = GetInvoiceContactOverrideEmails(client);
+
+                if (!invoiceEmailList.Any()) return;
+
+                foreach (var email in invoiceEmailList)
+                {
+                    if (placement.invoiceContactOverride == null)
+                    {
+                        placement.invoiceContactOverride = new Contact();
+                    }
+
+                    placement.invoiceContactOverride.email = placement.invoiceContactOverride.email + email + "; ";
+                }
+
+                //clear last semi colon if invoice email set
+                if (placement.invoiceContactOverride != null && !string.IsNullOrEmpty(placement.invoiceContactOverride.email) && placement.invoiceContactOverride.email.EndsWith("; "))
+                {
+                    placement.invoiceContactOverride.email = placement.invoiceContactOverride.email.Remove(placement.invoiceContactOverride.email.LastIndexOf(";"));
+                }
+                
+                return;
+            }
+            
+            placement.invoiceContactOverride.address = InvoiceAddress.MapAddress();
+            placement.invoiceContactOverride.email = InvoicePerson.EmailAddress;
+
+        }
+
+        private void SetSelfBill(RSM.Placement placement, Client client)
+        {
+            if (client.InvoiceDeliveryMethod != "Self Bill") return;
+
+            if (placement.invoiceContactOverride == null)
+            {
+                placement.invoiceContactOverride = new Contact();
+            }
+
+            placement.invoiceContactOverride.address = new RSM.Address()
+            {
+                line1 = "450 Capability Green",
+                town = "Luton",
+                postcode = "LU1 3LU"
+            };
+        }
+
+        private void SetPost(RSM.Placement placement, Client client)
+        {
+            if (client.InvoiceDeliveryMethod != "Paper") return;
+
+            if (placement.invoiceContactOverride == null)
+            {
+                placement.invoiceContactOverride = new Contact();
+            }
+
+            placement.invoiceContactOverride.address = InvoiceAddress.MapAddress();
+        }
+
+        private void SetFromClient(RSM.Placement placement)
+        {
+            //if the invoice delivery method is not set on the client then it needs to be mapped from the HLE
+            if (string.IsNullOrEmpty(Client.InvoiceDeliveryMethod)) return;
+
+            SetBillingControlled(placement, Client);
+            SetElectronic(placement, Client);
+            SetSelfBill(placement, Client);
+            SetPost(placement, Client);
+        }
+
+        private void SetFromHle(RSM.Placement placement)
+        {
+            //should not map from HLE if invoice delivery is set on the client
+            if (!string.IsNullOrEmpty(Client.InvoiceDeliveryMethod)) return;
+
+            //invoice delivery method should never be blank on the HLE but just incase exit so not getting null pointer exception
+            if (string.IsNullOrEmpty(Hle.InvoiceDeliveryMethod)) return;
+
+            SetBillingControlled(placement, Hle);
+            SetElectronic(placement, Hle);
+            SetSelfBill(placement, Hle);
+            SetPost(placement, Hle);
         }
 
 

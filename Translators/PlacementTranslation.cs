@@ -46,6 +46,13 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                     return;
                 }
 
+                if(placement.Historic!=null && (bool)placement.Historic)
+                {
+                    _logger.Warn($"Historic Placements do not transfer to RSM {placement.PlacementRef}", entity.CorrelationId, entity, placement.PlacementRef, "Dtos.Ufo.ExportedEntity", null);
+                    entity.ExportSuccess = false;
+                    return;
+                }
+
                 if (BlockExport(Mappers.MapOpCoFromName(placement.OpCo.Name)))
                 {
                     _logger.Warn($"Placement OpCo not live in RSM {placement.PlacementRef} {placement.OpCo.Name}", entity.CorrelationId, entity, placement.PlacementRef, "Dtos.Ufo.ExportedEntity", null);
@@ -60,19 +67,19 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                     return;
                 }
 
-                if(placement.InvoiceAddress== null) 
-                {
-                    _logger.Warn($"Placement {placement.PlacementRef} does not have an invoice address", entity.CorrelationId, entity, placement.PlacementRef, "Dtos.Ufo.ExportedEntity", null);
-                    entity.ExportSuccess = false;
-                    return;
-                }
+                //if(placement.InvoiceAddress== null) 
+                //{
+                //    _logger.Warn($"Placement {placement.PlacementRef} does not have an invoice address", entity.CorrelationId, entity, placement.PlacementRef, "Dtos.Ufo.ExportedEntity", null);
+                //    entity.ExportSuccess = false;
+                //    return;
+                //}
 
-                if (placement.InvoicePerson == null)
-                {
-                    _logger.Warn($"Placement {placement.PlacementRef} does not have a invoice Contact", entity.CorrelationId, entity, placement.PlacementRef, "Dtos.Ufo.ExportedEntity", null);
-                    entity.ExportSuccess = false;
-                    return;
-                }
+                //if (placement.InvoicePerson == null)
+                //{
+                //    _logger.Warn($"Placement {placement.PlacementRef} does not have a invoice Contact", entity.CorrelationId, entity, placement.PlacementRef, "Dtos.Ufo.ExportedEntity", null);
+                //    entity.ExportSuccess = false;
+                //    return;
+                //}
 
                 if (placement.SecondTier == "Yes" && (placement.RsmCandidate.LiveInPayroll==null || !(bool)placement.RsmCandidate.LiveInPayroll))
                 {

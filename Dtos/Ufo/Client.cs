@@ -30,7 +30,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
         public string InvoiceEmail2 { get; set; }
         public string InvoiceEmail3 { get; set; }
 
-        public string EnablePlaymentApplications { get; set; }
+        public string EnablePaymentApplications { get; set; }
 
         public bool? IsCheckedIn { get; set; }
 
@@ -45,6 +45,77 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
         public string PoRequired { get; set; }
         public string SendRatesFormat { get; set; }
+        public string CentralInvoiceing { get; set; }
+
+        private void MapDeliveryMethodFromClient(RSM.Client client)
+        {
+            //if the invoice delivery method is not set on the client then it needs to be mapped from the HLE
+            if (string.IsNullOrEmpty(InvoiceDeliveryMethod)) return;
+            
+            if (!string.IsNullOrEmpty(EnablePaymentApplications))
+            {
+                client.usesApplicationForPaymentSpecified = true;
+                client.usesApplicationForPayment = false;
+
+                if (InvoiceDeliveryMethod == "Self Bill" || InvoiceDeliveryMethod == "Billing Controlled")
+                {
+                    switch (EnablePaymentApplications)
+                    {
+                        case "Yes":
+                            {
+                                client.usesApplicationForPaymentSpecified = true;
+                                client.usesApplicationForPayment = true;
+                                break;
+                            }
+                    }
+                }
+            }
+
+            client.invoiceDeliveryMethodSpecified = true;
+
+            //invoice method defaulted to paper because email would require an email which may not be supplied
+            client.invoiceDeliveryMethod = 0;
+
+            client.invoiceDeliveryMethod = Mappers.MapInvoiceDeliveryMethod(InvoiceDeliveryMethod);
+
+        }
+
+        private void MapDeliveryMethodFromHle(RSM.Client client)
+        {
+            //should not map from HLE if invoice delivery is set on the client
+            if (!string.IsNullOrEmpty(InvoiceDeliveryMethod)) return;
+            
+            //invoice delivery method should never be blank on the HLE but just incase exit so not getting null pointer exception
+            if (string.IsNullOrEmpty(HleClient.InvoiceDeliveryMethod)) return;
+
+            if (!string.IsNullOrEmpty(HleClient.EnablePaymentApplications))
+            {
+                client.usesApplicationForPaymentSpecified = true;
+                client.usesApplicationForPayment = false;
+
+                if (HleClient.InvoiceDeliveryMethod == "Self Bill" || HleClient.InvoiceDeliveryMethod == "Billing Controlled")
+                {
+                    switch (HleClient.EnablePaymentApplications)
+                    {
+                        case "Yes":
+                            {
+                                client.usesApplicationForPaymentSpecified = true;
+                                client.usesApplicationForPayment = true;
+                                break;
+                            }
+                    }
+                }
+            }
+
+            client.invoiceDeliveryMethodSpecified = true;
+
+            //invoice method defaulted to paper because email would require an email which may not be supplied
+            client.invoiceDeliveryMethod = 0;
+
+            client.invoiceDeliveryMethod = Mappers.MapInvoiceDeliveryMethod(HleClient.InvoiceDeliveryMethod);
+
+        }
+
 
         public RSM.Client MapClient(List<DivisionCode> divisionCodes)
         {
@@ -103,62 +174,7 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                 client.companyVatNo = "";
 
             client.externalId = ClientRef;
-            client.invoiceDeliveryMethodSpecified = true;
 
-            //invoice method defaulted to paper because email would require an email which may not be supplied
-            client.invoiceDeliveryMethod = 0;
-
-            //default to use invoice method on client
-            if (!string.IsNullOrEmpty(InvoiceDeliveryMethod))
-            {
-                client.invoiceDeliveryMethod = Mappers.MapInvoiceDeliveryMethod(InvoiceDeliveryMethod);
-            }
-            else
-            {
-                //if child client then use the invoice method on the HLE
-                if (HleClient != null && HleClient.ClientRef != ClientRef && !string.IsNullOrEmpty(HleClient.InvoiceDeliveryMethod))
-                {
-                    client.invoiceDeliveryMethod = Mappers.MapInvoiceDeliveryMethod(HleClient.InvoiceDeliveryMethod);
-                }
-            }
-
-            client.usesApplicationForPaymentSpecified = false;
-            if (!string.IsNullOrEmpty(EnablePlaymentApplications))
-            {
-                switch (EnablePlaymentApplications)
-                {
-                    case "Yes":
-                        {
-                            client.usesApplicationForPaymentSpecified = true;
-                            client.usesApplicationForPayment = true;
-                            break;
-                        }
-                    default:
-                        {
-                            client.usesApplicationForPaymentSpecified = true;
-                            client.usesApplicationForPayment = false;
-                            break;
-                        }
-                }
-            }
-            else if(HleClient!=null && HleClient.ClientRef != ClientRef)
-            {
-                switch (HleClient.EnablePlaymentApplications)
-                {
-                    case "Yes":
-                        {
-                            client.usesApplicationForPaymentSpecified = true;
-                            client.usesApplicationForPayment = true;
-                            break;
-                        }
-                    default:
-                        {
-                            client.usesApplicationForPaymentSpecified = true;
-                            client.usesApplicationForPayment = false;
-                            break;
-                        }
-                }
-            }
 
             client.invoicePeriodSpecified = true;
             client.invoicePeriod = 0;
@@ -261,6 +277,9 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
             {
                 client.primaryContact.address = WorkAddress.GetAddress();
             }
+
+            MapDeliveryMethodFromClient(client);
+            MapDeliveryMethodFromHle(client);            
 
             return client;
         }
