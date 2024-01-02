@@ -253,7 +253,10 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                 placement.invoiceContactOverride = new Contact();
             }
 
-            placement.invoiceContactOverride.address = InvoiceAddress.MapAddress();
+            if (InvoiceAddress != null)
+            {
+                placement.invoiceContactOverride.address = InvoiceAddress.MapAddress();
+            }
 
 
             var invoiceEmailList = GetInvoiceContactOverrideEmails(client);
@@ -284,6 +287,16 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
         {
             if (client.InvoiceDeliveryMethod != "Electronic") return;
 
+            if (placement.invoiceContactOverride == null)
+            {
+                placement.invoiceContactOverride = new Contact();
+            }
+
+            if (InvoiceAddress != null)
+            {
+                placement.invoiceContactOverride.address = InvoiceAddress.MapAddress();
+            }
+
             if (client.CentralInvoiceing == "Yes")
             {
                 var invoiceEmailList = GetInvoiceContactOverrideEmails(client);
@@ -292,11 +305,6 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
                 foreach (var email in invoiceEmailList)
                 {
-                    if (placement.invoiceContactOverride == null)
-                    {
-                        placement.invoiceContactOverride = new Contact();
-                    }
-
                     placement.invoiceContactOverride.email = placement.invoiceContactOverride.email + email + "; ";
                 }
 
@@ -308,9 +316,11 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                 
                 return;
             }
-            
-            placement.invoiceContactOverride.address = InvoiceAddress.MapAddress();
-            placement.invoiceContactOverride.email = InvoicePerson.EmailAddress;
+
+            if (InvoicePerson != null)
+            {
+                placement.invoiceContactOverride.email = InvoicePerson.EmailAddress;
+            }
 
         }
 

@@ -105,14 +105,6 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                 timesheet.shifts = new Shift[0];
                 var shiftIndex = 0;
 
-
-                //removed as no longer needed
-                /*
-                if ((Division.Name == "Tuition Services" || Division.Name == "Student Support") && Unit.Name=="NTP Tuition Pillar")
-                {
-                    TimesheetLines.Add(GetDeduction(30, "DFE Subsidy - 70%"));
-                }*/
-
                 //Map all the time values
                 foreach (var line in TimesheetLines)
                 {
@@ -386,46 +378,6 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
 
             return timesheet;
         }
-
-        private TimesheetLine GetDeduction(decimal percentageDeduction, string feeName)
-        {
-            var basic = TimesheetLines.Where(x => x.Rate.RateType.ToLower() == "basic rate").ToList();
-
-            if (basic == null) return null;
-
-            var deduction = new TimesheetLine();
-            deduction.StartDateTime = basic[0].StartDateTime;
-            deduction.EndDateTime = basic[0].EndDateTime;
-            deduction.StartDateTime = basic[0].StartDateTime;
-            deduction.EndDateTime = basic[0].EndDateTime;
-            deduction.HoursType = basic[0].HoursType;
-            deduction.PoNumber = basic[0].PoNumber;
-            deduction.TotalHours = 0;
-            foreach (var line in basic)
-            {
-                deduction.TotalHours = deduction.TotalHours + line.TotalHours;
-
-            }
-
-            deduction.TotalHours = deduction.TotalHours * -1;
-
-            deduction.Rate = new AssignmentRate();
-            deduction.Rate.FeeName = feeName; //"DFE Subsidy -70%";
-            deduction.Rate.OvertimeType = feeName;
-            deduction.Rate.PayRateCurrency = 0;
-            deduction.Rate.PayUnit = basic[0].Rate.PayUnit;
-            deduction.Rate.StartDate = AssignmentStart.ToString();
-
-            var charge = (decimal)basic[0].Rate.ChargeRateCurrency;
-            var percentage = percentageDeduction / 100;
-            charge = charge - (charge * percentage);
-            deduction.Rate.ChargeRateCurrency = Math.Round(charge, 2, MidpointRounding.AwayFromZero);
-            deduction.Rate.RateType = "Other Rate";
-            return deduction;
-
-        }
-
-
 
     }
 }

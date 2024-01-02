@@ -132,12 +132,13 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                     return;
                 }
 
-                if (assign.InvoicePerson == null && assign.Division.Name != "Tuition Services" && assign.Division.Name != "Student Support")
-                {
-                    _logger.Warn($"Invoice Person for {assign.AssignmentRef} is missing", entity.CorrelationId, entity, assign.AssignmentRef, "Dtos.Ufo.ExportedEntity", null);
-                    entity.ExportSuccess = false;
-                    return;
-                }
+                // 02/01/2024 Removed as part of Finance Transformation
+                //if (assign.InvoicePerson == null && assign.Division.Name != "Tuition Services" && assign.Division.Name != "Student Support")
+                //{
+                //    _logger.Warn($"Invoice Person for {assign.AssignmentRef} is missing", entity.CorrelationId, entity, assign.AssignmentRef, "Dtos.Ufo.ExportedEntity", null);
+                //    entity.ExportSuccess = false;
+                //    return;
+                //}
 
                 //added back in 30/06/2023 for CPE go live. Suspect it was removed previously as it was stopping assignments being ended in RSM
                 if (assign.Candidate.LiveInPayroll == null || assign.Candidate.LiveInPayroll == false)
