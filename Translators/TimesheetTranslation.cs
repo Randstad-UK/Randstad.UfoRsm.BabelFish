@@ -147,13 +147,21 @@ namespace Randstad.UfoRsm.BabelFish.Translators
                 }
 
                 //Netive timesheets go to the adjustment service
-                if (timesheet.TimesheetRef.StartsWith("NT"))
+                if (timesheet.TimesheetRef.StartsWith("NT") && !timesheet.IsAdjustment)
                 {
                     SendToRsm(JsonConvert.SerializeObject(ts), Mappers.MapOpCoFromName(timesheet.OpCo.Name.ToLower()).ToString(), "Timesheet", entity.CorrelationId, true, true);
 
                     _logger.Success($"Successfully mapped Netive Timesheet {timesheet.TimesheetRef} and sent to Adjustment Service",
                         entity.CorrelationId, ts, timesheet.TimesheetRef, "Dtos.Ufo.Timesheet", null, null,
                         "RSM.Timesheet");
+                }
+
+                if (timesheet.IsAdjustment)
+                {
+                    SendToRsm(JsonConvert.SerializeObject(ts), Mappers.MapOpCoFromName(timesheet.OpCo.Name.ToLower()).ToString(), "Timesheet", entity.CorrelationId, true, true);
+
+                    _logger.Success($"Successfully mapped Adjusted Timesheet {timesheet.TimesheetRef} and sent to Adjustment Service",
+                        entity.CorrelationId, ts, timesheet.TimesheetRef, "Dtos.Ufo.Timesheet", null, null, "RSM.Timesheet");
                 }
             }
 

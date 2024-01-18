@@ -43,10 +43,12 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
         public string ApprovedBy { get; set; }
         public string ApprovedDateTime { get; set; }
         public bool? ProcessAdjustments { get; set; }
+        public bool IsAdjustment { get; set; }
 
         //Student Support
         public string StudentFirstName { get; set; }
         public string StudentSurname { get; set; }
+        
 
 
         private void AddExpenseTypeLines(List<RSM.Shift> shifts)

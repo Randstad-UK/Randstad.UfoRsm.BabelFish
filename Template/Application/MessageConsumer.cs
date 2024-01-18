@@ -102,43 +102,44 @@ namespace Randstad.UfoRsm.BabelFish.Template.Application
 
         protected override async Task ExecuteAsync(CancellationToken cancellationToken)
         {
-            cancellationToken.Register(() => _logger.Info($"{_serviceName} has been cancelled.", _correlationId, null, null, null, null));
+            _ = cancellationToken.Register(() => _logger.Info($"{_serviceName} has been cancelled.", _correlationId, null, null, null, null));
 
-            await Task.Run(async () =>
+            while (!cancellationToken.IsCancellationRequested)
             {
-                while (!cancellationToken.IsCancellationRequested)
+                try
                 {
-                    try
+                    await Task.Run(async () =>
                     {
+                        _logger.Debug($"Entering {nameof(ExecuteAsync)}.", _correlationId, null, null, null, null);
                         await ProcessMessages(cancellationToken);
-
+                        _logger.Debug($"{_serviceName}: waiting {_delay} seconds.", _correlationId, null, null, null, null);
                         await Task.Delay(TimeSpan.FromSeconds(_delay), cancellationToken);
                         SetPollingInterval();
                         _errorHandler.ResetKnownErrorsCount();
-                    }
-                    catch (Exception ex)
-                    {
-                        if (_errorHandler.Handle(ex, _correlationId))
-                        {
-                            _logger.Debug($"Handle known error {ex.Message}.", _correlationId, null, null, null, null);
-                            _consumerService.AcknowledgeMessage();
-                            continue;
-                        }
 
-                        if (_nextMessage != null)
-                        {
-                            _consumerService.RejectMessage(true);
-                        }
-
-                        _removeFromSd = false;
-                        _logger.Fatal($"{_serviceName}: {ex.Message}", _correlationId, null, null, null, null, ex);
-                        await StopAsync(cancellationToken);
-                    }
+                    }, cancellationToken);
                 }
+                catch (Exception ex)
+                {
+                    _logger.Error(string.Format("{0}: {1}", _serviceName, ex.Message), _correlationId, null, null, null, null, ex);
 
-                _hostApplicationLifetime.StopApplication();
+                    if (_nextMessage != null)
+                    {
+                        _consumerService.RejectMessage(true);
+                    }
 
-            }, cancellationToken);
+                    if (_errorHandler.Handle(ex, _correlationId))
+                    {
+                        continue;
+                    }
+
+                    _removeFromSd = false;
+                    _logger.Fatal(string.Format("{0}: {1}", _serviceName, ex.Message), _correlationId, null, null, null, null, ex);
+                    await StopAsync(cancellationToken);
+                }
+            }
+
+            _hostApplicationLifetime.StopApplication();
         }
 
         /// <summary>
