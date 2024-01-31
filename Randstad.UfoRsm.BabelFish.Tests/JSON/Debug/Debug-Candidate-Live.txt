@@ -1,0 +1,93 @@
+﻿{
+  "CandidateId": "a1C250000025lFoEAI",
+  "LiveInPayroll": true,
+  "CandidateRef": "C-001677069",
+  "Title": "Mr",
+  "Name": "Gaid",
+  "Surname": "Yusuf",
+  "Sex": "Male",
+  "DateOfBirth": "2000-01-10T00:00:00",
+  "NiNumber": "SK198050C",
+  "Phone": "07595971291",
+  "Mobile": null,
+  "EmailAddress": "qaayed@hotmail.com",
+  "PaymentMethod": "BACS",
+  "PayrollRefNumber": "JLS30499",
+  "StartDate": "2022-04-01T00:00:00",
+  "EndDate": null,
+  "EmployeeFileId": "a1025000001sGu5AAE",
+  "Status": { "Status": "Working" },
+  "HomeAddress": {
+    "Street": "600 Warwick Road",
+    "City": "BIRMINGHAM",
+    "County": null,
+    "Country": null,
+    "PostCode": "B11 2HR"
+  },
+  "LtdCompany": null,
+  "UmbrellaAgency": null,
+  "OutsourcedAgency": null,
+  "Paye": {
+    "StudentLoan": {
+      "HasLoan": "No",
+      "LeftBeforeLast6thApril": null,
+      "PayingBackDirectly": null,
+      "PlanType": null
+    },
+    "PostgradLoan": {
+      "HasLoan": "No",
+      "LeftBeforeLast6thApril": null,
+      "PayingBackDirectly": null
+    },
+    "Account": {
+      "AccountName": "G Yusuf",
+      "AccountNumber": "30462160",
+      "SortCode": "778559",
+      "BankName": null,
+      "BuildingSocietyRef": null
+    },
+    "StartDec": 0,
+    "PAI": "Opt In",
+    "EmailPayslips": "Email",
+    "PaymentMethod": "BACS",
+    "PayrollRef": null
+  },
+  "SelfEmployed": null,
+  "PayType": 0,
+  "PaymentFrequency": "Weekly",
+  "OperatingCo": {
+    "Id": "a3R25000000BjOUEA0",
+    "MigratedGroupId": null,
+    "IsActive": null,
+    "Name": "Customer Success",
+    "FinanceCode": "RIS"
+  },
+  "Division": {
+    "Id": "a3R25000000BjOZEA0",
+    "MigratedGroupId": null,
+    "IsActive": null,
+    "Name": "JET",
+    "FinanceCode": null
+  },
+  "Unit": {
+    "Id": "a3R25000000BjPzEAK",
+    "MigratedGroupId": "R1231",
+    "IsActive": true,
+    "Name": "JLR Solihull",
+    "FinanceCode": "R1231"
+  },
+  "Branch": {
+    "Id": "a3R25000000BjP5EAK",
+    "MigratedGroupId": null,
+    "IsActive": null,
+    "Name": "JLR",
+    "FinanceCode": null
+  },
+  "Region": {
+    "Id": "a3R25000000BjOqEAK",
+    "MigratedGroupId": null,
+    "IsActive": null,
+    "Name": "Automotive",
+    "FinanceCode": null
+  }
+}

@@ -1,0 +1,119 @@
+﻿{
+  "ClientId": "0013L00000ciwQhQAI",
+  "ClientRef": "CL-0279171",
+  "ClientName": "Sophie Direct Bill",
+  "IsLegalHirer": false,
+  "NoVat": false,
+  "VatNo": null,
+  "CompanyRegNum": null,
+  "CreditLimit": 10000.0,
+  "InvoiceDeliveryMethod": null,
+  "InvoiceEmail": null,
+  "InvoiceEmail2": null,
+  "InvoiceEmail3": null,
+  "EnablePaymentApplications": null,
+  "IsCheckedIn": true,
+  "WorkAddress": {
+    "Street": "120 High Street",
+    "City": "Luton",
+    "County": null,
+    "Country": null,
+    "PostCode": "LU1 1LL"
+  },
+  "OpCo": {
+    "Id": "a3R3L000000Cl41UAC",
+    "MigratedGroupId": "PS",
+    "IsActive": null,
+    "Name": "Public Services",
+    "FinanceCode": "PS"
+  },
+  "Unit": {
+    "Id": "a3R3L000000CrxwUAC",
+    "MigratedGroupId": "PS-252",
+    "IsActive": true,
+    "Name": "Edu - Bristol Primary",
+    "FinanceCode": "E1020"
+  },
+  "HleClient": {
+    "ClientId": "0013L00000cjTqRQAU",
+    "ClientRef": "CL-0279183",
+    "ClientName": "Sophie HLE",
+    "IsLegalHirer": true,
+    "NoVat": null,
+    "VatNo": null,
+    "CompanyRegNum": null,
+    "CreditLimit": 10000.0,
+    "InvoiceDeliveryMethod": "Electronic",
+    "InvoiceEmail": null,
+    "InvoiceEmail2": null,
+    "InvoiceEmail3": null,
+    "EnablePaymentApplications": null,
+    "IsCheckedIn": true,
+    "WorkAddress": null,
+    "OpCo": {
+      "Id": "a3R3L000000Cl41UAC",
+      "MigratedGroupId": "PS",
+      "IsActive": null,
+      "Name": "Public Services",
+      "FinanceCode": "PS"
+    },
+    "Unit": {
+      "Id": "a3R3L000000CrxwUAC",
+      "MigratedGroupId": "PS-252",
+      "IsActive": true,
+      "Name": "Edu - Bristol Primary",
+      "FinanceCode": "E1020"
+    },
+    "HleClient": null,
+    "RsmClient": null,
+    "PoRequired": null,
+    "SendRatesFormat": null,
+    "CentralInvoiceing": "No",
+    "Branch": {
+      "Id": "a3R3L000000CrxrUAC",
+      "MigratedGroupId": null,
+      "IsActive": true,
+      "Name": "Edu Bristol",
+      "FinanceCode": null
+    },
+    "Region": {
+      "Id": "a3R3L000000CrxmUAC",
+      "MigratedGroupId": null,
+      "IsActive": null,
+      "Name": "Education South West Region",
+      "FinanceCode": null
+    },
+    "Division": {
+      "Id": "a3R3L000000CrxhUAC",
+      "MigratedGroupId": null,
+      "IsActive": null,
+      "Name": "Education",
+      "FinanceCode": null
+    }
+  },
+  "RsmClient": null,
+  "PoRequired": null,
+  "SendRatesFormat": null,
+  "CentralInvoiceing": null,
+  "Branch": {
+    "Id": "a3R3L000000CrxrUAC",
+    "MigratedGroupId": null,
+    "IsActive": true,
+    "Name": "Edu Bristol",
+    "FinanceCode": null
+  },
+  "Region": {
+    "Id": "a3R3L000000CrxmUAC",
+    "MigratedGroupId": null,
+    "IsActive": null,
+    "Name": "Education South West Region",
+    "FinanceCode": null
+  },
+  "Division": {
+    "Id": "a3R3L000000CrxhUAC",
+    "MigratedGroupId": null,
+    "IsActive": null,
+    "Name": "Education",
+    "FinanceCode": null
+  }
+}

@@ -1,0 +1,196 @@
+{
+  "format": 1,
+  "restore": {
+    "C:\\Repository\\Randstad.UfoRsm.BabelFish\\Randstad.UfoRsm.BabelFish.Tests\\Randstad.UfoRsm.BabelFish.Tests.csproj": {}
+  },
+  "projects": {
+    "C:\\Repository\\Randstad.UfoRsm.BabelFish\\Randstad.UfoRsm.BabelFish.Tests\\Randstad.UfoRsm.BabelFish.Tests.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Repository\\Randstad.UfoRsm.BabelFish\\Randstad.UfoRsm.BabelFish.Tests\\Randstad.UfoRsm.BabelFish.Tests.csproj",
+        "projectName": "Randstad.UfoRsm.BabelFish.Tests",
+        "projectPath": "C:\\Repository\\Randstad.UfoRsm.BabelFish\\Randstad.UfoRsm.BabelFish.Tests\\Randstad.UfoRsm.BabelFish.Tests.csproj",
+        "packagesPath": "C:\\Users\\ross.mcleodadm\\.nuget\\packages\\",
+        "outputPath": "C:\\Repository\\Randstad.UfoRsm.BabelFish\\Randstad.UfoRsm.BabelFish.Tests\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
+          "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\",
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\ross.mcleodadm\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netcoreapp3.1"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
+          "https://api.nuget.org/v3/index.json": {},
+          "https://nuget.pkg.github.com/Randstad-UK/index.json": {}
+        },
+        "frameworks": {
+          "netcoreapp3.1": {
+            "targetAlias": "netcoreapp3.1",
+            "projectReferences": {
+              "C:\\Repository\\Randstad.UfoRsm.BabelFish\\Randstad.UfoRsm.BabelFish\\Randstad.UfoRsm.BabelFish.csproj": {
+                "projectPath": "C:\\Repository\\Randstad.UfoRsm.BabelFish\\Randstad.UfoRsm.BabelFish\\Randstad.UfoRsm.BabelFish.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netcoreapp3.1": {
+          "targetAlias": "netcoreapp3.1",
+          "dependencies": {
+            "Microsoft.NET.Test.Sdk": {
+              "target": "Package",
+              "version": "[16.5.0, )"
+            },
+            "NUnit": {
+              "target": "Package",
+              "version": "[3.12.0, )"
+            },
+            "NUnit3TestAdapter": {
+              "target": "Package",
+              "version": "[3.16.1, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.405\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Repository\\Randstad.UfoRsm.BabelFish\\Randstad.UfoRsm.BabelFish\\Randstad.UfoRsm.BabelFish.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Repository\\Randstad.UfoRsm.BabelFish\\Randstad.UfoRsm.BabelFish\\Randstad.UfoRsm.BabelFish.csproj",
+        "projectName": "Randstad.UfoRsm.BabelFish",
+        "projectPath": "C:\\Repository\\Randstad.UfoRsm.BabelFish\\Randstad.UfoRsm.BabelFish\\Randstad.UfoRsm.BabelFish.csproj",
+        "packagesPath": "C:\\Users\\ross.mcleodadm\\.nuget\\packages\\",
+        "outputPath": "C:\\Repository\\Randstad.UfoRsm.BabelFish\\Randstad.UfoRsm.BabelFish\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
+          "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\",
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\ross.mcleodadm\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netcoreapp3.1"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
+          "https://api.nuget.org/v3/index.json": {},
+          "https://nuget.pkg.github.com/Randstad-UK/index.json": {}
+        },
+        "frameworks": {
+          "netcoreapp3.1": {
+            "targetAlias": "netcoreapp3.1",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netcoreapp3.1": {
+          "targetAlias": "netcoreapp3.1",
+          "dependencies": {
+            "Microsoft.Extensions.Configuration.UserSecrets": {
+              "target": "Package",
+              "version": "[6.0.0, )"
+            },
+            "Microsoft.Extensions.Hosting": {
+              "target": "Package",
+              "version": "[6.0.0, )"
+            },
+            "Microsoft.Extensions.Hosting.WindowsServices": {
+              "target": "Package",
+              "version": "[6.0.0, )"
+            },
+            "Randstad.Logging": {
+              "target": "Package",
+              "version": "[2.1.1, )"
+            },
+            "Randstad.MessageExchange": {
+              "target": "Package",
+              "version": "[2.4.0, )"
+            },
+            "Randstad.ServiceDiscovery.Client": {
+              "target": "Package",
+              "version": "[1.0.10, )"
+            },
+            "System.ServiceModel.Duplex": {
+              "target": "Package",
+              "version": "[4.9.0, )"
+            },
+            "System.ServiceModel.Http": {
+              "target": "Package",
+              "version": "[4.9.0, )"
+            },
+            "System.ServiceModel.NetTcp": {
+              "target": "Package",
+              "version": "[4.9.0, )"
+            },
+            "System.ServiceModel.Security": {
+              "target": "Package",
+              "version": "[4.9.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.405\\RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

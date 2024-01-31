@@ -1,0 +1,119 @@
+﻿{
+  "ClientId": "0013L00000bHVH6QAO",
+  "ClientRef": "CL-0279110",
+  "ClientName": "CPE",
+  "IsLegalHirer": true,
+  "NoVat": false,
+  "VatNo": null,
+  "CompanyRegNum": null,
+  "CreditLimit": null,
+  "InvoiceDeliveryMethod": "Electronic",
+  "InvoiceEmail": null,
+  "InvoiceEmail2": null,
+  "InvoiceEmail3": null,
+  "EnablePaymentApplications": null,
+  "IsCheckedIn": true,
+  "WorkAddress": {
+    "Street": null,
+    "City": null,
+    "County": null,
+    "Country": null,
+    "PostCode": null
+  },
+  "OpCo": {
+    "Id": "a3R3L000000Cl40UAC",
+    "MigratedGroupId": "CPE",
+    "IsActive": null,
+    "Name": "CPE",
+    "FinanceCode": "CPE"
+  },
+  "Unit": {
+    "Id": "a3R3L000000Cl84UAC",
+    "MigratedGroupId": null,
+    "IsActive": true,
+    "Name": "Maidstone",
+    "FinanceCode": "P0022"
+  },
+  "HleClient": {
+    "ClientId": "0013L00000bHVH6QAO",
+    "ClientRef": "CL-0279110",
+    "ClientName": "CPE",
+    "IsLegalHirer": true,
+    "NoVat": null,
+    "VatNo": null,
+    "CompanyRegNum": null,
+    "CreditLimit": null,
+    "InvoiceDeliveryMethod": "Electronic",
+    "InvoiceEmail": null,
+    "InvoiceEmail2": null,
+    "InvoiceEmail3": null,
+    "EnablePaymentApplications": null,
+    "IsCheckedIn": true,
+    "WorkAddress": null,
+    "OpCo": {
+      "Id": "a3R3L000000Cl40UAC",
+      "MigratedGroupId": "CPE",
+      "IsActive": null,
+      "Name": "CPE",
+      "FinanceCode": "CPE"
+    },
+    "Unit": {
+      "Id": "a3R3L000000Cl84UAC",
+      "MigratedGroupId": null,
+      "IsActive": true,
+      "Name": "Maidstone",
+      "FinanceCode": "P0022"
+    },
+    "HleClient": null,
+    "RsmClient": null,
+    "PoRequired": null,
+    "SendRatesFormat": null,
+    "CentralInvoiceing": null,
+    "Branch": {
+      "Id": "a3R3L000000Cl7zUAC",
+      "MigratedGroupId": null,
+      "IsActive": true,
+      "Name": "CPE Maidstone",
+      "FinanceCode": null
+    },
+    "Region": {
+      "Id": "a3R3L000000Cl7uUAC",
+      "MigratedGroupId": null,
+      "IsActive": null,
+      "Name": "CPE South East Region",
+      "FinanceCode": null
+    },
+    "Division": {
+      "Id": "a3R3L000000Cl46UAC",
+      "MigratedGroupId": "CPEDiv",
+      "IsActive": null,
+      "Name": "CPE Division",
+      "FinanceCode": null
+    }
+  },
+  "RsmClient": null,
+  "PoRequired": null,
+  "SendRatesFormat": null,
+  "CentralInvoiceing": null,
+  "Branch": {
+    "Id": "a3R3L000000Cl7zUAC",
+    "MigratedGroupId": null,
+    "IsActive": true,
+    "Name": "CPE Maidstone",
+    "FinanceCode": null
+  },
+  "Region": {
+    "Id": "a3R3L000000Cl7uUAC",
+    "MigratedGroupId": null,
+    "IsActive": null,
+    "Name": "CPE South East Region",
+    "FinanceCode": null
+  },
+  "Division": {
+    "Id": "a3R3L000000Cl46UAC",
+    "MigratedGroupId": "CPEDiv",
+    "IsActive": null,
+    "Name": "CPE Division",
+    "FinanceCode": null
+  }
+}

@@ -1,0 +1,182 @@
+﻿{
+  "CandidateId": "a1C7E000003O9zmUAC",
+  "LiveInPayroll": true,
+  "MigratedCandidateId": null,
+  "CandidateRef": "C-000062242",
+  "Title": null,
+  "Name": "Sarah",
+  "Surname": "Stone",
+  "Fullname": "Sarah Stone",
+  "Salutation": null,
+  "HmrcGender": "female",
+  "DateOfBirth": "2000-07-28T00:00:00",
+  "DocumentNumber": "doc 1234",
+  "MaritalStatus": null,
+  "Nationality": null,
+  "HomeAddress": {
+    "Street": "3 Cambridge Street",
+    "City": "Manchester",
+    "County": null,
+    "Country": null,
+    "PostCode": "M1 5GH"
+  },
+  "EmergencyContactName": null,
+  "EmergencyContact": null,
+  "Phone": null,
+  "Mobile": null,
+  "EmailAddress": "ufotesting@randstad.co.uk",
+  "PaymentMethod": "Cheque",
+  "PayrollRefNumber": "U-00006885",
+  "StartDate": "2021-07-29T00:00:00",
+  "EndDate": null,
+  "EmployeeFileId": "a107E000003GSdDQAW",
+  "Status": { "Status": "Working" },
+  "Owner": {
+    "Id": "0054J0000052b0MQAQ",
+    "MigratedUserId": "PS-997",
+    "EmployeeRef": "12598",
+    "Firstname": "Sophie",
+    "Lastname": "Lloyd",
+    "Username": "sophie.lloyd@ruk-ufo.co.uk.test",
+    "Email": "sophie.lloyd@randstad.co.uk",
+    "IsActive": true,
+    "OpCo": {
+      "Id": "a3R7E0000006mn6UAA",
+      "MigratedGroupId": null,
+      "IsActive": true,
+      "Name": "Business Solutions",
+      "FinanceCode": "BS"
+    },
+    "Unit": {
+      "Id": "a3R7E0000006mq5UAA",
+      "MigratedGroupId": "PS-285",
+      "IsActive": true,
+      "Name": "Edu - Manchester Primary North",
+      "FinanceCode": "E1261"
+    },
+    "Branch": {
+      "Id": "a3R7E0000006moBUAQ",
+      "MigratedGroupId": null,
+      "IsActive": true,
+      "Name": "Edu Manchester",
+      "FinanceCode": null
+    },
+    "Region": {
+      "Id": "a3R7E0000006mnUUAQ",
+      "MigratedGroupId": null,
+      "IsActive": true,
+      "Name": "Education North Region",
+      "FinanceCode": null
+    },
+    "Division": {
+      "Id": "a3R7E0000006mn9UAA",
+      "MigratedGroupId": null,
+      "IsActive": true,
+      "Name": "Education",
+      "FinanceCode": null
+    }
+  },
+  "LeaverHolidayRequest": null,
+  "LtdCompany": null,
+  "UmbrellaAgency": {
+    "IsApproved": true,
+    "AslRef": "4545454",
+    "Name": "Testy Umbrella",
+    "Id": "a3U7E0000005eY4UAI"
+  },
+  "OutsourcedAgency": null,
+  "Paye": null,
+  "PayType": 3,
+  "AWRScope": "Out of Scope",
+  "OperatingCo": {
+    "Id": "a3R7E0000006mn6UAA",
+    "MigratedGroupId": null,
+    "IsActive": null,
+    "Name": "Business Solutions",
+    "FinanceCode": "BS"
+  },
+  "Divisions": [
+    {
+      "Candidate": {
+        "CandidateId": "a1C7E000003O9zmUAC",
+        "LiveInPayroll": null,
+        "MigratedCandidateId": null,
+        "CandidateRef": null,
+        "Title": null,
+        "Name": null,
+        "Surname": null,
+        "Fullname": null,
+        "Salutation": null,
+        "Gender": null,
+        "DateOfBirth": null,
+        "NiNumber": null,
+        "DocumentNumber": null,
+        "MaritalStatus": null,
+        "Nationality": null,
+        "HomeAddress": null,
+        "EmergencyContactName": null,
+        "EmergencyContact": null,
+        "Phone": null,
+        "Mobile": null,
+        "EmailAddress": null,
+        "PaymentMethod": null,
+        "PayrollRefNumber": null,
+        "StartDate": null,
+        "EndDate": null,
+        "EmployeeFileId": null,
+        "Status": null,
+        "Owner": null,
+        "LeaverHolidayRequest": null,
+        "LtdCompany": null,
+        "UmbrellaAgency": null,
+        "OutsourcedAgency": null,
+        "Paye": null,
+        "PayType": null,
+        "AWRScope": null,
+        "OperatingCo": null,
+        "Divisions": null,
+        "SetGdpr": null,
+        "Unit": null,
+        "Branch": null,
+        "Region": null,
+        "Division": null
+      },
+      "CandidateDivisionId": "a2y7E000000ZcCEQA0",
+      "Division": {
+        "DivisionId": "a3C7E000000R52bUAC",
+        "Name": "Teacher - QTS",
+        "MigratedAttributeId": "PS-5073"
+      },
+      "TempStatus": "Lapsed"
+    }
+  ],
+  "SetGdpr": null,
+  "Unit": {
+    "Id": "a3R7E0000006mq5UAA",
+    "MigratedGroupId": "PS-285",
+    "IsActive": true,
+    "Name": "Edu - Manchester Primary North",
+    "FinanceCode": "E1261"
+  },
+  "Branch": {
+    "Id": "a3R7E0000006moBUAQ",
+    "MigratedGroupId": null,
+    "IsActive": null,
+    "Name": "Edu Manchester",
+    "FinanceCode": null
+  },
+  "Region": {
+    "Id": "a3R7E0000006mnUUAQ",
+    "MigratedGroupId": null,
+    "IsActive": null,
+    "Name": "Education North Region",
+    "FinanceCode": null
+  },
+  "Division": {
+    "Id": "a3R7E0000006mn9UAA",
+    "MigratedGroupId": null,
+    "IsActive": null,
+    "Name": "Education",
+    "FinanceCode": null
+  }
+}

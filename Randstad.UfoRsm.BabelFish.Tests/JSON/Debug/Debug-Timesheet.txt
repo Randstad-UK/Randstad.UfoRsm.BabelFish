@@ -1,0 +1,62 @@
+﻿{
+  "TimesheetId": "a1v26000003pYoaAAE",
+  "AssignmentRef": "PAs-573541",
+  "AssignmentStart": "0001-01-01T00:00:00",
+  "Cancelled": false,
+  "PoNumber": null,
+  "TimesheetRef": "UT02782379",
+  "StartDate": "2022-11-10",
+  "EndDate": "2022-11-10",
+  "ExternalTimesheetId": null,
+  "OpCo": {
+    "Id": "a3R26000000PT7KEAW",
+    "MigratedGroupId": null,
+    "IsActive": null,
+    "Name": "Public Services",
+    "FinanceCode": "PS"
+  },
+  "Division": {
+    "Id": "a3R26000000PT7yEAG",
+    "MigratedGroupId": null,
+    "IsActive": null,
+    "Name": "Student Support",
+    "FinanceCode": "SWS"
+  },
+  "TimesheetLines": [
+    {
+      "Rate": {
+        "FeeRef": "AF-859285",
+        "FeeName": null,
+        "StartDate": "2022-11-07",
+        "ExpenseType": null,
+        "OvertimeType": null,
+        "PayUnit": "Hourly",
+        "SequenceNumber": null,
+        "PayRateCurrency": 0.0,
+        "ChargeRateCurrency": 50.0,
+        "PostParityPayRateCurrency": null,
+        "PostParityChargeRateCurrency": null,
+        "RateType": "Basic Rate",
+        "Assignment": null
+      },
+      "TotalHours": 1.0,
+      "DaysReported": null,
+      "StartDateTime": "2022-11-10T10:00:00Z",
+      "EndDateTime": "2022-11-10T11:00:00Z",
+      "HoursType": null,
+      "BreakStartTime": null,
+      "BreakEndTime": null,
+      "PoNumber": null
+    }
+  ],
+  "Expenses": null,
+  "ApprovalStatus": null,
+  "ApprovedBy": "Jo Curtis",
+  "ApprovedDateTime": "2022-11-10T10:41:33Z",
+  "ProcessAdjustments": null,
+  "StudentFirstName": "Paul",
+  "StudentSurname": "Hollywood",
+  "Unit": null,
+  "Branch": null,
+  "Region": null
+}

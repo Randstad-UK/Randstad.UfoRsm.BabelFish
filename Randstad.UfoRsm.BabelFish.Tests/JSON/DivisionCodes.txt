@@ -1,0 +1,1364 @@
+﻿[
+	{
+		"Code": "B1021",
+		"Division": "REB",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "B1022",
+		"Division": "REB",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "B1042",
+		"Division": "REB",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "B1043",
+		"Division": "REB",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "B1044",
+		"Division": "REB",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "B1046",
+		"Division": "REB",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "B1047",
+		"Division": "REB",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "B1048",
+		"Division": "REB",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "B1049",
+		"Division": "REB",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "B1050",
+		"Division": "REB",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "B1081",
+		"Division": "REB",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "B1084",
+		"Division": "REB",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "B1100",
+		"Division": "REB",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "B1101",
+		"Division": "REB",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "B1102",
+		"Division": "REB",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "B1103",
+		"Division": "REB",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "B1105",
+		"Division": "REB",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "B1106",
+		"Division": "REB",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "B1140",
+		"Division": "REB",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "B1141",
+		"Division": "REB",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "B1142",
+		"Division": "REB",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "B1200",
+		"Division": "REB",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "B1201",
+		"Division": "REB",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "B1260",
+		"Division": "REB",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "B1261",
+		"Division": "REB",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "B1262",
+		"Division": "REB",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "B1263",
+		"Division": "REB",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "B1264",
+		"Division": "REB",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "B1302",
+		"Division": "REB",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "B1305",
+		"Division": "REB",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "B1324",
+		"Division": "REB",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "B1325",
+		"Division": "REB",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "B1328",
+		"Division": "REB",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "B1329",
+		"Division": "REB",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "B1332",
+		"Division": "REB",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "B1334",
+		"Division": "REB",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "B1335",
+		"Division": "REB",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "B1337",
+		"Division": "REB",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "B1341",
+		"Division": "REB",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "B1381",
+		"Division": "REB",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "B1382",
+		"Division": "REB",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "B1384",
+		"Division": "REB",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "B1386",
+		"Division": "REB",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "B1442",
+		"Division": "REB",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "B1443",
+		"Division": "REB",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "B1540",
+		"Division": "REB",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "B1541",
+		"Division": "REB",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "B1543",
+		"Division": "REB",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "B1560",
+		"Division": "REB",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "B1561",
+		"Division": "REB",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "B1640",
+		"Division": "REB",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "B5501",
+		"Division": "TEC",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "B5502",
+		"Division": "TEC",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "B5503",
+		"Division": "TEC",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "B5504",
+		"Division": "TEC",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "B5505",
+		"Division": "TEC",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "B5507",
+		"Division": "TEC",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "B5508",
+		"Division": "TEC",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "B6501",
+		"Division": "DIG",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "B7504",
+		"Division": "F&A",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "B7510",
+		"Division": "F&A",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "B7512",
+		"Division": "F&A",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "B7513",
+		"Division": "F&A",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "B7516",
+		"Division": "F&A",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "B9100",
+		"Division": "REB",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "C1000",
+		"Division": "CAR",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "C1001",
+		"Division": "CAR",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "C1004",
+		"Division": "CAR",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "C1019",
+		"Division": "CAR",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "C1021",
+		"Division": "CAR",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "C1103",
+		"Division": "CAR",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "C1104",
+		"Division": "CAR",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "C1180",
+		"Division": "CAR",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "C1182",
+		"Division": "CAR",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "C1183",
+		"Division": "CAR",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "C1201",
+		"Division": "CAR",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "C1260",
+		"Division": "CAR",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "C1304",
+		"Division": "CAR",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "C1318",
+		"Division": "CAR",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "C1323",
+		"Division": "CAR",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "C1324",
+		"Division": "CAR",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "C1326",
+		"Division": "CAR",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "C1361",
+		"Division": "CAR",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "C1362",
+		"Division": "CAR",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "C1365",
+		"Division": "CAR",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "C5000",
+		"Division": "CAR",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "C5001",
+		"Division": "CAR",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "C9000",
+		"Division": "CAR",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "C1523",
+		"Division": "CAR",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "C1522",
+		"Division": "CAR",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "E1020",
+		"Division": "EDU",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "E1021",
+		"Division": "EDU",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "E1022",
+		"Division": "EDU",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "E1030",
+		"Division": "EDU",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "E1031",
+		"Division": "EDU",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "E1040",
+		"Division": "EDU",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "E1041",
+		"Division": "EDU",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "E1042",
+		"Division": "EDU",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "E1050",
+		"Division": "EDU",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "E1051",
+		"Division": "EDU",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "E1052",
+		"Division": "EDU",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "E1080",
+		"Division": "EDU",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "E1081",
+		"Division": "EDU",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "E1140",
+		"Division": "EDU",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "E1141",
+		"Division": "EDU",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "E1142",
+		"Division": "EDU",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "E1160",
+		"Division": "EDU",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "E1161",
+		"Division": "EDU",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "E1162",
+		"Division": "EDU",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "E1186",
+		"Division": "EDU",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "E1187",
+		"Division": "EDU",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "E1188",
+		"Division": "EDU",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "E1190",
+		"Division": "EDU",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "E1191",
+		"Division": "EDU",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "E1200",
+		"Division": "EDU",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "E1201",
+		"Division": "EDU",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "E1202",
+		"Division": "EDU",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "E1220",
+		"Division": "EDU",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "E1221",
+		"Division": "EDU",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "E1222",
+		"Division": "EDU",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "E1240",
+		"Division": "EDU",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "E1241",
+		"Division": "EDU",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "E1242",
+		"Division": "EDU",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "E1261",
+		"Division": "EDU",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "E1262",
+		"Division": "EDU",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "E1263",
+		"Division": "EDU",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "E1265",
+		"Division": "EDU",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "E1320",
+		"Division": "EDU",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "E1322",
+		"Division": "EDU",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "E1340",
+		"Division": "EDU",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "E1341",
+		"Division": "EDU",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "E1342",
+		"Division": "EDU",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "E1360",
+		"Division": "EDU",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "E1361",
+		"Division": "EDU",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "E1362",
+		"Division": "EDU",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "E1363",
+		"Division": "EDU",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "E1364",
+		"Division": "EDU",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "E1400",
+		"Division": "EDU",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "E1401",
+		"Division": "EDU",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "E1402",
+		"Division": "EDU",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "E1540",
+		"Division": "EDU",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "E1541",
+		"Division": "EDU",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "E1542",
+		"Division": "EDU",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "E1543",
+		"Division": "EDU",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "E1544",
+		"Division": "EDU",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "E1545",
+		"Division": "EDU",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "E1580",
+		"Division": "EDU",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "E1581",
+		"Division": "EDU",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "E1582",
+		"Division": "EDU",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "E1600",
+		"Division": "EDU",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "E2100",
+		"Division": "EDU",
+		"InvoiceTemplate": "Teach Anywhere"
+	},
+	{
+		"Code": "E2101",
+		"Division": "EDU",
+		"InvoiceTemplate": "Teach Anywhere"
+	},
+	{
+		"Code": "E2103",
+		"Division": "EDU",
+		"InvoiceTemplate": "Teach Anywhere"
+	},
+	{
+		"Code": "E2104",
+		"Division": "EDU",
+		"InvoiceTemplate": "Teach Anywhere"
+	},
+	{
+		"Code": "E2102",
+		"Division": "EDU",
+		"InvoiceTemplate": "Teach Anywhere"
+	},
+	{
+		"Code": "F7705",
+		"Division": "FS",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "F7707",
+		"Division": "FS",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "F7708",
+		"Division": "FS",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "F7709",
+		"Division": "FS",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "F7710",
+		"Division": "FS",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "F7711",
+		"Division": "FS",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "F7712",
+		"Division": "FS",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "P0005",
+		"Division": "CPE",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "P0007",
+		"Division": "CPE",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "P0010",
+		"Division": "CPE",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "P0013",
+		"Division": "CPE",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "P0015",
+		"Division": "CPE",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "P0022",
+		"Division": "CPE",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "P0025",
+		"Division": "CPE",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "P0027",
+		"Division": "CPE",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "P0030",
+		"Division": "CPE",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "P0034",
+		"Division": "CPE",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "P0035",
+		"Division": "CPE",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "P0036",
+		"Division": "CPE",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "P0037",
+		"Division": "CPE",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "P0041",
+		"Division": "CPE",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "P0042",
+		"Division": "CPE",
+		"InvoiceTemplate": "Randstad Executive Search"
+	},
+	{
+		"Code": "P0044",
+		"Division": "CPE",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "P0051",
+		"Division": "CPE",
+		"InvoiceTemplate": "",
+		"TimeSheetDuration": "weekly_sat-fri"
+	},
+	{
+		"Code": "P0054",
+		"Division": "CPE",
+		"InvoiceTemplate": "",
+		"TimeSheetDuration": "weekly_sat-fri"
+	},
+	{
+		"Code": "P0055",
+		"Division": "CPE",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "P0060",
+		"Division": "CPE",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "P0026",
+		"Division": "CPE",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "P9999",
+		"Division": "CPE",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "0XXX",
+		"Division": "CAR",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "C1190",
+		"Division": "CAR",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "R1002",
+		"Division": "RIS",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "R1003",
+		"Division": "RIS",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "R1009",
+		"Division": "RIS",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "R1010",
+		"Division": "RIS",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "R1011",
+		"Division": "RIS",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "R1012",
+		"Division": "RIS",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "R1013",
+		"Division": "RIS",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "R1014",
+		"Division": "RIS",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "R1016",
+		"Division": "RIS",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "R1017",
+		"Division": "RIS",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "R1018",
+		"Division": "RIS",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "R1036",
+		"Division": "RIS",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "R1041",
+		"Division": "RIS",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "R1042",
+		"Division": "RIS",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "R1044",
+		"Division": "RIS",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "R1057",
+		"Division": "RIS",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "R1091",
+		"Division": "RIS",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "R1092",
+		"Division": "RIS",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "R1100",
+		"Division": "RIS",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "R1102",
+		"Division": "RIS",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "R1105",
+		"Division": "RIS",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "R1112",
+		"Division": "RIS",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "R1118",
+		"Division": "RIS",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "R1122",
+		"Division": "RIS",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "R1139",
+		"Division": "RIS",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "R1144",
+		"Division": "RIS",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "R1145",
+		"Division": "RIS",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "R1148",
+		"Division": "RIS",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "R1149",
+		"Division": "RIS",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "R1150",
+		"Division": "RIS",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "R1154",
+		"Division": "RIS",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "R1156",
+		"Division": "RIS",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "R1162",
+		"Division": "RIS",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "R1163",
+		"Division": "RIS",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "R1164",
+		"Division": "RIS",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "R1181",
+		"Division": "RIS",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "R1184",
+		"Division": "RIS",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "R1189",
+		"Division": "RIS",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "R1190",
+		"Division": "RIS",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "R1191",
+		"Division": "RIS",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "R1192",
+		"Division": "RIS",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "R1193",
+		"Division": "RIS",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "R1194",
+		"Division": "RIS",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "R1196",
+		"Division": "RIS",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "R1198",
+		"Division": "RIS",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "R1168",
+		"Division": "RIS",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "R1200",
+		"Division": "RIS",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "R1201",
+		"Division": "RIS",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "R1210",
+		"Division": "RIS",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "R1212",
+		"Division": "RIS",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "R1215",
+		"Division": "RIS",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "R1216",
+		"Division": "RIS",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "R1217",
+		"Division": "RIS",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "R1218",
+		"Division": "RIS",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "R1220",
+		"Division": "RIS",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "R1221",
+		"Division": "RIS",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "R1222",
+		"Division": "RIS",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "R1223",
+		"Division": "RIS",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "R1224",
+		"Division": "RIS",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "R1230",
+		"Division": "RIS",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "R1231",
+		"Division": "RIS",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "R1232",
+		"Division": "RIS",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "R1233",
+		"Division": "RIS",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "R1234",
+		"Division": "RIS",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "R1235",
+		"Division": "RIS",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "R1236",
+		"Division": "RIS",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "R1250",
+		"Division": "RIS",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "R1266",
+		"Division": "RIS",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "R1275",
+		"Division": "RIS",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "R1277",
+		"Division": "RIS",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "R1278",
+		"Division": "RIS",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "R1290",
+		"Division": "RIS",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "R1305",
+		"Division": "RIS",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "R1306",
+		"Division": "RIS",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "R1307",
+		"Division": "RIS",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "R1308",
+		"Division": "RIS",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "R9300",
+		"Division": "RIS",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "R1237",
+		"Division": "RIS",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "R1238",
+		"Division": "RIS",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "RISADMIN",
+		"Division": "RIS",
+		"InvoiceTemplate": ""
+	},
+	{
+		"Code": "S1000",
+		"Division": "SS",
+		"InvoiceTemplate": "SS"
+	},
+	{
+		"Code": "S1001",
+		"Division": "SS",
+		"InvoiceTemplate": "SS"
+	},
+	{
+		"Code": "S1002",
+		"Division": "SS",
+		"InvoiceTemplate": "SS"
+	},
+	{
+		"Code": "S1003",
+		"Division": "SS",
+		"InvoiceTemplate": "SS"
+	},
+	{
+		"Code": "S1004",
+		"Division": "SS",
+		"InvoiceTemplate": "SS"
+	},
+	{
+		"Code": "S1005",
+		"Division": "SS",
+		"InvoiceTemplate": "SS"
+	}
+]

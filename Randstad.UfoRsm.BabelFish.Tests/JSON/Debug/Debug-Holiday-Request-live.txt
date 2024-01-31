@@ -1,0 +1,76 @@
+﻿{
+	"HolidayRequestId": "a3G25000000dsGBEAY",
+	"HolidayRequestRef": "HR-000034329",
+	"Candidate": {
+		"CandidateId": null,
+		"LiveInPayroll": true,
+		"CandidateRef": "C-001638044",
+		"Title": null,
+		"Name": null,
+		"Surname": null,
+		"Sex": null,
+		"DateOfBirth": null,
+		"NiNumber": null,
+		"Phone": null,
+		"Mobile": null,
+		"EmailAddress": null,
+		"PaymentMethod": null,
+		"PayrollRefNumber": "CBVA0021",
+		"StartDate": null,
+		"EndDate": null,
+		"EmployeeFileId": null,
+		"Status": null,
+		"HomeAddress": null,
+		"LtdCompany": null,
+		"UmbrellaAgency": null,
+		"OutsourcedAgency": null,
+		"Paye": null,
+		"SelfEmployed": null,
+		"PayType": null,
+		"PaymentFrequency": null,
+		"OperatingCo": {
+			"Id": "a3R25000000BjOUEA0",
+			"MigratedGroupId": null,
+			"IsActive": true,
+			"Name": "Customer Success",
+			"FinanceCode": "RIS"
+		},
+		"Division": {
+			"Id": "a3R25000000BjOZEA0",
+			"MigratedGroupId": null,
+			"IsActive": true,
+			"Name": "JET",
+			"FinanceCode": null
+		},
+		"Unit": {
+			"Id": "a3R25000000BjQ2EAK",
+			"MigratedGroupId": "00886",
+			"IsActive": true,
+			"Name": "Mondelez Bournville",
+			"FinanceCode": "R1010"
+		},
+		"Branch": {
+			"Id": "a3R25000000BjPJEA0",
+			"MigratedGroupId": null,
+			"IsActive": true,
+			"Name": "Mondelez",
+			"FinanceCode": null
+		},
+		"Region": {
+			"Id": "a3R25000000BjOtEAK",
+			"MigratedGroupId": null,
+			"IsActive": true,
+			"Name": "FMCG",
+			"FinanceCode": null
+		}
+	},
+	"HolidayRequestDate": "2023-03-06T00:00:00",
+	"StartDate": "2023-03-06T00:00:00",
+	"EndDate": "2023-03-06T00:00:00",
+	"SubmittedOn": "2023-03-13T16:52:20Z",
+	"ApprovedOn": "2023-03-13T16:52:42Z",
+	"DeclinedOn": "0001-01-01T00:00:00",
+	"Notes": null,
+	"Hours": 2.0,
+	"ApproverExternalId": "RAdmin"
+}

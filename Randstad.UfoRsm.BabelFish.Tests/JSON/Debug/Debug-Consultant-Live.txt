@@ -1,0 +1,15 @@
+﻿{
+  "Username": "jasmin.ahmed@ruk-ufo.co.uk.test",
+  "Profile": "RUK Standard User",
+  "Name": "Jasmin Ahmed",
+  "MigratedUserId": "PS-1019",
+  "LegacyBackofficeId": "jasmin.ahmed",
+  "Lastname": "Ahmed",
+  "LastLoginDate": "2021-05-24T11:43:04.000Z",
+  "IsPortalEnabled": false,
+  "IsActive": true,
+  "Id": "0054J0000052b0TQAQ",
+  "Firstname": "Jasmin",
+  "EmployeeRef": "18266",
+  "Email": "jasmin.ahmed@randstad.co.uk.invalid"
+}

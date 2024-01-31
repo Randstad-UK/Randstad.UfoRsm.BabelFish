@@ -1,0 +1,44 @@
+﻿{
+  "SubmittedOn": "2022-02-04T15:05:38.000Z",
+  "StartDate": "2022-02-04",
+  "Hours": 8.00,
+  "HolidayRequestRef": "HR-000013909",
+  "HolidayRequestId": "a3G8E000000OsWMUA0",
+  "HolidayRequestDate": "2022-02-04",
+  "EndDate": "2022-02-05",
+  "Candidate": {
+    "ValidationErrors": {},
+    "Unit": {
+      "Name": "Unit",
+      "IsBilling": false,
+      "IsActive": true,
+      "Id": "a3R8E000000EVm2UAG",
+      "FinanceCode": "B1325"
+    },
+    "Region": {
+      "Name": "Region",
+      "IsActive": true,
+      "Id": "a3R8E000000EVm0UAG"
+    },
+    "PayrollRefNumber": "P-00064237",
+    "OperatingCo": {
+      "Name": "Business Solutions",
+      "IsActive": true,
+      "Id": "a3R8E000000EVlyUAG",
+      "FinanceCode": "B1325"
+    },
+    "OpCo": "Business Solutions",
+    "Division": {
+      "Name": "Division",
+      "IsActive": true,
+      "Id": "a3R8E000000EVlzUAG"
+    },
+    "CandidateRef": "C-000064343",
+    "Branch": {
+      "Name": "Branch",
+      "IsActive": true,
+      "Id": "a3R8E000000EVm1UAG"
+    }
+  },
+  "ApprovedOn": "2022-02-04T15:05:47.000Z"
+}

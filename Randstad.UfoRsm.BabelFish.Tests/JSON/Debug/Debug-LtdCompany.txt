@@ -1,0 +1,48 @@
+﻿{
+  "LastModifiedById": "0054J000002rDq7QAE",
+  "CreatedById": "0054J000002rDq7QAE",
+  "UtrNumber": "123",
+  "SelfBill": "Yes",
+  "Name": "Test ltd 2x",
+  "Id": "a3L8E000001JJPhUAO",
+  "Candidates": [
+    {
+      "ValidationErrors": {},
+      "Unit": {
+        "Name": "Unit 2",
+        "IsBilling": false,
+        "IsActive": true,
+        "Id": "a3R8E000000EWYjUAO"
+      },
+      "StartDate": "2022-02-15",
+      "Region": {
+        "Name": "Region",
+        "Id": "a3R8E000000EVm0UAG"
+      },
+      "PayType": "LTD",
+      "PayrollRefNumber": "L-00021568",
+      "OperatingCo": {
+        "Name": "Business Solutions",
+        "Id": "a3R8E000000EVlyUAG",
+        "FinanceCode": "B1325"
+      },
+      "OpCo": "Business Solutions",
+      "LiveInPayroll": true,
+      "HomeAddressTownCity": "Milton Keynes",
+      "HomeAddressStreet": "68 Trinity Row",
+      "HomeAddressPostcode": "MK12 5PB",
+      "Division": {
+        "Name": "Division",
+        "Id": "a3R8E000000EVlzUAG"
+      },
+      "CandidateRef": "C-001141778",
+      "CandidateId": "a1C8E000004cL2fUAE",
+      "Branch": {
+        "Name": "Branch",
+        "Id": "a3R8E000000EVm1UAG"
+      },
+      "AWRScope": "Out of Scope"
+    }
+  ],
+  "BankAccount": {}
+}

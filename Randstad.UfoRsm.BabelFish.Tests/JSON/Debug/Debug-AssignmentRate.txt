@@ -1,0 +1,101 @@
+﻿{
+  "StartDate": "2021-12-16",
+  "SequenceNumber": "0827236",
+  "ReceiptRequired": false,
+  "RateType": "Basic Rate",
+  "RateId": "a0F8E00000pfqGhUAI",
+  "PayUnit": "Hourly",
+  "PayRateCurrency": 10.00,
+  "Margin": 33.33,
+  "IsPayRise": false,
+  "IsModifiedOnAssignment": true,
+  "FeeRef": "AF-827235",
+  "EndDate": "2021-12-17",
+  "ChargeRateCurrency": 15.00,
+  "Assignment": {
+    "LastModifiedDate": "2022-01-12T13:48:20.000Z",
+    "CreatedDate": "2021-12-15T17:28:33.000Z",
+    "Unit": {
+      "Name": "Unit",
+      "IsBilling": false,
+      "Id": "a3R8E000000EVm2UAG",
+      "FinanceCode": "B1325"
+    },
+    "StartDate": "2021-12-16",
+    "Region": {
+      "Name": "Region",
+      "Id": "a3R8E000000EVm0UAG"
+    },
+    "PreferredPeriod": "Week",
+    "PoRequired": false,
+    "Owner": {
+      "Username": "ross.mcleod@ruk-ufo.co.uk.sanboxrm",
+      "Unit": {
+        "ParentId": "a3R8E000000EVm1UAG",
+        "Name": "Unit",
+        "IsBilling": false,
+        "IsActive": true,
+        "Id": "a3R8E000000EVm2UAG",
+        "FinanceCode": "B1325"
+      },
+      "Region": {
+        "ParentId": "a3R8E000000EVlzUAG",
+        "Name": "Region",
+        "IsBilling": false,
+        "IsActive": true,
+        "Id": "a3R8E000000EVm0UAG"
+      },
+      "OpCo": {
+        "Name": "Business Solutions",
+        "IsBilling": false,
+        "IsActive": true,
+        "Id": "a3R8E000000EVlyUAG",
+        "FinanceCode": "B1325"
+      },
+      "Name": "Ross McLeod",
+      "MigratedUserId": "PS-282",
+      "LegacyBackofficeId": "ross.mcleod",
+      "Lastname": "McLeod",
+      "IsActive": true,
+      "Id": "0054J000002rDq7QAE",
+      "Firstname": "Ross",
+      "EmployeeRef": "7640",
+      "Email": "ross.mcleod@randstad.co.uk",
+      "Division": {
+        "ParentId": "a3R8E000000EVlyUAG",
+        "Name": "Division",
+        "IsBilling": false,
+        "IsActive": true,
+        "Id": "a3R8E000000EVlzUAG"
+      },
+      "Branch": {
+        "ParentId": "a3R8E000000EVm0UAG",
+        "Name": "Branch",
+        "IsBilling": false,
+        "IsActive": true,
+        "Id": "a3R8E000000EVm1UAG"
+      }
+    },
+    "OpCo": {
+      "Name": "Business Solutions",
+      "Id": "a3R8E000000EVlyUAG",
+      "FinanceCode": "B1325"
+    },
+    "HolidayPay": "Rolled Up Holiday Pay",
+    "EndDate": "2021-12-17",
+    "Division": {
+      "Name": "Division",
+      "Id": "a3R8E000000EVlzUAG"
+    },
+    "Branch": {
+      "Name": "Branch",
+      "Id": "a3R8E000000EVm1UAG"
+    },
+    "AssignmentRef": "PAs-553594",
+    "AssignmentJobTitle": "test job",
+    "AssignmentId": "a0H8E00000CVrCfUAL",
+    "CheckIn": "Checked In"
+  },
+  "ActiveHourlyRate": 0.0,
+  "Active": false
+}

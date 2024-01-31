@@ -1,0 +1,414 @@
+﻿{
+  "Unit": {
+    "Id": "a3R3L000000Cl84UAC",
+    "MigratedGroupId": null,
+    "IsActive": null,
+    "Name": "Maidstone",
+    "FinanceCode": "P0022"
+  },
+  "OpCo": {
+    "Id": "a3R3L000000Cl40UAC",
+    "MigratedGroupId": "CPE",
+    "IsActive": null,
+    "Name": "CPE",
+    "FinanceCode": "CPE"
+  },
+  "PlacementRef": "PL-0068669",
+  "PoNumber": null,
+  "PoRequired": null,
+  "SecondTier": null,
+  "SecondTierFee": 0.0,
+  "StartDate": "2023-11-01T00:00:00",
+  "PlacementJobTitle": "paper child",
+  "CandidateFirstName": "FT",
+  "CandidateLastName": "Cand",
+  "Fee": 34.0,
+  "CheckIn": "Checked In",
+  "IR35": false,
+  "CostCentre": null,
+  "Historic": false,
+  "Owner": {
+    "Id": "0053L000004QV8uQAG",
+    "MigratedUserId": null,
+    "EmployeeRef": "123343",
+    "Firstname": "Akhila",
+    "Lastname": "Dhanekula",
+    "Username": "akhila.dhanekula@ruk-ufo.co.uk.test.std",
+    "Email": "akhila.dhanekula@randstad.co.uk",
+    "IsActive": true,
+    "OpCo": {
+      "Id": "a3R3L000000Cl40UAC",
+      "MigratedGroupId": "CPE",
+      "IsActive": true,
+      "Name": "CPE",
+      "FinanceCode": "CPE"
+    },
+    "Unit": {
+      "Id": "a3R3L000000Cl84UAC",
+      "MigratedGroupId": null,
+      "IsActive": true,
+      "Name": "Maidstone",
+      "FinanceCode": "P0022"
+    },
+    "Branch": {
+      "Id": "a3R3L000000Cl7zUAC",
+      "MigratedGroupId": null,
+      "IsActive": true,
+      "Name": "CPE Maidstone",
+      "FinanceCode": null
+    },
+    "Region": {
+      "Id": "a3R3L000000Cl7uUAC",
+      "MigratedGroupId": null,
+      "IsActive": true,
+      "Name": "CPE South East Region",
+      "FinanceCode": null
+    },
+    "Division": {
+      "Id": "a3R3L000000Cl46UAC",
+      "MigratedGroupId": "CPEDiv",
+      "IsActive": true,
+      "Name": "CPE Division",
+      "FinanceCode": null
+    }
+  },
+  "InvoiceAddress": null,
+  "InvoicePerson": {
+    "ContactId": "0033L00000avYQmQAM",
+    "Forename": "bc",
+    "Surname": "cc",
+    "EmailAddress": "ftg@tr.iuo",
+    "Department": null,
+    "OpCo": null,
+    "MailingAddress": null,
+    "IsCheckedIn": false,
+    "Unit": null,
+    "Branch": null,
+    "Region": null,
+    "Division": null
+  },
+  "ClientContact": {
+    "ContactId": "0033L00000avYQmQAM",
+    "Forename": "bc",
+    "Surname": "cc",
+    "EmailAddress": "ftg@tr.iuo",
+    "Department": null,
+    "OpCo": null,
+    "MailingAddress": null,
+    "IsCheckedIn": false,
+    "Unit": null,
+    "Branch": null,
+    "Region": null,
+    "Division": null
+  },
+  "RsmCandidate": {
+    "CandidateId": "a1C3L000000DQEYUA4",
+    "LiveInPayroll": true,
+    "CandidateRef": "C-002480372",
+    "Title": null,
+    "Name": "FT",
+    "Surname": "Cand",
+    "Sex": null,
+    "DateOfBirth": "2004-10-01T00:00:00",
+    "NiNumber": "AA123456C",
+    "Phone": null,
+    "Mobile": null,
+    "EmailAddress": "fg@yhj.kiu",
+    "PaymentMethod": "BACS",
+    "PayrollRefNumber": "P-02094054",
+    "StartDate": "2023-10-01T00:00:00",
+    "EndDate": null,
+    "EmployeeFileId": null,
+    "Status": null,
+    "HomeAddress": {
+      "Street": "Saint James's Building",
+      "City": "79 Oxford Street",
+      "County": null,
+      "Country": "United Kingdom",
+      "PostCode": "M1 6PP"
+    },
+    "LtdCompany": null,
+    "UmbrellaAgency": null,
+    "OutsourcedAgency": null,
+    "Paye": null,
+    "SelfEmployed": null,
+    "PayType": 0,
+    "PaymentFrequency": null,
+    "OperatingCo": {
+      "Id": "a3R3L000000Cl40UAC",
+      "MigratedGroupId": "CPE",
+      "IsActive": null,
+      "Name": "CPE",
+      "FinanceCode": "CPE"
+    },
+    "Division": null,
+    "Unit": {
+      "Id": "a3R3L000000Cl84UAC",
+      "MigratedGroupId": null,
+      "IsActive": true,
+      "Name": "Maidstone",
+      "FinanceCode": "P0022"
+    },
+    "Branch": null,
+    "Region": null
+  },
+  "Client": {
+    "ClientId": "0013L00000cljhTQAQ",
+    "ClientRef": "CL-0279219",
+    "ClientName": "Child Billing controlled",
+    "IsLegalHirer": false,
+    "NoVat": null,
+    "VatNo": null,
+    "CompanyRegNum": null,
+    "CreditLimit": null,
+    "InvoiceDeliveryMethod": "Billing Controlled",
+    "InvoiceEmail": null,
+    "InvoiceEmail2": null,
+    "InvoiceEmail3": null,
+    "EnablePaymentApplications": "No",
+    "IsCheckedIn": null,
+    "WorkAddress": {
+      "Street": "Saint James's Building, 79 Oxford Street",
+      "City": "Manchester",
+      "County": null,
+      "Country": "GB",
+      "PostCode": "M1 6PP"
+    },
+    "OpCo": {
+      "Id": "a3R3L000000Cl40UAC",
+      "MigratedGroupId": "CPE",
+      "IsActive": null,
+      "Name": "CPE",
+      "FinanceCode": "CPE"
+    },
+    "Unit": {
+      "Id": "a3R3L000000Cl84UAC",
+      "MigratedGroupId": null,
+      "IsActive": null,
+      "Name": "Maidstone",
+      "FinanceCode": "P0022"
+    },
+    "HleClient": {
+      "ClientId": "0013L00000cljg6QAA",
+      "ClientRef": "CL-0279218",
+      "ClientName": "HLE Billing controlled",
+      "IsLegalHirer": true,
+      "NoVat": null,
+      "VatNo": null,
+      "CompanyRegNum": null,
+      "CreditLimit": null,
+      "InvoiceDeliveryMethod": "Self Bill",
+      "InvoiceEmail": null,
+      "InvoiceEmail2": null,
+      "InvoiceEmail3": null,
+      "EnablePaymentApplications": "Yes",
+      "IsCheckedIn": null,
+      "WorkAddress": {
+        "Street": "Ashwell",
+        "City": "Baldock",
+        "County": null,
+        "Country": "GB",
+        "PostCode": "SG7 6SL"
+      },
+      "OpCo": {
+        "Id": "a3R3L000000Cl40UAC",
+        "MigratedGroupId": null,
+        "IsActive": null,
+        "Name": "CPE",
+        "FinanceCode": "CPE"
+      },
+      "Unit": {
+        "Id": "a3R3L000000Cl84UAC",
+        "MigratedGroupId": null,
+        "IsActive": null,
+        "Name": "Maidstone",
+        "FinanceCode": "P0022"
+      },
+      "HleClient": null,
+      "RsmClient": null,
+      "PoRequired": null,
+      "SendRatesFormat": null,
+      "CentralInvoiceing": null,
+      "Branch": {
+        "Id": "a3R3L000000Cl7zUAC",
+        "MigratedGroupId": null,
+        "IsActive": null,
+        "Name": "CPE Maidstone",
+        "FinanceCode": null
+      },
+      "Region": {
+        "Id": "a3R3L000000Cl7uUAC",
+        "MigratedGroupId": null,
+        "IsActive": null,
+        "Name": "CPE South East Region",
+        "FinanceCode": null
+      },
+      "Division": {
+        "Id": "a3R3L000000Cl46UAC",
+        "MigratedGroupId": null,
+        "IsActive": null,
+        "Name": "CPE Division",
+        "FinanceCode": null
+      }
+    },
+    "RsmClient": null,
+    "PoRequired": null,
+    "SendRatesFormat": null,
+    "CentralInvoiceing": null,
+    "Branch": {
+      "Id": "a3R3L000000Cl7zUAC",
+      "MigratedGroupId": null,
+      "IsActive": null,
+      "Name": "CPE Maidstone",
+      "FinanceCode": null
+    },
+    "Region": {
+      "Id": "a3R3L000000Cl7uUAC",
+      "MigratedGroupId": null,
+      "IsActive": null,
+      "Name": "CPE South East Region",
+      "FinanceCode": null
+    },
+    "Division": {
+      "Id": "a3R3L000000Cl46UAC",
+      "MigratedGroupId": "CPEDiv",
+      "IsActive": null,
+      "Name": "CPE Division",
+      "FinanceCode": null
+    }
+  },
+  "Hle": {
+    "ClientId": "0013L00000cljg6QAA",
+    "ClientRef": "CL-0279218",
+    "ClientName": "HLE Billing controlled",
+    "IsLegalHirer": true,
+    "NoVat": null,
+    "VatNo": null,
+    "CompanyRegNum": null,
+    "CreditLimit": null,
+    "InvoiceDeliveryMethod": "Self Bill",
+    "InvoiceEmail": null,
+    "InvoiceEmail2": null,
+    "InvoiceEmail3": null,
+    "EnablePaymentApplications": "Yes",
+    "IsCheckedIn": null,
+    "WorkAddress": {
+      "Street": "Ashwell",
+      "City": "Baldock",
+      "County": null,
+      "Country": "GB",
+      "PostCode": "SG7 6SL"
+    },
+    "OpCo": {
+      "Id": "a3R3L000000Cl40UAC",
+      "MigratedGroupId": null,
+      "IsActive": null,
+      "Name": "CPE",
+      "FinanceCode": "CPE"
+    },
+    "Unit": {
+      "Id": "a3R3L000000Cl84UAC",
+      "MigratedGroupId": null,
+      "IsActive": null,
+      "Name": "Maidstone",
+      "FinanceCode": "P0022"
+    },
+    "HleClient": null,
+    "RsmClient": null,
+    "PoRequired": null,
+    "SendRatesFormat": null,
+    "CentralInvoiceing": null,
+    "Branch": {
+      "Id": "a3R3L000000Cl7zUAC",
+      "MigratedGroupId": null,
+      "IsActive": null,
+      "Name": "CPE Maidstone",
+      "FinanceCode": null
+    },
+    "Region": {
+      "Id": "a3R3L000000Cl7uUAC",
+      "MigratedGroupId": null,
+      "IsActive": null,
+      "Name": "CPE South East Region",
+      "FinanceCode": null
+    },
+    "Division": {
+      "Id": "a3R3L000000Cl46UAC",
+      "MigratedGroupId": null,
+      "IsActive": null,
+      "Name": "CPE Division",
+      "FinanceCode": null
+    }
+  },
+  "ConsultantSplits": [
+    {
+      "Consultant": {
+        "Id": "0053L000004QV8uQAG",
+        "MigratedUserId": null,
+        "EmployeeRef": "123343",
+        "Firstname": "Akhila",
+        "Lastname": "Dhanekula",
+        "Username": "akhila.dhanekula@ruk-ufo.co.uk.test.std",
+        "Email": "akhila.dhanekula@randstad.co.uk",
+        "IsActive": true,
+        "OpCo": {
+          "Id": "a3R3L000000Cl40UAC",
+          "MigratedGroupId": "CPE",
+          "IsActive": true,
+          "Name": "CPE",
+          "FinanceCode": "CPE"
+        },
+        "Unit": {
+          "Id": "a3R3L000000Cl84UAC",
+          "MigratedGroupId": null,
+          "IsActive": true,
+          "Name": "Maidstone",
+          "FinanceCode": "P0022"
+        },
+        "Branch": {
+          "Id": "a3R3L000000Cl7zUAC",
+          "MigratedGroupId": null,
+          "IsActive": true,
+          "Name": "CPE Maidstone",
+          "FinanceCode": null
+        },
+        "Region": {
+          "Id": "a3R3L000000Cl7uUAC",
+          "MigratedGroupId": null,
+          "IsActive": true,
+          "Name": "CPE South East Region",
+          "FinanceCode": null
+        },
+        "Division": {
+          "Id": "a3R3L000000Cl46UAC",
+          "MigratedGroupId": "CPEDiv",
+          "IsActive": true,
+          "Name": "CPE Division",
+          "FinanceCode": null
+        }
+      },
+      "Split": 100.0
+    }
+  ],
+  "Branch": {
+    "Id": "a3R3L000000Cl7zUAC",
+    "MigratedGroupId": null,
+    "IsActive": null,
+    "Name": "CPE Maidstone",
+    "FinanceCode": null
+  },
+  "Region": {
+    "Id": "a3R3L000000Cl7uUAC",
+    "MigratedGroupId": null,
+    "IsActive": null,
+    "Name": "CPE South East Region",
+    "FinanceCode": null
+  },
+  "Division": {
+    "Id": "a3R3L000000Cl46UAC",
+    "MigratedGroupId": "CPEDiv",
+    "IsActive": null,
+    "Name": "CPE Division",
+    "FinanceCode": null
+  }
+}

@@ -1,0 +1,282 @@
+﻿{
+  "LastModifiedDate": "2022-01-13T09:24:15.000Z",
+  "CreatedDate": "2021-12-15T17:28:33.000Z",
+  "WorkAddress": {
+    "Street": "68 Trinity Row",
+    "PostCode": "MK12 5PB",
+    "County": "Bucks",
+    "Country": "GB",
+    "City": "Milton Keynes"
+  },
+  "Unit": {
+    "Name": "Unit",
+    "IsBilling": false,
+    "Id": "a3R8E000000EVm2UAG",
+    "FinanceCode": "B1325"
+  },
+  "StartDate": "2021-12-16",
+  "Region": {
+    "Name": "Region",
+    "Id": "a3R8E000000EVm0UAG"
+  },
+  "Rates": [
+    {
+      "StartDate": "2021-12-16",
+      "SequenceNumber": "0827236",
+      "ReceiptRequired": false,
+      "RateType": "Basic Rate",
+      "RateId": "a0F8E00000pfqGhUAI",
+      "PayUnit": "Hourly",
+      "PayRateCurrency": 10.00,
+      "Margin": 33.33,
+      "IsPayRise": false,
+      "IsModifiedOnAssignment": true,
+      "FeeRef": "AF-827235",
+      "EndDate": "2021-12-17",
+      "ChargeRateCurrency": 15.00,
+      "ActiveHourlyRate": 0.0,
+      "Active": false
+    }
+  ],
+  "PreferredPeriod": "Week",
+  "PositionName": "Position 2",
+  "PoRequired": false,
+  "PayrollRef": "P-00753617",
+  "PaymentType": "PAYE",
+  "Owner": {
+    "Username": "ross.mcleod@ruk-ufo.co.uk.sanboxrm",
+    "Unit": {
+      "ParentId": "a3R8E000000EVm1UAG",
+      "Name": "Unit",
+      "IsBilling": false,
+      "IsActive": true,
+      "Id": "a3R8E000000EVm2UAG",
+      "FinanceCode": "B1325"
+    },
+    "Region": {
+      "ParentId": "a3R8E000000EVlzUAG",
+      "Name": "Region",
+      "IsBilling": false,
+      "IsActive": true,
+      "Id": "a3R8E000000EVm0UAG"
+    },
+    "OpCo": {
+      "Name": "Business Solutions",
+      "IsBilling": false,
+      "IsActive": true,
+      "Id": "a3R8E000000EVlyUAG",
+      "FinanceCode": "B1325"
+    },
+    "Name": "Ross McLeod",
+    "MigratedUserId": "PS-282",
+    "LegacyBackofficeId": "ross.mcleod",
+    "Lastname": "McLeod",
+    "IsActive": true,
+    "Id": "0054J000002rDq7QAE",
+    "Firstname": "Ross",
+    "EmployeeRef": "7640",
+    "Email": "ross.mcleod@randstad.co.uk",
+    "Division": {
+      "ParentId": "a3R8E000000EVlyUAG",
+      "Name": "Division",
+      "IsBilling": false,
+      "IsActive": true,
+      "Id": "a3R8E000000EVlzUAG"
+    },
+    "Branch": {
+      "ParentId": "a3R8E000000EVm0UAG",
+      "Name": "Branch",
+      "IsBilling": false,
+      "IsActive": true,
+      "Id": "a3R8E000000EVm1UAG"
+    }
+  },
+  "OpCo": {
+    "Name": "Business Solutions",
+    "Id": "a3R8E000000EVlyUAG",
+    "FinanceCode": "B1325"
+  },
+  "JobRef": "PR-779231",
+  "IR35": true,
+  "InvoicePerson": {
+    "Surname": "ClientContact",
+    "Forename": "Test",
+    "EmailAddress": "approver@test.com",
+    "ContactId": "0038E00001K2a3TQAR"
+  },
+  "InvoiceContact": "Test ClientContact",
+  "InvoiceAddressId": "5078807",
+  "InvoiceAddress": {
+    "Street": "68 Trinity Row",
+    "PostCode": "MK12 5PB",
+    "InvoiceAddressRef": "CIA-0000289062",
+    "County": "Bucks",
+    "Country": "GB",
+    "Client": [
+      {
+        "ClientRef": "CL-0196974",
+        "ClientName": "Test Client",
+        "ClientId": "0018E00001eLwtOQAS"
+      }
+    ],
+    "City": "Milton Keynes",
+    "AddressId": "5078807"
+  },
+  "HolidayPay": "Rolled Up Holiday Pay",
+  "HleRef": "CL-0196974",
+  "EndDate": "2021-12-17",
+  "Division": {
+    "Name": "Division",
+    "Id": "a3R8E000000EVlzUAG"
+  },
+  "Contact": "Test ClientContact",
+  "ConsultantSplits": [
+    {
+      "Split": 100,
+      "Consultant": {
+        "Username": "ross.mcleod@ruk-ufo.co.uk.sanboxrm",
+        "Unit": {
+          "ParentId": "a3R8E000000EVm1UAG",
+          "Name": "Unit",
+          "IsBilling": false,
+          "IsActive": true,
+          "Id": "a3R8E000000EVm2UAG",
+          "FinanceCode": "B1325"
+        },
+        "Region": {
+          "ParentId": "a3R8E000000EVlzUAG",
+          "Name": "Region",
+          "IsBilling": false,
+          "IsActive": true,
+          "Id": "a3R8E000000EVm0UAG"
+        },
+        "OpCo": {
+          "Name": "Business Solutions",
+          "IsBilling": false,
+          "IsActive": true,
+          "Id": "a3R8E000000EVlyUAG",
+          "FinanceCode": "B1325"
+        },
+        "Name": "Ross McLeod",
+        "MigratedUserId": "PS-282",
+        "LegacyBackofficeId": "ross.mcleod",
+        "Lastname": "McLeod",
+        "IsActive": true,
+        "Id": "0054J000002rDq7QAE",
+        "Firstname": "Ross",
+        "EmployeeRef": "7640",
+        "Email": "ross.mcleod@randstad.co.uk",
+        "Division": {
+          "ParentId": "a3R8E000000EVlyUAG",
+          "Name": "Division",
+          "IsBilling": false,
+          "IsActive": true,
+          "Id": "a3R8E000000EVlzUAG"
+        },
+        "Branch": {
+          "ParentId": "a3R8E000000EVm0UAG",
+          "Name": "Branch",
+          "IsBilling": false,
+          "IsActive": true,
+          "Id": "a3R8E000000EVm1UAG"
+        }
+      }
+    }
+  ],
+  "ClientRef": "CL-0196974",
+  "ClientName": "Test Client",
+  "ClientId": "0018E00001eLwtOQAS",
+  "Client": {
+    "WorkAddress": {
+      "Street": "68 Trinity Row",
+      "PostCode": "MK12 5PB",
+      "County": "Bucks",
+      "Country": "UK",
+      "City": "Milton Keynes"
+    },
+    "OpCo": {
+      "Name": "Business Solutions",
+      "Id": "a3R8E000000EVlyUAG",
+      "FinanceCode": "B1325"
+    },
+    "CompanyRegNum": "Reg1234",
+    "ClientRef": "CL-0196974",
+    "ClientName": "Test Client",
+    "ClientId": "0018E00001eLwtOQAS"
+  },
+  "CandidateRef": "C-001141777",
+  "Candidate": {
+    "ValidationErrors": {},
+    "Unit": {
+      "Name": "Unit",
+      "IsBilling": false,
+      "IsActive": true,
+      "Id": "a3R8E000000EVm2UAG",
+      "FinanceCode": "B1325"
+    },
+    "Surname": "candidate",
+    "PayType": "LTD",
+    "PayrollRefNumber": "P-00753617",
+    "PaymentMethod": "BACS",
+    
+    "LtdCompany": {
+		"Id": "a3L7E000000mxb1UAA",
+		"Name": "Test Ltd",
+		"Cis": "Yes",
+		"InvoiceAddress": {
+			"Street": "Test Street",
+			"City": "Test Town",
+			"County": null,
+			"Country": null,
+			"PostCode": "MK1 1BB"
+		},
+		"RegNo": "123456789",
+		"SelfBill": "Yes",
+		"UtrNumber": "1234567890",
+		"VatNumber": null,
+		"BankAccount": {
+			"PayMethod": 0,
+			"SortCode": "203907",
+			"AccountNumber": "12345678",
+			"AccountName": "Test Ltd",
+			"SocietyName": null,
+			"SocietyNum": null,
+			"IBAN": null,
+			"BIC": null
+		},
+		"PLIOptOut": null,
+		"Candidates": null,
+		"Unit": null,
+		"Branch": null,
+		"Region": null,
+		"Division": null
+	},
+
+    "OperatingCo": {
+      "Name": "Business Solutions",
+      "Id": "a3R8E000000EVlyUAG",
+      "FinanceCode": "B1325"
+    },
+    "NiNumber": "AA123456C",
+    "Name": "ross",
+    "LiveInPayroll": false,
+    "HomeAddress": {
+      "Street": "68 Trinity Row",
+      "PostCode": "MK125PB",
+      "Country": "Australia",
+      "City": "Milton Keynes"
+    },
+    "Sex": "male",
+    "EmailAddress": "candidate@test.com",
+    "DateOfBirth": "2000-12-14",
+    "CandidateId": "a1C8E000004bw3UUAQ"
+  },
+  "Branch": {
+    "Name": "Branch",
+    "Id": "a3R8E000000EVm1UAG"
+  },
+  "AssignmentRef": "PAs-553594",
+  "AssignmentJobTitle": "test job",
+  "AssignmentId": "a0H8E00000CVrCfUAL",
+  "CheckIn":  "Checked In" 
+}
