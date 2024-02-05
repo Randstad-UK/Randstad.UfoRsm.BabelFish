@@ -402,3 +402,4 @@ C:\Repository\Randstad.UfoRsm.BabelFish\Randstad.UfoRsm.BabelFish.Tests\obj\Debu
 C:\Repository\Randstad.UfoRsm.BabelFish\Randstad.UfoRsm.BabelFish.Tests\obj\Debug\netcoreapp3.1\Randstad.UfoRsm.BabelFish.Tests.dll
 C:\Repository\Randstad.UfoRsm.BabelFish\Randstad.UfoRsm.BabelFish.Tests\obj\Debug\netcoreapp3.1\Randstad.UfoRsm.BabelFish.Tests.pdb
 C:\Repository\Randstad.UfoRsm.BabelFish\Randstad.UfoRsm.BabelFish.Tests\obj\Debug\netcoreapp3.1\Randstad.UfoRsm.BabelFish.Tests.genruntimeconfig.cache
+C:\Repository\Randstad.UfoRsm.BabelFish\Randstad.UfoRsm.BabelFish.Tests\obj\Debug\netcoreapp3.1\Randstad.UfoRsm.BabelFish.Tests.sourcelink.json

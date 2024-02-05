@@ -3668,7 +3668,7 @@
       ]
     },
     "Randstad.Environments/1.0.0": {
-      "sha512": "edyXsSgiZsNwxkOEHC4QvFpipb3iFVlZ93IfwdufxXjaTkrmRqsRJTzvgYrPVG9KWO6svzOXsvNQiex1GyreHQ==",
+      "sha512": "7y2Ru2G1JXPspeH0G13NkHC14UZefLyHxwG6afeFSeYhR7E4uk1mef3l9LPPmqXuWRukeq2wTrMuno4yWpenXA==",
       "type": "package",
       "path": "randstad.environments/1.0.0",
       "files": [
@@ -3680,7 +3680,7 @@
       ]
     },
     "Randstad.Logging/2.1.1": {
-      "sha512": "40/UvtkIQUJ/kMNeTCnhuAMSn2wZoxFsGcl9uzN3ZAVY6st8NIsFUV4x3B9geQ+D9Ey5/ArKp9fI+FzY1/FH8w==",
+      "sha512": "9X8S4BAuqgpnXv4j7xdrwnmAlBEQxDUJqPg7FbTiQymhl0HQz5wABmM9W9FCHgHOnDZbN1FLWSNEELQVY+cshg==",
       "type": "package",
       "path": "randstad.logging/2.1.1",
       "files": [
@@ -3692,7 +3692,7 @@
       ]
     },
     "Randstad.LogLevels/1.1.0": {
-      "sha512": "P/RyvvWao3TGJnB502PjO64LWM2XoKXf39vip0pmUQ+H7IZek9c+t4dlVvRUWuFxOG5KhjeQG3dAQt7EAOhQiA==",
+      "sha512": "LxsAahU+csCLZoOLE7Hgmt3SyDTvwaPJvfRmW1wPR9voKQbU80+iFji9KU5pVizZ/fdl1gyAjr7oXVwKKKn2ag==",
       "type": "package",
       "path": "randstad.loglevels/1.1.0",
       "files": [
@@ -3703,7 +3703,7 @@
       ]
     },
     "Randstad.MessageExchange/2.4.0": {
-      "sha512": "nhFS/FSsn25s1R46v4Ly/Ut7Ap0tp4hc3Kb36k3dk0hJV2wMynMzQZA7Uc/3RvQSBo+RfP/leIZnGCcs5lWG7Q==",
+      "sha512": "7t+v8H2hzJ3ccWIBCrniT1RBODuGdv4o+mZwnl1kI15ZtbBFASM021hC1DRReeeiG8v822dIPIS7G/QgLlQYKw==",
       "type": "package",
       "path": "randstad.messageexchange/2.4.0",
       "files": [
@@ -3714,7 +3714,7 @@
       ]
     },
     "Randstad.OperatingCompanies/1.0.2": {
-      "sha512": "e+Ex9RCHPzmyW6X7gmFDY+ObXk9WG1COkcUaDr9AjN6SdJpiwv48iV4GDaFOrDwPBA/SFN+1q6sj7NzK3UzRrQ==",
+      "sha512": "Oz4ci77mYlKWJ3fjpWdjaUXfvuVUbT+REJczcPvfwayWlyBVJT3c9qNHCV/7JUQvq3z6fMkvMD5zhnOCjhcKIw==",
       "type": "package",
       "path": "randstad.operatingcompanies/1.0.2",
       "files": [
@@ -3726,7 +3726,7 @@
       ]
     },
     "Randstad.ServiceDiscovery.Client/1.0.10": {
-      "sha512": "2Wv9lYeJTu2YRccO1m+Zr5zdByzDs/i+V/R3gGLiT9/RDL4Ao4Fba761gSbcVFKuPvnBXhP0ep5DniLcRCID4g==",
+      "sha512": "lF+y+Py9J5S1JdEZELjLp0vOd4o6qAuI3GzdP8J0q+Ckhi6AzEdDrWNXG1cowR8Pvkh/pqL/xvS9DjdzUG2VHA==",
       "type": "package",
       "path": "randstad.servicediscovery.client/1.0.10",
       "files": [
@@ -6947,9 +6947,7 @@
   },
   "packageFolders": {
     "C:\\Users\\ross.mcleodadm\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {},
-    "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\": {},
-    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
@@ -6961,15 +6959,12 @@
       "outputPath": "C:\\Repository\\Randstad.UfoRsm.BabelFish\\Randstad.UfoRsm.BabelFish.Tests\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
-        "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\",
-        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
         "C:\\Users\\ross.mcleodadm\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "netcoreapp3.1"
@@ -7029,7 +7024,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.405\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101\\RuntimeIdentifierGraph.json"
       }
     }
   }

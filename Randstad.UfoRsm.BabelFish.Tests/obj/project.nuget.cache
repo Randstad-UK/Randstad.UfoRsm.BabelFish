@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "bE4nOxXlZLeyAWY9XE6/xIHAVqFLEMFvAuA7iQMvBwP7yPKqbuWlu5GC8gbn/QbMBtI2/P0x5yjO+xe5z0Rz/Q==",
+  "dgSpecHash": "jXOtwOzPBSqpdqsmUWNXAKwJSfpW3nuH04ZJNd2ptkIFfCPEC55KsHE+Pw3q1TjOz9MlCfPwrSn3SglxE2AijA==",
   "success": true,
   "projectFilePath": "C:\\Repository\\Randstad.UfoRsm.BabelFish\\Randstad.UfoRsm.BabelFish.Tests\\Randstad.UfoRsm.BabelFish.Tests.csproj",
   "expectedPackageFiles": [
@@ -46,7 +46,7 @@
     "C:\\Users\\ross.mcleodadm\\.nuget\\packages\\netstandard.library\\2.0.0\\netstandard.library.2.0.0.nupkg.sha512",
     "C:\\Users\\ross.mcleodadm\\.nuget\\packages\\newtonsoft.json\\12.0.2\\newtonsoft.json.12.0.2.nupkg.sha512",
     "C:\\Users\\ross.mcleodadm\\.nuget\\packages\\nuget.frameworks\\5.0.0\\nuget.frameworks.5.0.0.nupkg.sha512",
-    "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\nunit\\3.12.0\\nunit.3.12.0.nupkg.sha512",
+    "C:\\Users\\ross.mcleodadm\\.nuget\\packages\\nunit\\3.12.0\\nunit.3.12.0.nupkg.sha512",
     "C:\\Users\\ross.mcleodadm\\.nuget\\packages\\nunit3testadapter\\3.16.1\\nunit3testadapter.3.16.1.nupkg.sha512",
     "C:\\Users\\ross.mcleodadm\\.nuget\\packages\\rabbitmq.client\\5.1.1\\rabbitmq.client.5.1.1.nupkg.sha512",
     "C:\\Users\\ross.mcleodadm\\.nuget\\packages\\randstad.environments\\1.0.0\\randstad.environments.1.0.0.nupkg.sha512",

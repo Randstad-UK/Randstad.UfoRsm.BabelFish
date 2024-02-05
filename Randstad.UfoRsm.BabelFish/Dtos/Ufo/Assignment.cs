@@ -432,10 +432,10 @@ namespace Randstad.UfoRsm.BabelFish.Dtos.Ufo
                 && PostAwrHolidayPercentage!=null)
             {
                 placement.holidayAccrualRateSpecified = true;
-                placement.holidayAccrualRate = PreAwrHolidayPercentage;
+                placement.holidayAccrualRate = PreAwrHolidayPercentage / 100;
 
                 placement.holidayAccrualRatePostAWRSpecified = true;
-                placement.holidayAccrualRatePostAWR = PostAwrHolidayPercentage;
+                placement.holidayAccrualRatePostAWR = PostAwrHolidayPercentage / 100;
             }
 
             //this is no longer required

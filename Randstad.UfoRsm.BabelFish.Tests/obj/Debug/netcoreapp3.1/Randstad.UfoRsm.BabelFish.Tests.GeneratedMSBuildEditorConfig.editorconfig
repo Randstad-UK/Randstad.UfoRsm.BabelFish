@@ -1,3 +1,5 @@
 is_global = true
 build_property.RootNamespace = Randstad.UfoRsm.BabelFish.Tests
 build_property.ProjectDir = C:\Repository\Randstad.UfoRsm.BabelFish\Randstad.UfoRsm.BabelFish.Tests\
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 
